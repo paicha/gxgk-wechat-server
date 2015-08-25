@@ -25,3 +25,28 @@
 - 莞香广科论坛入口
 - 上网认证客户端引导下载
 - 快递查询、快递动态提醒
+
+安装
+
+```
+pip install -r requirements.txt
+``` 
+
+运行
+
+```
+python run.py
+```
+
+部署
+
+```
+# using gunicorn
+pip install gunicorn
+
+# run
+gunicorn run:app -p wechat.pid -b 127.0.0.1:8000 -D
+
+# reload
+kill -HUP `cat wechat.pid`
+```
