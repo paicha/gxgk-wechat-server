@@ -7,6 +7,7 @@ MySQL-python==1.2.5
 SQLAlchemy==1.0.8
 Werkzeug==0.10.4
 itsdangerous==0.24
+redis==2.10.3
 requests==2.7.0
 wechat-sdk==0.5.8
 wsgiref==0.1.2
