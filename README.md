@@ -26,11 +26,30 @@
 - 上网认证客户端引导下载
 - 快递查询、快递动态提醒
 
-安装
+安装依赖
 
 ```
 pip install -r requirements.txt
 ``` 
+
+安装 MySQL、Redis
+```
+略
+```
+
+设置环境参数
+```
+cp instance/config.example instance/config.py
+vi instance/config.py
+```
+
+初始化数据库
+
+```
+# into Python shell
+>>> from main import db, models
+>>> db.create_all()
+```
 
 运行
 

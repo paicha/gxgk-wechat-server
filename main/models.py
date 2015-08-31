@@ -57,7 +57,7 @@ class Sign(db.Model):
         return '<openid %r>' % self.openid
 
 
-class express(db.Model):
+class Express(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     openid = db.Column(db.String(32), nullable=False)
