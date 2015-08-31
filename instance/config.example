@@ -1,0 +1,9 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+DEBUG = True
+APP_ID = ""
+APP_SECRET = ""
+TOKEN = ""
+CACHE_KEY_PREFIX = ""
+SQLALCHEMY_DATABASE_URI = ""
