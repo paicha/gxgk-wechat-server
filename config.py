@@ -6,7 +6,7 @@ MAIN_URL = "http://bbs.gxgk.cc/wechat/"
 
 WELCOME_TEXT = u"感谢关注莞香广科[愉快]\n我是广科助手小喵[调皮]\n\n"
 
-COMMAND_TEXT = u"请回复以下关键词开始：\n——————————\n电话  图书馆\n\n成绩  四六级\n\n客服  签到\n\n音乐  游戏  雷达\n\n论坛\n\n快递  公交  天气\n\n校历  新闻  合作\n\n点击左下角切换菜单"
+COMMAND_TEXT = u"请回复以下关键词开始：\n——————————\n成绩  图书馆  四六级\n\n电话  快递 明信片\n\n签到  音乐  游戏\n\n公交  雷达  天气\n\n校历  新闻  论坛\n\n陪聊  留言  合作\n\n点击左下角切换菜单"
 
 COMMAND_NOT_FOUND_TEXT = u"输入错误关键词了？\n关键词前后不需要空格\n\n"
 
