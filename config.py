@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 DEBUG = False
+
 MAIN_URL = "http://bbs.gxgk.cc/wechat/"
 
 WELCOME_TEXT = u"感谢关注莞香广科[愉快]\n我是广科助手小喵[调皮]\n\n"
