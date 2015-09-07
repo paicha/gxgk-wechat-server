@@ -10,7 +10,7 @@ def wechat_response(data):
     """微信消息处理回复"""
     wechat.parse_data(data)
     message = wechat.get_message()
-    # TODO 用户信息写入数据库
+    # 用户信息写入数据库
     user = User(openid=message.source)
     user.save()
     response = 'success'

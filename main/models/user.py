@@ -3,10 +3,9 @@
 
 from . import db
 from . import redis
-from . import app
 from datetime import datetime
 
-redis_prefix = app.config["REDIS_PREFIX"]
+redis_prefix = "wechat:user:"
 
 
 class User(db.Model):
