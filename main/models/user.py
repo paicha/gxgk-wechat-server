@@ -2,7 +2,11 @@
 # -*- coding: utf-8 -*-
 
 from . import db
+from . import redis
+from . import app
 from datetime import datetime
+
+redis_prefix = app.config["REDIS_PREFIX"]
 
 
 class User(db.Model):
@@ -37,3 +41,25 @@ class User(db.Model):
 
     def __repr__(self):
         return '<openid %r>' % self.openid
+
+    def save(self):
+        cache = redis.exists(redis_prefix + self.openid)
+        if not cache:
+            exist_in_db = User.query.filter_by(openid=self.openid).first()
+            if exist_in_db is None:
+                db.session.add(self)
+                db.session.commit()
+            # 写入缓存
+            redis.hmset(redis_prefix + self.openid, {
+                "nickname": self.nickname,
+                "realname": self.realname,
+                "classname": self.classname,
+                "sex": self.sex,
+                "province": self.province,
+                "city": self.city,
+                "country": self.country,
+                "headimgurl": self.headimgurl,
+                "email": self.email,
+                "regtime": self.regtime
+            })
+        return None

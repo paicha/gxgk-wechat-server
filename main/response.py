@@ -3,6 +3,7 @@
 
 import re
 from main import wechat, app
+from .models import User
 
 
 def wechat_response(data):
@@ -10,13 +11,15 @@ def wechat_response(data):
     wechat.parse_data(data)
     message = wechat.get_message()
     # TODO 用户信息写入数据库
+    user = User(openid=message.source)
+    user.save()
     response = 'success'
     if message.type == 'text':
         # 替换全角空格为半角空格
         message.content = message.content.replace(u'　', ' ')
         # 清除行首空格
         message.content = message.content.lstrip()
-
+        # TODO 繁体转换或增加繁体关键字判断
         if message.content == u'电话':
             response = phone_number()
         elif re.match(u'^留言|^客服', message.content):
