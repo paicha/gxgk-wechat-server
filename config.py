@@ -7,9 +7,9 @@ MAIN_URL = "http://bbs.gxgk.cc/wechat/"
 
 WELCOME_TEXT = u"感谢关注莞香广科[愉快]\n我是广科助手小喵[调皮]\n\n"
 
-COMMAND_TEXT = u"请回复以下关键词开始：\n——————————\n成绩  图书馆  四六级\n\n电话  快递 明信片\n\n签到  音乐  游戏\n\n公交  雷达  天气\n\n校历  新闻  论坛\n\n陪聊  留言  合作\n\n点击左下角切换菜单"
+COMMAND_TEXT = u"请回复以下关键词开始：\n——————————\n成绩  图书馆  四六级\n\n电话  快递  明信片\n\n签到  音乐  游戏\n\n公交  雷达  天气\n\n校历  新闻  论坛\n\n陪聊  留言  合作\n\n点击左下角切换菜单"
 
-COMMAND_NOT_FOUND_TEXT = u"输入错误关键词了？\n关键词前后不需要空格\n\n"
+COMMAND_NOT_FOUND_TEXT = u"输入错误关键词了？\n\n"
 
 HELP_TEXT = u"\n\n回复 “ ? ” 查看主菜单"
 
@@ -19,11 +19,11 @@ LEAVE_A_MESSAGE_TEXT = u"Hi~这里是小喵~\n请听到喵一声之后留言\n\n
 
 WEATHER_RADAR_TEXT = u'<a href="http://www.dg121.com/tianqiziliao/donghua_yun_radar/radar.gif">东莞雷达回波</a>'
 
-HTML5_GAMES_TEXT = u'<a href="http://autobox.meiriq.com/list/302da1ab">点击玩游戏</a>'
+HTML5_GAMES_TEXT = u'<a href="http://autobox.meiriq.com/list/302da1ab?from=gxgkbbs">点击玩游戏</a>'
 
 POSTCARD_TEXT = u'<a href="https://jinshuju.net/s/iBxE0L">明信片查询</a>'
 
-CONTACT_US_TEXT = u"我们欢迎各类型的合作\n　\n请联系：weixin@gxgk.cc\nQQ：723144293"
+CONTACT_US_TEXT = u"我们欢迎各类型的合作\n　\n请联系：weixin@gxgk.cc\nQQ：646304004"
 
 BUS_ROUTES_NEWS = [{
     'title': u'公交路线时刻表',
@@ -110,7 +110,7 @@ MENU_SETTING = {
                 {
                     "type": "click",
                     "name": "每日签到",
-                    "key": "qiandao",
+                    "key": "sign",
                     "sub_button": []
                 },
                 {
