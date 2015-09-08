@@ -13,6 +13,7 @@ def wechat_response(data):
     # 用户信息写入数据库
     user = User(openid=message.source)
     user.save()
+    # 默认回复微信信息
     response = 'success'
     if message.type == 'text':
         # 替换全角空格为半角空格
@@ -20,49 +21,61 @@ def wechat_response(data):
         # 清除行首空格
         message.content = message.content.lstrip()
         # TODO 繁体转换或增加繁体关键字判断
-        if message.content == u'电话':
-            response = phone_number()
-        elif re.match(u'^留言|^客服', message.content):
-            response = leave_a_message()
-        elif message.content == u'雷达':
-            response = weather_radar()
-        elif re.match(u'^公交|^公车', message.content):
-            response = bus_routes()
-        elif re.match(u'放假|校历', message.content):
-            response = academic_calendar()
-        elif message.content == u'合作':
-            response = contact_us()
-        elif message.content == u'明信片':
-            response = postcard()
-        elif message.content == u'成绩':
-            response = wechat.response_text('成绩功能测试中')
-        elif message.content == u'新闻':
-            response = wechat.response_text('新闻功能测试中')
-        elif message.content == u'四六级':
-            response = wechat.response_text('四六级功能测试中')
-        elif message.content == u'签到':
-            response = wechat.response_text('签到功能测试中')
-        elif message.content == u'音乐':
-            response = wechat.response_text('音乐功能测试中')
-        elif message.content == u'论坛':
-            response = wechat.response_text('论坛功能测试中')
-        elif message.content == u'快递':
-            response = wechat.response_text('快递功能测试中')
-        elif message.content == u'更新菜单':
-            response = update_menu_setting()
-        else:
+        commands = {
+            u'^\?|^？': all_command,
+            u'^留言|^客服': leave_a_message,
+            u'雷达': weather_radar,
+            u'电话': phone_number,
+            u'^公交|^公车': bus_routes,
+            u'放假|校历': academic_calendar,
+            u'合作': contact_us,
+            u'明信片': postcard,
+            u'游戏': html5_games,
+            u'成绩': developing,
+            u'新闻': developing,
+            u'天气': developing,
+            u'陪聊': developing,
+            u'四六级': developing,
+            u'图书馆': developing,
+            u'签到': developing,
+            u'音乐': developing,
+            u'论坛': developing,
+            u'快递': developing,
+            u'更新菜单': update_menu_setting
+        }
+        # 找出指令对应的回复
+        command_match = False
+        for key_word in commands:
+            if re.match(key_word, message.content):
+                response = commands[key_word]()
+                command_match = True
+                break
+        # 缺省回复
+        if not command_match:
             response = command_not_found()
     elif message.type == 'click':
-        if message.key == 'phone_number':
-            response = phone_number()
-        elif message.key == 'score':
-            response = wechat.response_text('成绩功能测试中')
+        commands = {
+            'phone_number': phone_number,
+            'score': developing,
+            'express': developing,
+            'search_books': developing,
+            'chat_robot': developing,
+            'sign': developing,
+            'music': developing,
+            'weather': developing
+        }
+        response = commands[message.key]()
     elif message.type == 'subscribe':
         response = subscribe()
     else:
         pass
 
     return response
+
+
+def developing():
+    """维护公告"""
+    return wechat.response_text('该功能维护中，过两天再来吧')
 
 
 def update_menu_setting():
@@ -116,6 +129,12 @@ def leave_a_message():
 def command_not_found():
     """非关键词回复"""
     content = app.config['COMMAND_NOT_FOUND_TEXT'] + app.config['COMMAND_TEXT']
+    return wechat.response_text(content)
+
+
+def all_command():
+    """回复全部指令"""
+    content = app.config['COMMAND_TEXT']
     return wechat.response_text(content)
 
 
