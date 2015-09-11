@@ -5,6 +5,10 @@ from . import db
 
 
 class Express(db.Model):
+    __table_args__ = {
+        'mysql_engine': 'InnoDB',
+        'mysql_charset': 'utf8'
+    }
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     openid = db.Column(db.String(32), nullable=False)

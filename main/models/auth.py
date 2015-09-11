@@ -5,6 +5,10 @@ from . import db
 
 
 class Auth(db.Model):
+    __table_args__ = {
+        'mysql_engine': 'InnoDB',
+        'mysql_charset': 'utf8'
+    }
 
     openid = db.Column(db.String(32), primary_key=True, unique=True,
                        nullable=False)

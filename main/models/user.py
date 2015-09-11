@@ -9,6 +9,10 @@ redis_prefix = "wechat:user:"
 
 
 class User(db.Model):
+    __table_args__ = {
+        'mysql_engine': 'InnoDB',
+        'mysql_charset': 'utf8'
+    }
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     openid = db.Column(db.String(32), unique=True, nullable=False)
@@ -19,13 +23,12 @@ class User(db.Model):
     province = db.Column(db.String(10), nullable=True)
     city = db.Column(db.String(20), nullable=True)
     country = db.Column(db.String(20), nullable=True)
-    headimgurl = db.Column(db.String(100), nullable=True)
-    email = db.Column(db.String(32), nullable=True)
+    headimgurl = db.Column(db.String(150), nullable=True)
     regtime = db.Column(db.DateTime, default=datetime.now, nullable=False)
 
     def __init__(self, openid, nickname=None, realname=None,
                  classname=None, sex=None, province=None, city=None,
-                 country=None, headimgurl=None, email=None, regtime=None):
+                 country=None, headimgurl=None, regtime=None):
         self.openid = openid
         self.nickname = nickname
         self.realname = realname
@@ -35,7 +38,6 @@ class User(db.Model):
         self.city = city
         self.country = country
         self.headimgurl = headimgurl
-        self.email = email
         self.regtime = regtime
 
     def __repr__(self):
@@ -58,7 +60,6 @@ class User(db.Model):
                 "city": self.city,
                 "country": self.country,
                 "headimgurl": self.headimgurl,
-                "email": self.email,
                 "regtime": self.regtime
             })
         return None
