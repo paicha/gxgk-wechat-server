@@ -19,7 +19,7 @@ LEAVE_A_MESSAGE_TEXT = u"Hi~这里是小喵~\n请听到喵一声之后留言\n\n
 
 WEATHER_RADAR_TEXT = u'<a href="http://www.dg121.com/tianqiziliao/donghua_yun_radar/radar.gif">东莞雷达回波</a>'
 
-HTML5_GAMES_TEXT = u'<a href="http://autobox.meiriq.com/list/302da1ab?from=gxgkbbs">点击玩游戏</a>'
+HTML5_GAMES_TEXT = u'<a href="http://autobox.meiriq.com/list/302da1ab?from=gxgkcat">点击玩游戏</a>'
 
 POSTCARD_TEXT = u'<a href="https://jinshuju.net/s/iBxE0L">明信片查询</a>'
 
