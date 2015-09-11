@@ -11,8 +11,7 @@ def wechat_response(data):
     wechat.parse_data(data)
     message = wechat.get_message()
     # 用户信息写入数据库
-    user = User(openid=message.source)
-    user.save()
+    set_user_info(message.source)
     # 默认回复微信信息
     response = 'success'
     if message.type == 'text':
@@ -71,6 +70,19 @@ def wechat_response(data):
         pass
 
     return response
+
+
+def set_user_info(openid):
+    """保存用户信息"""
+    user_info = wechat.get_user_info(openid)
+    user = User(openid=user_info['openid'],
+                nickname=user_info['nickname'],
+                sex=user_info['sex'],
+                province=user_info['province'],
+                city=user_info['city'],
+                country=user_info['country'],
+                headimgurl=user_info['headimgurl'])
+    user.save()
 
 
 def developing():
