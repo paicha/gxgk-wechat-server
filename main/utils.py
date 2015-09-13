@@ -7,6 +7,7 @@ import time
 from . import app, wechat
 
 
+# 获取当前毫秒
 current_milli_time = lambda: int(round(time.time() * 1000))
 
 

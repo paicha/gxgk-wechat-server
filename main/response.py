@@ -3,7 +3,7 @@
 
 import re
 from main import wechat, app
-from .models import User
+from .models import set_user_info
 
 
 def wechat_response(data):
@@ -70,19 +70,6 @@ def wechat_response(data):
         pass
 
     return response
-
-
-def set_user_info(openid):
-    """保存用户信息"""
-    user_info = wechat.get_user_info(openid)
-    user = User(openid=user_info['openid'],
-                nickname=user_info['nickname'],
-                sex=user_info['sex'],
-                province=user_info['province'],
-                city=user_info['city'],
-                country=user_info['country'],
-                headimgurl=user_info['headimgurl'])
-    user.save()
 
 
 def developing():
