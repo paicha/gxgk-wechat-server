@@ -4,6 +4,7 @@
 import re
 from main import wechat, app
 from .models import set_user_info
+from .plugins.state import *
 
 
 def wechat_response(data):
@@ -33,7 +34,7 @@ def wechat_response(data):
             u'成绩': developing,
             u'新闻': developing,
             u'天气': developing,
-            u'陪聊': developing,
+            u'陪聊': chat_robot,
             u'四六级': developing,
             u'图书馆': developing,
             u'签到': developing,
@@ -42,28 +43,39 @@ def wechat_response(data):
             u'快递': developing,
             u'更新菜单': update_menu_setting
         }
+
         # 找出指令对应的回复
         command_match = False
         for key_word in commands:
             if re.match(key_word, message.content):
-                response = commands[key_word]()
+                response = commands[key_word](message)
+                # 匹配命令之后，统一设置默认状态
+                set_user_state(message.source, 'default')
                 command_match = True
                 break
-        # 缺省回复
+
+        # 非关键词回复
         if not command_match:
-            response = command_not_found()
+            # 匹配状态
+            if get_user_state(message.source) == 'chat':
+                response = chat_robot(message)
+            # 缺省回复
+            else:
+                response = command_not_found()
+
     elif message.type == 'click':
         commands = {
             'phone_number': phone_number,
             'score': developing,
             'express': developing,
             'search_books': developing,
-            'chat_robot': developing,
+            'chat_robot': chat_robot,
             'sign': developing,
             'music': developing,
             'weather': developing
         }
-        response = commands[message.key]()
+        response = commands[message.key](message)
+
     elif message.type == 'subscribe':
         response = subscribe()
     else:
@@ -75,6 +87,12 @@ def wechat_response(data):
 def developing():
     """维护公告"""
     return wechat.response_text('该功能维护中，过两天再来吧')
+
+
+def chat_robot(message):
+    """聊天机器人"""
+    set_user_state(message.source, 'chat')
+    return wechat.response_text('你好')
 
 
 def update_menu_setting():
