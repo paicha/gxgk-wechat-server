@@ -2,11 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from flask.ext.sqlalchemy import SQLAlchemy
-from redis import Redis
-from .. import app, wechat
+from .. import app, wechat, redis
 
 db = SQLAlchemy(app)
-redis = Redis()
 
 from .auth import *
 from .express import *

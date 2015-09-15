@@ -4,8 +4,6 @@
 from . import db
 from datetime import datetime
 
-redis_prefix = "wechat:user:"
-
 
 class User(db.Model):
     __table_args__ = {
