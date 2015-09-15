@@ -9,10 +9,12 @@ from .plugins.state import *
 
 def wechat_response(data):
     """微信消息处理回复"""
+    global message, openid
     wechat.parse_data(data)
     message = wechat.get_message()
+    openid = message.source
     # 用户信息写入数据库
-    set_user_info(message.source)
+    set_user_info(openid)
     # 默认回复微信信息
     response = 'success'
     if message.type == 'text':
@@ -34,7 +36,7 @@ def wechat_response(data):
             u'成绩': developing,
             u'新闻': developing,
             u'天气': developing,
-            u'陪聊': chat_robot,
+            u'陪聊': enter_chat_state,
             u'四六级': developing,
             u'图书馆': developing,
             u'签到': developing,
@@ -43,22 +45,20 @@ def wechat_response(data):
             u'快递': developing,
             u'更新菜单': update_menu_setting
         }
-
         # 找出指令对应的回复
         command_match = False
         for key_word in commands:
             if re.match(key_word, message.content):
-                response = commands[key_word](message)
                 # 匹配命令之后，统一设置默认状态
-                set_user_state(message.source, 'default')
+                set_user_state(openid, 'default')
+                response = commands[key_word]()
                 command_match = True
                 break
-
         # 非关键词回复
         if not command_match:
             # 匹配状态
-            if get_user_state(message.source) == 'chat':
-                response = chat_robot(message)
+            if get_user_state(openid) == 'chat':
+                response = chat_robot()
             # 缺省回复
             else:
                 response = command_not_found()
@@ -69,18 +69,19 @@ def wechat_response(data):
             'score': developing,
             'express': developing,
             'search_books': developing,
-            'chat_robot': chat_robot,
+            'chat_robot': enter_chat_state,
             'sign': developing,
             'music': developing,
             'weather': developing
         }
-        response = commands[message.key](message)
+        response = commands[message.key]()
 
     elif message.type == 'subscribe':
         response = subscribe()
     else:
         pass
-
+    # 保存最后一次交互的时间
+    set_user_last_interact_time(openid, message.time)
     return response
 
 
@@ -89,10 +90,21 @@ def developing():
     return wechat.response_text('该功能维护中，过两天再来吧')
 
 
-def chat_robot(message):
+def enter_chat_state():
+    """进入聊天模式"""
+    set_user_state(openid, 'chat')
+    return wechat.response_text(app.config['ENTER_CHAT_STATE_TEXT'])
+
+
+def chat_robot():
     """聊天机器人"""
-    set_user_state(message.source, 'chat')
-    return wechat.response_text('你好')
+    timeout = int(message.time) - int(get_user_last_interact_time(openid))
+    # 超过一段时间，提示陪聊超时
+    if timeout <= 5 * 60:
+        return wechat.response_text('聊天中')
+    else:
+        set_user_state(openid, 'default')
+        return wechat.response_text(app.config['CHAT_TIME_OUT_TEXT'])
 
 
 def update_menu_setting():
