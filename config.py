@@ -25,6 +25,10 @@ POSTCARD_TEXT = u'<a href="https://jinshuju.net/s/iBxE0L">明信片查询</a>'
 
 CONTACT_US_TEXT = u"我们欢迎各类型的合作\n　\n请联系：weixin@gxgk.cc\nQQ：646304004"
 
+ENTER_CHAT_STATE_TEXT = "已进入自动陪聊模式\n回复你想要说的话吧\n\n回复“取消”退出陪聊\n若留言请回复m+内容"
+
+CHAT_TIME_OUT_TEXT = "那么久不理小喵[可怜]\n自动退出陪聊模式啦~\n\n回复“陪聊”可以重新进入\n\n回复 “ ? ” 查看主菜单"
+
 BUS_ROUTES_NEWS = [{
     'title': u'公交路线时刻表',
     'description': u'没时间解释，快上车！',
