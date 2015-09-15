@@ -16,6 +16,7 @@ def set_user_info(openid):
     """保存用户信息"""
     redis_prefix = "wechat:user:"
     cache = redis.exists(redis_prefix + openid)
+
     if not cache:
         user_info = User.query.filter_by(openid=openid).first()
         if not user_info:
@@ -30,6 +31,7 @@ def set_user_info(openid):
             user.save()
             # 与查询的数据类型一样，方便 redis 写入
             user_info = user
+
         # 写入缓存
         redis.hmset(redis_prefix + user_info.openid, {
             "nickname": user_info.nickname,
@@ -42,6 +44,7 @@ def set_user_info(openid):
             "headimgurl": user_info.headimgurl,
             "regtime": user_info.regtime
         })
+
         return None
     else:
         return None
