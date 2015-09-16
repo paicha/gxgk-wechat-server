@@ -112,12 +112,12 @@ def enter_chat_state():
 def chat_robot():
     """聊天机器人"""
     timeout = int(message.time) - int(get_user_last_interact_time(openid))
-    # 超过一段时间，提示陪聊超时
-    if timeout <= 5 * 60:
-        return wechat.response_text('聊天中')
-    else:
+    # 超过一段时间，提示聊天超时
+    if timeout > 5 * 60:
         set_user_state(openid, 'default')
         return wechat.response_text(app.config['CHAT_TIME_OUT_TEXT'])
+    else:
+        return wechat.response_text('聊天中')
 
 
 def update_menu_setting():
