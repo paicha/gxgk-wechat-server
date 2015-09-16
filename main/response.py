@@ -10,12 +10,15 @@ from .plugins.state import *
 def wechat_response(data):
     """微信消息处理回复"""
     global message, openid
+
     wechat.parse_data(data)
     message = wechat.get_message()
     openid = message.source
+
     # 用户信息写入数据库
     set_user_info(openid)
-    # 默认回复微信信息
+
+    # 默认回复微信请求信息
     response = 'success'
     if message.type == 'text':
         # 替换全角空格为半角空格
@@ -23,6 +26,7 @@ def wechat_response(data):
         # 清除行首空格
         message.content = message.content.lstrip()
         # TODO 繁体转换或增加繁体关键字判断
+        # 指令列表
         commands = {
             u'^\?|^？': all_command,
             u'^留言|^客服': leave_a_message,
@@ -45,23 +49,28 @@ def wechat_response(data):
             u'快递': developing,
             u'更新菜单': update_menu_setting
         }
-        # 找出指令对应的回复
+        # 状态列表
+        state_commands = {
+            'chat': chat_robot
+        }
+
+        # 匹配指令
         command_match = False
         for key_word in commands:
             if re.match(key_word, message.content):
-                # 匹配命令之后，统一设置默认状态
+                # 指令匹配后，设置默认状态
                 set_user_state(openid, 'default')
                 response = commands[key_word]()
                 command_match = True
                 break
-        # 非关键词回复
         if not command_match:
             # 匹配状态
-            if get_user_state(openid) == 'chat':
-                response = chat_robot()
-            # 缺省回复
-            else:
+            state = get_user_state(openid)
+            # 关键词、状态都不匹配，缺省回复
+            if state == 'default':
                 response = command_not_found()
+            else:
+                response = state_commands[state]()
 
     elif message.type == 'click':
         commands = {
@@ -74,9 +83,13 @@ def wechat_response(data):
             'music': developing,
             'weather': developing
         }
+        # 匹配指令后，重置状态
+        set_user_state(openid, 'default')
         response = commands[message.key]()
 
     elif message.type == 'subscribe':
+        # 关注后，默认状态
+        set_user_state(openid, 'default')
         response = subscribe()
     else:
         pass
