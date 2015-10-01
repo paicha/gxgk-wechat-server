@@ -29,6 +29,7 @@ def wechat_response(data):
         # TODO 繁体转换或增加繁体关键字判断
         # 指令列表
         commands = {
+            u'取消': cancel_command,
             u'^\?|^？': all_command,
             u'^留言|^客服': leave_a_message,
             u'雷达': weather_radar,
@@ -94,6 +95,7 @@ def wechat_response(data):
         response = subscribe()
     else:
         pass
+
     # 保存最后一次交互的时间
     set_user_last_interact_time(openid, message.time)
     return response
@@ -102,6 +104,11 @@ def wechat_response(data):
 def developing():
     """维护公告"""
     return wechat.response_text('该功能维护中，过两天再来吧')
+
+
+def cancel_command():
+    content = app.config['CANCEL_COMMAND_TEXT'] + app.config['COMMAND_TEXT']
+    return wechat.response_text(content)
 
 
 def enter_chat_state():
