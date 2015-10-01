@@ -131,3 +131,4 @@ sftp-config.json
 # customize
 *.pyc
 instance/config.py
+app.log
