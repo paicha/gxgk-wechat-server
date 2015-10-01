@@ -5,6 +5,7 @@ import re
 from main import wechat, app
 from .models import set_user_info
 from .plugins.state import *
+from .plugins import simsimi
 
 
 def wechat_response(data):
@@ -117,7 +118,8 @@ def chat_robot():
         set_user_state(openid, 'default')
         return wechat.response_text(app.config['CHAT_TIME_OUT_TEXT'])
     else:
-        return wechat.response_text('聊天中')
+        content = simsimi.chat(message.content)
+        return wechat.response_text(content)
 
 
 def update_menu_setting():
