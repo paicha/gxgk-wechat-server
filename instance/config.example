@@ -2,7 +2,16 @@
 # -*- coding: utf-8 -*-
 
 DEBUG = False
+# 微信公众平台配置
 APP_ID = ""
 APP_SECRET = ""
 TOKEN = ""
+EncodingAESKey = ""
+# 数据库
 SQLALCHEMY_DATABASE_URI = ""
+# simsimi key
+SIMSIMI_KEY = ''
+# requests 代理
+HTTP_PROXIES = {
+    "http": "http://user:pass@ip:port/",
+}
