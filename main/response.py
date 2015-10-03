@@ -2,10 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import re
+import time
 from main import wechat, app
 from .models import set_user_info
 from .plugins.state import *
 from .plugins import simsimi
+from .plugins import sign
 
 
 def wechat_response(data):
@@ -45,7 +47,7 @@ def wechat_response(data):
             u'陪聊': enter_chat_state,
             u'四六级': developing,
             u'图书馆': developing,
-            u'签到': developing,
+            u'^签到|^起床': daily_sign,
             u'音乐': developing,
             u'论坛': developing,
             u'快递': developing,
@@ -81,7 +83,7 @@ def wechat_response(data):
             'express': developing,
             'search_books': developing,
             'chat_robot': enter_chat_state,
-            'sign': developing,
+            'sign': daily_sign,
             'music': developing,
             'weather': developing
         }
@@ -107,6 +109,7 @@ def developing():
 
 
 def cancel_command():
+    """取消状态"""
     content = app.config['CANCEL_COMMAND_TEXT'] + app.config['COMMAND_TEXT']
     return wechat.response_text(content)
 
@@ -127,6 +130,20 @@ def chat_robot():
     else:
         content = simsimi.chat(message.content)
         return wechat.response_text(content)
+
+
+def daily_sign():
+    """每日签到"""
+    data = sign.daily_sign(openid)
+    if data:
+        wechat.send_template_message(
+            openid, app.config['SIGN_TEMPLATE_ID'], data)
+        # 为保证模板通知先被接收
+        time.sleep(0.7)
+        return wechat.response_text('[调皮]')
+    else:
+        return wechat.response_text(u"离起床还早呢~\n快睡觉吧~\n\n签到时间从" +
+                                    u"早上6点开始\n\n记得每天签到啦~")
 
 
 def update_menu_setting():
