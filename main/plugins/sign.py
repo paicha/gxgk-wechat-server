@@ -30,6 +30,7 @@ def daily_sign(openid):
             keepdays = sign_info["keepdays"]
             today_sign_time = datetime.fromtimestamp(
                 last_sign_time / 1000).strftime('%H:%M:%S')
+            content = "累计签到：%s 天\n连续签到：%s 天\n\n今天广科第 %s 个签到！\n\n继续保持噢~"
             return {
                 "first": {
                     "value": "今天已经签到过啦！"
@@ -41,7 +42,7 @@ def daily_sign(openid):
                     "value": today_sign_time
                 },
                 "remark": {
-                    "value": "累计签到：%s 天\n连续签到：%s 天\n\n今天广科第 %s 个签到！\n\n继续保持噢~" % (totaldays, keepdays, 1)
+                    "value": content % (totaldays, keepdays, 1)
                 }
             }
         else:
@@ -56,6 +57,7 @@ def daily_sign(openid):
                              sign_info["keepdays"])
             today_sign_time = datetime.fromtimestamp(
                 current_milli_time / 1000).strftime('%H:%M:%S')
+            content = "累计签到：%s 天\n连续签到：%s 天\n\n今天广科第 %s 个签到！\n\n继续保持噢~"
             return {
                 "first": {
                     "value": "签到成功！"
@@ -67,6 +69,6 @@ def daily_sign(openid):
                     "value": today_sign_time
                 },
                 "remark": {
-                    "value": "累计签到：%s 天\n连续签到：%s 天\n\n今天广科第 %s 个签到！\n\n继续保持噢~" % (sign_info["totaldays"] + 1, sign_info["keepdays"], 1)
+                    "value":  content % (sign_info["totaldays"] + 1, sign_info["keepdays"], 1)
                 }
             }
