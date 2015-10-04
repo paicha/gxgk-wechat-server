@@ -137,10 +137,10 @@ def daily_sign():
     data = sign.daily_sign(openid)
     if data:
         wechat.send_template_message(
-            openid, app.config['SIGN_TEMPLATE_ID'], data)
+            openid, app.config['SIGN_TEMPLATE_ID'], data['template_data'])
         # 为保证模板通知先被接收
         time.sleep(0.7)
-        return wechat.response_text('[调皮]')
+        return wechat.response_text(data['ranklist'])
     else:
         return wechat.response_text(u"离起床还早呢~\n快睡觉吧~\n\n签到时间从" +
                                     u"早上6点开始\n\n记得每天签到啦~")

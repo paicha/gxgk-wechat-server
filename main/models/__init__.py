@@ -104,3 +104,22 @@ def update_sign_info(openid, lastsigntime, totaldays, keepdays):
         sign_info.update()
 
     return None
+
+
+def get_today_sign_ranklist(today_timestamp):
+    """获取今日签到排行榜"""
+    data = Sign.query.join(User, Sign.openid == User.openid) \
+        .add_columns(User.nickname) \
+        .filter(Sign.lastsigntime >= today_timestamp) \
+        .order_by(Sign.lastsigntime).all()
+
+    return data
+
+
+def get_sign_keepdays_ranklist():
+    """获取续签排行榜"""
+    data = Sign.query.join(User, Sign.openid == User.openid) \
+        .add_columns(User.nickname) \
+        .order_by(Sign.keepdays.desc()).all()
+
+    return data
