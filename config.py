@@ -15,7 +15,7 @@ CANCEL_COMMAND_TEXT = u"已回到正常模式啦啦啦~\n\n"
 
 HELP_TEXT = u"\n\n回复 “ ? ” 查看主菜单"
 
-PHONE_NUMBER_TEXT = u"————办公————\n校园网 0769-86211959\n\n院办室 0769-86211800\n\n学生处 0769-86211913\n\n教务处 0769-86211915\n\n招生办 0769-86211555\n\n————外卖————\n 台湾卤肉饭\n 13546976798/666798\n 旺记烧鹅\n 15015411456/671456\n 南香木桶饭\n 18824345816/674707\n 捷报源\n 15913751122/681122\n 良记\n 13437413545/33270668\n 电白菜馆\n 0769-22989348/666795\n 云香云吞面\n 15913776088/616088\n 隆江猪脚饭\n 13538360169/660169\n 米修吧\n 15989925944/644446\n 辉记餐厅\n 13662707099/627099\n QQ城市餐厅\n 13428578250/668250\n 好友邻\n 13723510289/660289\n 潮兴饭店\n 13622660754/660754\n 沙县小吃\n 13537367224\n\n 味力果\n 13423403880/671234\n 美食美客\n 13763281883/69988\n 布维记\n 18929100900/63666\n 地下铁\n 13712428381/668381\n 茶品道\n 0769-28828443\n 潘多拉\n 18926840222"
+PHONE_NUMBER_TEXT = u"————办公————\n校园网 0769-86211959\n\n院办室 0769-86211800\n\n学生处 0769-86211913\n\n教务处 0769-86211915\n\n招生办 0769-86211555"
 
 LEAVE_A_MESSAGE_TEXT = u"Hi~这里是小喵~\n请听到喵一声之后留言\n\n喵~回复：m+内容\n如：m小喵是笨蛋"
 
@@ -50,9 +50,15 @@ MENU_SETTING = {
             "name": "校园生活",
             "sub_button": [
                 {
+                    "type": "view",
+                    "name": "广科论坛",
+                    "url": "http://wsq.discuz.qq.com/?siteid=264557099",
+                    "sub_button": []
+                },
+                {
                     "type": "click",
-                    "name": "成绩查询",
-                    "key": "score",
+                    "name": "常用电话",
+                    "key": "phone_number",
                     "sub_button": []
                 },
                 {
@@ -66,11 +72,16 @@ MENU_SETTING = {
                     "name": "扫码查快递",
                     "key": "scan_express_code",
                     "sub_button": []
-                },
+                }
+            ]
+        },
+        {
+            "name": "我是学霸",
+            "sub_button": [
                 {
                     "type": "click",
-                    "name": "常用电话",
-                    "key": "phone_number",
+                    "name": "成绩查询",
+                    "key": "score",
                     "sub_button": []
                 },
                 {
@@ -78,28 +89,17 @@ MENU_SETTING = {
                     "name": "图书馆找书",
                     "key": "search_books",
                     "sub_button": []
-                }
-            ]
-        },
-        {
-            "name": "广科社区",
-            "sub_button": [
+                },
                 {
-                    "type": "view",
-                    "name": "微信群聊",
-                    "url": "http://quan.qgc.qq.com/164406354",
+                    "type": "click",
+                    "name": "借书记录",
+                    "key": "borrowing_record",
                     "sub_button": []
                 },
                 {
-                    "type": "view",
-                    "name": "广科论坛",
-                    "url": "http://wsq.discuz.qq.com/?siteid=264557099",
-                    "sub_button": []
-                },
-                {
-                    "type": "view",
-                    "name": "上网客户端",
-                    "url": "http://www.gxgk.cc/",
+                    "type": "click",
+                    "name": "一键续借",
+                    "key": "renew_books",
                     "sub_button": []
                 }
             ]
@@ -109,14 +109,14 @@ MENU_SETTING = {
             "sub_button": [
                 {
                     "type": "click",
-                    "name": "小喵陪聊",
-                    "key": "chat_robot",
+                    "name": "每日签到",
+                    "key": "sign",
                     "sub_button": []
                 },
                 {
                     "type": "click",
-                    "name": "每日签到",
-                    "key": "sign",
+                    "name": "小喵陪聊",
+                    "key": "chat_robot",
                     "sub_button": []
                 },
                 {

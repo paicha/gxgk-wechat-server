@@ -82,6 +82,8 @@ def wechat_response(data):
             'score': developing,
             'express': developing,
             'search_books': developing,
+            'borrowing_record': developing,
+            'renew_books': developing,
             'chat_robot': enter_chat_state,
             'sign': daily_sign,
             'music': developing,
