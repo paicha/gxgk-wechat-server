@@ -91,6 +91,9 @@ def wechat_response(data):
         set_user_state(openid, 'default')
         response = commands[message.key]()
 
+    elif message.type == 'scancode_waitmsg':
+        response = developing()
+
     elif message.type == 'subscribe':
         # 关注后，默认状态
         set_user_state(openid, 'default')

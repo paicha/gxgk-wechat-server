@@ -57,20 +57,20 @@ MENU_SETTING = {
                 },
                 {
                     "type": "click",
-                    "name": "快递查询",
+                    "name": "单号查快递",
                     "key": "express",
+                    "sub_button": []
+                },
+                {
+                    "type": "scancode_waitmsg",
+                    "name": "扫码查快递",
+                    "key": "scan_express_code",
                     "sub_button": []
                 },
                 {
                     "type": "click",
                     "name": "常用电话",
                     "key": "phone_number",
-                    "sub_button": []
-                },
-                {
-                    "type": "view",
-                    "name": "明信片查询",
-                    "url": "https://jinshuju.net/s/iBxE0L",
                     "sub_button": []
                 },
                 {
