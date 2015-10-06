@@ -29,9 +29,7 @@ CONTACT_US_TEXT = u"我们欢迎各类型的合作\n　\n请联系：weixin@gxgk
 
 ENTER_CHAT_STATE_TEXT = u"已进入自动陪聊模式\n回复你想要说的话吧\n\n回复“取消”退出陪聊\n若留言请回复m+内容"
 
-ENTER_EXPRESS_STATE_TEXT = u"已进入快递查询模式\n\n直接回复快递运单号\n即可查询物流信息\n\n回复“取消”退出本模式"
-
-CHAT_TIME_OUT_TEXT = u"那么久不理小喵[可怜]\n自动退出陪聊模式啦~\n\n回复“陪聊”可以重新进入\n\n回复 “ ? ” 查看主菜单"
+ENTER_EXPRESS_STATE_TEXT = u"已进入快递查询模式\n\n直接回复运单号\n即可查询物流信息\n\n回复“取消”退出本模式"
 
 BUS_ROUTES_NEWS = [{
     'title': u'公交路线时刻表',

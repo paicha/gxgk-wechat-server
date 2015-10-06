@@ -50,12 +50,13 @@ def wechat_response(data):
             u'^签到|^起床': daily_sign,
             u'音乐': developing,
             u'论坛': developing,
-            u'快递': developing,
+            u'快递': enter_express_state,
             u'更新菜单': update_menu_setting
         }
         # 状态列表
         state_commands = {
-            'chat': chat_robot
+            'chat': chat_robot,
+            'express': express_shipment_tracking
         }
 
         # 匹配指令
@@ -80,7 +81,7 @@ def wechat_response(data):
         commands = {
             'phone_number': phone_number,
             'score': developing,
-            'express': developing,
+            'express': enter_express_state,
             'search_books': developing,
             'borrowing_record': developing,
             'renew_books': developing,
@@ -115,6 +116,23 @@ def developing():
     return wechat.response_text('该功能维护中，过两天再来吧')
 
 
+def enter_express_state():
+    """进入快递查询模式"""
+    set_user_state(openid, 'express')
+    return wechat.response_text(app.config['ENTER_EXPRESS_STATE_TEXT'])
+
+
+def express_shipment_tracking():
+    """快递物流查询"""
+    timeout = int(message.time) - int(get_user_last_interact_time(openid))
+    # 超过一段时间，退出模式
+    if timeout > 10 * 60:
+        set_user_state(openid, 'default')
+        return command_not_found()
+    else:
+        return wechat.response_text("express")
+
+
 def cancel_command():
     """取消状态"""
     content = app.config['CANCEL_COMMAND_TEXT'] + app.config['COMMAND_TEXT']
@@ -130,10 +148,10 @@ def enter_chat_state():
 def chat_robot():
     """聊天机器人"""
     timeout = int(message.time) - int(get_user_last_interact_time(openid))
-    # 超过一段时间，提示聊天超时
-    if timeout > 5 * 60:
+    # 超过一段时间，退出模式
+    if timeout > 20 * 60:
         set_user_state(openid, 'default')
-        return wechat.response_text(app.config['CHAT_TIME_OUT_TEXT'])
+        return command_not_found()
     else:
         content = simsimi.chat(message.content)
         return wechat.response_text(content)
@@ -203,7 +221,7 @@ def leave_a_message():
 
 def command_not_found():
     """非关键词回复"""
-    content = app.config['COMMAND_NOT_FOUND_TEXT'] + app.config['COMMAND_TEXT']
+    content = app.config['COMMAND_NOT_FOUND_TEXT'] + app.config['HELP_TEXT']
     return wechat.response_text(content)
 
 
