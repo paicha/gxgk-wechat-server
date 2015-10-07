@@ -19,7 +19,7 @@ PHONE_NUMBER_TEXT = u"————办公————\n校园网 0769-86211959\n\
 
 LEAVE_A_MESSAGE_TEXT = u"Hi~这里是小喵~\n请听到喵一声之后留言\n\n喵~回复：m+内容\n如：m小喵是笨蛋"
 
-WEATHER_RADAR_TEXT = u'<a href="http://www.dg121.com/tianqiziliao/donghua_yun_radar/radar.gif">东莞雷达回波</a>'
+WEATHER_RADAR_TEXT = u'点击查看：<a href="http://www.dg121.com/tianqiziliao/donghua_yun_radar/radar.gif">东莞雷达回波</a>'
 
 HTML5_GAMES_TEXT = u'<a href="http://autobox.meiriq.com/list/302da1ab?from=gxgkcat">点击玩游戏</a>'
 
