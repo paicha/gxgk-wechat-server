@@ -24,7 +24,7 @@ def chat(text):
                'text': text, 'lc': 'ch', 'ft': '1.0'}
     try:
         # 由于 API 的延迟过高，使用代理请求
-        r = requests.get(url, params=payload, timeout=2,
+        r = requests.get(url, params=payload, timeout=3,
                          proxies=app.config['HTTP_PROXIES'])
         answer = r.json()['response'].encode('utf-8')
     except Exception, e:
