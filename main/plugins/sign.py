@@ -33,20 +33,23 @@ def daily_sign(openid):
                 last_sign_time / 1000).strftime('%H:%M:%S')
             # 排行榜信息
             ranklist_data = ranklist_and_user_rank(openid, today_timestamp)
-            content = "累计签到：%s 天\n连续签到：%s 天\n\n今天广科第 %s 个签到！\n\n继续保持噢~"
+            content = u"\n今天广科第 %s 个签到！\n\n继续保持噢~"
             return {
                 "template_data": {
                     "first": {
                         "value": "今天已经签到过啦！"
                     },
                     "keyword1": {
-                        "value": "每日签到"
-                    },
-                    "keyword2": {
                         "value": today_sign_time
                     },
+                    "keyword2": {
+                        "value": keepdays
+                    },
+                    "keyword3": {
+                        "value": totaldays
+                    },
                     "remark": {
-                        "value": content % (totaldays, keepdays, ranklist_data['user_sign_rank'])
+                        "value": content % ranklist_data['user_sign_rank']
                     }
                 },
                 "ranklist": ranklist_data['ranklist_content']}
@@ -65,20 +68,23 @@ def daily_sign(openid):
                 current_milli_time / 1000).strftime('%H:%M:%S')
             # 获取最新的排行榜信息
             ranklist_data = ranklist_and_user_rank(openid, today_timestamp)
-            content = u"累计签到：%s 天\n连续签到：%s 天\n\n今天广科第 %s 个签到！\n\n继续保持噢~"
+            content = u"\n今天广科第 %s 个签到！\n\n继续保持噢~"
             return {
                 "template_data": {
                     "first": {
                         "value": "签到成功！"
                     },
                     "keyword1": {
-                        "value": "每日签到"
-                    },
-                    "keyword2": {
                         "value": today_sign_time
                     },
+                    "keyword2": {
+                        "value": sign_info["keepdays"]
+                    },
+                    "keyword3": {
+                        "value": sign_info["totaldays"] + 1
+                    },
                     "remark": {
-                        "value":  content % (sign_info["totaldays"] + 1, sign_info["keepdays"], ranklist_data['user_sign_rank'])
+                        "value":  content % ranklist_data['user_sign_rank']
                     }
                 },
                 "ranklist": ranklist_data['ranklist_content']}
