@@ -28,7 +28,7 @@ def chat(text):
                          proxies=app.config['HTTP_PROXIES'])
         answer = r.json()['response'].encode('utf-8')
     except Exception, e:
-        app.logger.warning(u"simsimi 请求或解析错误: %s, text: %s" % (e, text))
+        app.logger.warning(u"simsimi 请求或解析失败: %s, text: %s" % (e, text))
         return random.choice(default_answer)
     else:
         # 过滤特殊关键词
