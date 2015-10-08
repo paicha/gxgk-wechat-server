@@ -3,7 +3,7 @@
 
 from functools import wraps
 from flask import request, redirect
-from . import app, wechat
+from . import app, wechat, redis
 
 
 def check_signature(func):
@@ -27,3 +27,17 @@ def check_signature(func):
         return func(*args, **kwargs)
 
     return decorated_function
+
+
+def get_wechat_access_token():
+    """获取 access_token"""
+    access_token = redis.get("wechat:access_token")
+    if not access_token:
+        # 获取 access_token
+        access_token = wechat.get_access_token()['access_token']
+        # 存入缓存
+        expires = str(int(7200 * 0.9))
+        redis.set("wechat:access_token", access_token, expires)
+        return access_token
+    else:
+        return access_token
