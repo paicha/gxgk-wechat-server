@@ -8,6 +8,7 @@ from .models import set_user_info
 from .plugins.state import *
 from .plugins import simsimi
 from .plugins import sign
+from .plugins import express
 
 
 def wechat_response(data):
@@ -72,7 +73,7 @@ def wechat_response(data):
             # 匹配状态
             state = get_user_state(openid)
             # 关键词、状态都不匹配，缺省回复
-            if state == 'default':
+            if state == 'default' or not state:
                 response = command_not_found()
             else:
                 response = state_commands[state]()
@@ -126,11 +127,14 @@ def express_shipment_tracking():
     """快递物流查询"""
     timeout = int(message.time) - int(get_user_last_interact_time(openid))
     # 超过一段时间，退出模式
-    if timeout > 10 * 60:
+    if timeout > 15 * 60:
         set_user_state(openid, 'default')
         return command_not_found()
     else:
-        return wechat.response_text("express")
+        # 放入队列任务执行，异步回复
+        express.get_tracking_info.delay(openid, message.content)
+        # 立即返回
+        return 'success'
 
 
 def cancel_command():
