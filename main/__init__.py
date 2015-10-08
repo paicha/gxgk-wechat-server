@@ -6,11 +6,14 @@ import logging
 from logging.handlers import RotatingFileHandler
 from redis import Redis
 from wechat_sdk import WechatBasic
+from .plugins.tasks import make_celery
 
 app = Flask(__name__, instance_relative_config=True)
 # 加载配置
 app.config.from_object('config')
 app.config.from_pyfile('config.py')
+
+celery = make_celery(app)
 
 # 记录日志
 handler = RotatingFileHandler('app.log', maxBytes=10000, backupCount=1)
