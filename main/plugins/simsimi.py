@@ -4,8 +4,10 @@
 import requests
 import random
 from .. import app
+from .. import celery
+import wechat_custom
 
-default_answer = ['么么哒', '说啥呢……', '叫我干嘛', '纳尼……', '=。=']
+default_answer = [u'么么哒', u'说啥呢……', u'叫我干嘛', u'纳尼……', u'=。=']
 
 
 def bad_word_filter(answer):
@@ -18,7 +20,8 @@ def bad_word_filter(answer):
             break
 
 
-def chat(text):
+@celery.task
+def chat(openid, text):
     url = 'http://api.simsimi.com/request.p'
     payload = {'key': app.config['SIMSIMI_KEY'],
                'text': text, 'lc': 'ch', 'ft': '1.0'}
@@ -29,14 +32,14 @@ def chat(text):
         answer = r.json()['response'].encode('utf-8')
     except Exception, e:
         app.logger.warning(u"simsimi 请求或解析失败: %s, text: %s" % (e, text))
-        return random.choice(default_answer)
+        return wechat_custom.send_text(openid, random.choice(default_answer))
     else:
         # 过滤特殊关键词
         if bad_word_filter(answer):
-            return random.choice(default_answer)
+            return wechat_custom.send_text(openid, random.choice(default_answer))
         else:
             if '鸡' in answer or 'simsimi' in answer:
                 answer = answer.replace('小黄鸡', '小喵')
                 answer = answer.replace('鸡', '喵')
                 answer = answer.replace('simsimi', '小喵')
-            return answer
+            return wechat_custom.send_text(openid, answer.decode('utf-8'))

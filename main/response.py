@@ -157,8 +157,8 @@ def chat_robot():
         set_user_state(openid, 'default')
         return command_not_found()
     else:
-        content = simsimi.chat(message.content)
-        return wechat.response_text(content)
+        simsimi.chat.delay(openid, message.content)
+        return 'success'
 
 
 def daily_sign():
