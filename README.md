@@ -53,6 +53,12 @@ vi instance/config.py
 >>> db.create_all()
 ```
 
+运行队列任务
+
+```
+celery -A main.celery worker
+```
+
 运行
 
 ```
