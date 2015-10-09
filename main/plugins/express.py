@@ -17,41 +17,41 @@ def get_tracking_info(openid, num):
         # 获取快递公司代号
         com_code_res = requests.get(get_com_url, timeout=2)
         com_code = com_code_res.json()["auto"][0]["comCode"]
+        # 查询物流
+        get_info_url = 'http://www.kuaidi100.com/query?type=%s&postid=%s' % (
+            com_code, num)
+        info_res = requests.get(get_info_url, timeout=3)
+        tracking_info = info_res.json()
     except Exception, e:
         app.logger.warning(u"快递公司代号请求或解析失败: %s, num: %s" % (e, num))
         context = u'网络繁忙或者单号有误\n请检查单号是否正确\n\n单号无误请点击：' + \
             u'<a href="%s">重新查询</a>' % web_url
-        return wechat_custom.send_text(openid, context)
+        wechat_custom.send_text(openid, context)
     else:
-        try:
-            # 查询物流
-            get_info_url = 'http://www.kuaidi100.com/query?type=%s&postid=%s' % (
-                com_code, num)
-            info_res = requests.get(get_info_url, timeout=3)
-            tracking_info = info_res.json()
-        except Exception, e:
-            app.logger.warning(u"快递信息请求或解析失败: %s, num: %s" % (e, num))
-            context = u'网络繁忙\n\n请点击：<a href="%s">重新查询</a>' % web_url
-            return wechat_custom.send_text(openid, context)
+        if tracking_info["message"] == "ok":
+            des = u'%s： %s\n更新时间：%s\n\n最新状态：%s\n\n有新动态小喵会通知你哦！\n点击查看详情' % (
+                com_code_to_text(com_code), num,
+                tracking_info["data"][0]["time"],
+                tracking_info["data"][0]["context"])
+            context = [{
+                'title': u'快递最新物流',
+                'url': web_url
+            }, {
+                'title': des,
+                'url': web_url
+            }]
+            wechat_custom.send_news(openid, context)
+            if tracking_info["ischeck"] == '0':
+                # 写入数据库
+                pass
+        elif tracking_info["status"] == '201':
+            context = u'单号不存在或者已经过期 \n\n' + \
+                u'点击：<a href="%s">重新查询</a>' % web_url
+            wechat_custom.send_text(openid, context)
         else:
-            if tracking_info["message"] == "ok":
-                des = u'%s： %s\n更新时间：%s\n\n最新状态：%s\n\n有新动态小喵会通知你哦！\n点击查看详情' % (
-                    com_code_to_text(com_code), num,
-                    tracking_info["data"][0]["time"],
-                    tracking_info["data"][0]["context"])
-                context = [{
-                    'title': u'快递最新物流',
-                    'url': web_url
-                }, {
-                    'title': des,
-                    'description': des,
-                    'url': web_url
-                }]
-                return wechat_custom.send_news(openid, context)
-            else:
-                context = u'%s \n\n点击：<a href="%s">重新查询</a>' % \
-                    (tracking_info["message"], web_url)
-                return wechat_custom.send_text(openid, context)
+            context = u'%s \n\n点击：<a href="%s">重新查询</a>' % \
+                (tracking_info["message"], web_url)
+            wechat_custom.send_text(openid, context)
 
 
 def com_code_to_text(com_code):
