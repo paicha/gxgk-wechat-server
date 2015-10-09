@@ -111,17 +111,6 @@ def wechat_response(data):
     return response
 
 
-def developing():
-    """维护公告"""
-    return wechat.response_text('该功能维护中，过两天再来吧')
-
-
-def enter_express_state():
-    """进入快递查询模式"""
-    set_user_state(openid, 'express')
-    return wechat.response_text(app.config['ENTER_EXPRESS_STATE_TEXT'])
-
-
 def express_shipment_tracking():
     """快递物流查询"""
     if message.type == 'text':
@@ -146,18 +135,6 @@ def express_shipment_tracking():
             return 'success'
         else:
             return wechat.response_text('识别错误，请扫描快递条形码')
-
-
-def cancel_command():
-    """取消状态"""
-    content = app.config['CANCEL_COMMAND_TEXT'] + app.config['COMMAND_TEXT']
-    return wechat.response_text(content)
-
-
-def enter_chat_state():
-    """进入聊天模式"""
-    set_user_state(openid, 'chat')
-    return wechat.response_text(app.config['ENTER_CHAT_STATE_TEXT'])
 
 
 def chat_robot():
@@ -194,6 +171,29 @@ def update_menu_setting():
         return wechat.response_text(e)
     else:
         return wechat.response_text('Done!')
+
+
+def developing():
+    """维护公告"""
+    return wechat.response_text('该功能维护中，过两天再来吧')
+
+
+def enter_express_state():
+    """进入快递查询模式"""
+    set_user_state(openid, 'express')
+    return wechat.response_text(app.config['ENTER_EXPRESS_STATE_TEXT'])
+
+
+def cancel_command():
+    """取消状态"""
+    content = app.config['CANCEL_COMMAND_TEXT'] + app.config['COMMAND_TEXT']
+    return wechat.response_text(content)
+
+
+def enter_chat_state():
+    """进入聊天模式"""
+    set_user_state(openid, 'chat')
+    return wechat.response_text(app.config['ENTER_CHAT_STATE_TEXT'])
 
 
 def postcard():
