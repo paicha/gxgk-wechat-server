@@ -27,7 +27,15 @@ app.logger.addHandler(handler)
 
 # 初始第三方库
 redis = Redis()
+
+# 初始化微信 SDK
+access_token = redis.get("wechat:access_token")
+access_token_expires_at = redis.get("wechat:access_token_expires_at")
+if access_token_expires_at:
+    access_token_expires_at = int(access_token_expires_at)
 wechat = WechatBasic(appid=app.config['APP_ID'],
+                     access_token=access_token,
+                     access_token_expires_at=access_token_expires_at,
                      appsecret=app.config['APP_SECRET'],
                      token=app.config['TOKEN'])
 
