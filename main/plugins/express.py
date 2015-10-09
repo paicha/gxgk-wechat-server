@@ -35,12 +35,12 @@ def get_tracking_info(openid, num):
             return wechat_custom.send_text(openid, context)
         else:
             if tracking_info["message"] == "ok":
-                des = u'%s： %s \n最新状态：%s\n更新时间：%s\n\n点击查看详情' % (
+                des = u'%s： %s\n更新时间：%s\n\n最新状态：%s\n\n有新动态小喵会通知你哦！\n点击查看详情' % (
                     com_code_to_text(com_code), num,
-                    tracking_info["data"][0]["context"],
-                    tracking_info["data"][0]["time"])
+                    tracking_info["data"][0]["time"],
+                    tracking_info["data"][0]["context"])
                 context = [{
-                    'title': u'快递查询结果',
+                    'title': u'快递最新物流',
                     'url': web_url
                 }, {
                     'title': des,
