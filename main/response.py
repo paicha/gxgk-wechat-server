@@ -96,9 +96,8 @@ def wechat_response(data):
         response = commands[message.key]()
 
     elif message.type == 'scancode_waitmsg':
-        # 匹配指令后，重置状态
-        set_user_state(openid, 'default')
-        response = developing()
+        set_user_state(openid, 'express')
+        response = express_shipment_tracking()
 
     elif message.type == 'subscribe':
         # 关注后，默认状态
@@ -125,16 +124,28 @@ def enter_express_state():
 
 def express_shipment_tracking():
     """快递物流查询"""
-    timeout = int(message.time) - int(get_user_last_interact_time(openid))
-    # 超过一段时间，退出模式
-    if timeout > 15 * 60:
-        set_user_state(openid, 'default')
-        return command_not_found()
+    if message.type == 'text':
+        timeout = int(message.time) - int(get_user_last_interact_time(openid))
+        # 超过一段时间，退出模式
+        if timeout > 15 * 60:
+            set_user_state(openid, 'default')
+            content = app.config['COMMAND_NOT_FOUND_TEXT'] + \
+                u'\n\n回复 “快递” 进入查询快递模式' + app.config['HELP_TEXT']
+            return wechat.response_text(content)
+        else:
+            # 放入队列任务执行，异步回复
+            express.get_tracking_info.delay(openid, message.content)
+            # 立即返回
+            return 'success'
     else:
-        # 放入队列任务执行，异步回复
-        express.get_tracking_info.delay(openid, message.content)
-        # 立即返回
-        return 'success'
+        if message.ScanCodeInfo[0]['ScanType'] == 'barcode':
+            # 读取条形码扫描的单号
+            num = message.ScanCodeInfo[0]['ScanResult'].split(",", 1)[1]
+            # 异步查询
+            express.get_tracking_info.delay(openid, num)
+            return 'success'
+        else:
+            return wechat.response_text('识别错误，请扫描快递条形码')
 
 
 def cancel_command():
