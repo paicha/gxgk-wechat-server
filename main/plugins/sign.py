@@ -33,7 +33,7 @@ def daily_sign(openid):
                 last_sign_time / 1000).strftime('%H:%M:%S')
             # 排行榜信息
             ranklist_data = ranklist_and_user_rank(openid, today_timestamp)
-            content = u"\n今天广科第 %s 个签到！\n\n继续保持噢~"
+            content = u"\n今天广科第 %s 个签到！"
             return {
                 "template_data": {
                     "first": {
@@ -68,7 +68,7 @@ def daily_sign(openid):
                 current_milli_time / 1000).strftime('%H:%M:%S')
             # 获取最新的排行榜信息
             ranklist_data = ranklist_and_user_rank(openid, today_timestamp)
-            content = u"\n今天广科第 %s 个签到！\n\n继续保持噢~"
+            content = u"\n今天广科第 %s 个签到！"
             return {
                 "template_data": {
                     "first": {
