@@ -32,20 +32,20 @@ def send_news(openid, content):
     return send_message(data)
 
 
-def send_message(payload):
+def send_message(data):
     """
     使用客服接口主动推送消息
     """
     url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?" + \
         "access_token=%s" % get_wechat_access_token()
     try:
-        payload = json.dumps(payload, ensure_ascii=False).encode('utf8')
+        payload = json.dumps(data, ensure_ascii=False).encode('utf8')
         r = requests.post(url, data=payload)
         response = r.json()
     except Exception, e:
         app.logger.warning(u"客服接口推送信息失败: %s, %s" % (e, payload))
     else:
         if response["errmsg"] != 'ok':
-            app.logger.warning(u"客服接口推送信息失败: %s, %s"
-                               % (response["errmsg"], payload))
+            app.logger.warning(u"客服接口推送信息失败信息: %s, %s"
+                               % (response["errmsg"], data))
         return None
