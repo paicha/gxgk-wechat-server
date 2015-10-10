@@ -9,15 +9,16 @@ from ..models import set_express_num
 
 
 @celery.task
-def get_tracking_info(openid, num):
+def get_tracking_info(openid, num, com_code=None, from_user_input=True):
     """根据单号查询快递物流"""
 
     web_url = "http://m.kuaidi100.com/result.jsp?from=weixin&nu=%s" % num
     get_com_url = 'http://www.kuaidi100.com/autonumber/autoComNum?text=%s' % num
     try:
         # 获取快递公司代号
-        com_code_res = requests.get(get_com_url, timeout=2)
-        com_code = com_code_res.json()["auto"][0]["comCode"]
+        if not com_code:
+            com_code_res = requests.get(get_com_url, timeout=2)
+            com_code = com_code_res.json()["auto"][0]["comCode"]
         # 查询物流
         get_info_url = 'http://www.kuaidi100.com/query?type=%s&postid=%s' % (
             com_code, num)
@@ -25,9 +26,10 @@ def get_tracking_info(openid, num):
         tracking_info = info_res.json()
     except Exception, e:
         app.logger.warning(u"快递公司代号请求或解析失败: %s, num: %s" % (e, num))
-        context = u'网络繁忙或者单号有误\n请检查单号是否正确\n\n单号无误请点击：' + \
-            u'<a href="%s">重新查询</a>' % web_url
-        wechat_custom.send_text(openid, context)
+        if from_user_input:
+            context = u'网络繁忙或者单号有误\n请检查单号是否正确\n\n单号无误请点击：' + \
+                u'<a href="%s">重新查询</a>' % web_url
+            wechat_custom.send_text(openid, context)
     else:
         if tracking_info["message"] == "ok":
             des = u'%s： %s\n更新时间：%s\n\n最新状态：%s\n\n有新动态小喵会通知你哦！\n点击查看详情' % (
@@ -46,14 +48,15 @@ def get_tracking_info(openid, num):
             set_express_num(openid, num, com_code,
                             tracking_info["data"][0]["time"],
                             tracking_info["ischeck"])
-        elif tracking_info["status"] == '201':
+        elif tracking_info["status"] == '201' and from_user_input:
             context = u'单号不存在或者已经过期 \n\n' + \
                 u'点击：<a href="%s">重新查询</a>' % web_url
             wechat_custom.send_text(openid, context)
         else:
-            context = u'%s \n\n点击：<a href="%s">重新查询</a>' % \
-                (tracking_info["message"], web_url)
-            wechat_custom.send_text(openid, context)
+            if from_user_input:
+                context = u'%s \n\n点击：<a href="%s">重新查询</a>' % \
+                    (tracking_info["message"], web_url)
+                wechat_custom.send_text(openid, context)
 
 
 def com_code_to_text(com_code):

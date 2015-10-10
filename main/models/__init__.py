@@ -140,3 +140,9 @@ def set_express_num(openid, num, com_code, lastupdate, ischeck):
             express_info.lastupdate = lastupdate
             express_info.ischeck = ischeck
             express_info.update()
+
+
+def get_uncheck_express():
+    """读取未签收的快递信息"""
+    express_info = Express.query.filter_by(ischeck=0).all()
+    return express_info

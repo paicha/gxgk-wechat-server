@@ -1,8 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from .. import celery
+from ..models import get_uncheck_express
+from express import get_tracking_info
 
 
 @celery.task(name='express.update')
 def update_uncheck_express():
-    pass
+    """更新未签收的快递动态"""
+    data = get_uncheck_express()
+    if not data:
+        return None
+    else:
+        for express in data:
+            get_tracking_info.delay(
+                express.openid,
+                express.num,
+                express.comcode,
+                from_user_input=False)
