@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from celery.schedules import crontab
+
 DEBUG = False
 
 # 微信公众平台配置
@@ -15,6 +17,13 @@ SQLALCHEMY_DATABASE_URI = ""
 # celery 配置
 CELERY_BROKER_URL = 'redis://localhost:6379',
 CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_TIMEZONE = 'Asia/Shanghai'
+CELERYBEAT_SCHEDULE = {
+    'every-10-min-at-8-to-23': {
+        'task': 'express.update',
+        'schedule': crontab(minute='*/10', hour='8-23')
+    },
+}
 
 # simsimi key
 SIMSIMI_KEY = ''

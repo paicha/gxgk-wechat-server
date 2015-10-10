@@ -39,4 +39,7 @@ wechat = WechatBasic(appid=app.config['APP_ID'],
                      appsecret=app.config['APP_SECRET'],
                      token=app.config['TOKEN'])
 
+# 路由
 from .routes import *
+# 定时任务
+from .plugins.cron import *
