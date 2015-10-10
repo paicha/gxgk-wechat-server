@@ -132,3 +132,4 @@ sftp-config.json
 *.pyc
 instance/config.py
 app.log
+celerybeat-schedule
