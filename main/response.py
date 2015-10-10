@@ -50,7 +50,7 @@ def wechat_response(data):
             u'图书馆': developing,
             u'^签到|^起床': daily_sign,
             u'音乐': developing,
-            u'论坛': developing,
+            u'论坛': bbs_url,
             u'快递': enter_express_state,
             u'更新菜单': update_menu_setting
         }
@@ -198,12 +198,14 @@ def enter_chat_state():
 
 def postcard():
     """明信片查询"""
-    return wechat.response_text(app.config['POSTCARD_TEXT'])
+    content = app.config['POSTCARD_TEXT'] + app.config['HELP_TEXT']
+    return wechat.response_text(content)
 
 
 def html5_games():
     """HTML5游戏"""
-    return wechat.response_text(app.config['HTML5_GAMES_TEXT'])
+    content = app.config['HTML5_GAMES_TEXT'] + app.config['HELP_TEXT']
+    return wechat.response_text(content)
 
 
 def contact_us():
@@ -215,6 +217,12 @@ def contact_us():
 def academic_calendar():
     """校历"""
     return wechat.response_news(app.config['ACADEMIC_CALENDAR_NEWS'])
+
+
+def bbs_url():
+    """论坛网址"""
+    content = app.config['BBS_URL_TXT'] + app.config['HELP_TEXT']
+    return wechat.response_text(content)
 
 
 def bus_routes():
