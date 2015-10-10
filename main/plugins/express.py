@@ -5,6 +5,7 @@ import requests
 from .. import app
 from .. import celery
 import wechat_custom
+from ..models import set_express_num
 
 
 @celery.task
@@ -41,9 +42,10 @@ def get_tracking_info(openid, num):
                 'url': web_url
             }]
             wechat_custom.send_news(openid, context)
-            if tracking_info["ischeck"] == '0':
-                # 写入数据库
-                pass
+            # 写入数据库
+            set_express_num(openid, num, com_code,
+                            tracking_info["data"][0]["time"],
+                            tracking_info["ischeck"])
         elif tracking_info["status"] == '201':
             context = u'单号不存在或者已经过期 \n\n' + \
                 u'点击：<a href="%s">重新查询</a>' % web_url

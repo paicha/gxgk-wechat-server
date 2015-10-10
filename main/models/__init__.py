@@ -123,3 +123,20 @@ def get_sign_keepdays_ranklist():
         .order_by(Sign.keepdays.desc()).all()
 
     return data
+
+
+def set_express_num(openid, num, com_code, lastupdate, ischeck):
+    """写入快递单号"""
+    express_info = Express.query.filter_by(openid=openid, num=num).first()
+    if not express_info:
+        express = Express(openid=openid,
+                          num=num,
+                          comcode=com_code,
+                          lastupdate=lastupdate,
+                          ischeck=ischeck)
+        express.save()
+    else:
+        if express_info.lastupdate != lastupdate:
+            express_info.lastupdate = lastupdate
+            express_info.ischeck = ischeck
+            express_info.update()
