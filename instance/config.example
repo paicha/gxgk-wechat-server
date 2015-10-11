@@ -21,7 +21,7 @@ CELERY_TIMEZONE = 'Asia/Shanghai'
 CELERYBEAT_SCHEDULE = {
     'every-10-min-at-8-to-23': {
         'task': 'express.update',
-        'schedule': crontab(minute='*/10', hour='8-23')
+        'schedule': crontab(minute='*/10', hour='8-22')
     },
 }
 
