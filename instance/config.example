@@ -35,3 +35,6 @@ HTTP_PROXIES = {
 
 # 微信模板通知 ID
 SIGN_TEMPLATE_ID = ""
+
+# 素材库图片 ID
+THUMB_MEDIA_ID = ""

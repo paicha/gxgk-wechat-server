@@ -20,6 +20,23 @@ def send_text(openid, content):
     return send_message(data)
 
 
+def send_music(openid, title, desc, music_url, thumb_media_id):
+    """组装音乐回复数据"""
+    data = {
+        "touser": openid,
+        "msgtype": "music",
+        "music":
+        {
+            "title": title,
+            "description": desc,
+            "musicurl": music_url,
+            "hqmusicurl": music_url,
+            "thumb_media_id": thumb_media_id
+        }
+    }
+    return send_message(data)
+
+
 def send_news(openid, content):
     """组装图文回复数据"""
     data = {

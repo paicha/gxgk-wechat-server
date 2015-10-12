@@ -9,6 +9,7 @@ from .plugins.state import *
 from .plugins import simsimi
 from .plugins import sign
 from .plugins import express
+from .plugins import music
 
 
 def wechat_response(data):
@@ -35,6 +36,7 @@ def wechat_response(data):
             u'取消': cancel_command,
             u'^\?|^？': all_command,
             u'^留言|^客服': leave_a_message,
+            u'^m': command_not_found,
             u'雷达': weather_radar,
             u'电话': phone_number,
             u'^公交|^公车': bus_routes,
@@ -49,7 +51,7 @@ def wechat_response(data):
             u'四六级': developing,
             u'图书馆': developing,
             u'^签到|^起床': daily_sign,
-            u'音乐': developing,
+            u'音乐': play_music,
             u'论坛': bbs_url,
             u'快递': enter_express_state,
             u'更新菜单': update_menu_setting
@@ -81,14 +83,16 @@ def wechat_response(data):
     elif message.type == 'click':
         commands = {
             'phone_number': phone_number,
+            'bus': bus_routes,
             'score': developing,
+            'cet': developing,
             'express': enter_express_state,
             'search_books': developing,
             'borrowing_record': developing,
             'renew_books': developing,
             'chat_robot': enter_chat_state,
             'sign': daily_sign,
-            'music': developing,
+            'music': play_music,
             'weather': developing
         }
         # 匹配指令后，重置状态
@@ -135,6 +139,12 @@ def express_shipment_tracking():
             return 'success'
         else:
             return wechat.response_text('识别错误，请扫描快递条形码')
+
+
+def play_music():
+    """随机音乐"""
+    music.get_douban_fm.delay(openid)
+    return 'success'
 
 
 def chat_robot():
