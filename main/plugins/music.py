@@ -24,5 +24,5 @@ def get_douban_fm(openid):
         wechat_custom.send_text(openid, context)
     else:
         # 客服接口推送音乐必须要有 thumb_media_id
-        thumb_media_id = app.config["THUMB_MEDIA_ID"]
+        thumb_media_id = app.config["MUSIC_THUMB_MEDIA_ID"]
         wechat_custom.send_music(openid, title, desc, music_url, thumb_media_id)
