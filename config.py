@@ -7,7 +7,7 @@ MAIN_URL = "http://bbs.gxgk.cc/wechat/"
 
 WELCOME_TEXT = u"感谢关注莞香广科[愉快]\n我是广科助手小喵[调皮]\n\n"
 
-COMMAND_TEXT = u"请回复以下关键词开始：\n——————————\n成绩  图书馆  四六级\n\n电话  快递  明信片\n\n签到  音乐  游戏\n\n公交  雷达  天气\n\n校历  新闻  论坛\n\n陪聊  留言  合作\n\n点击左下角切换菜单"
+COMMAND_TEXT = u"请回复以下关键词开始：\n——————————\n成绩  图书馆  四六级\n\n电话  快递  明信片\n\n签到  音乐  游戏\n\n公交  雷达  天气\n\n校历  新闻  论坛\n\n陪聊  留言  合作\n\n点击左下角切换输入框"
 
 COMMAND_NOT_FOUND_TEXT = u"收到你的留言啦！"
 
@@ -62,6 +62,11 @@ MENU_SETTING = {
                     "name": "常用电话",
                     "key": "phone_number",
                     "sub_button": []
+                }, {
+                    "type": "click",
+                    "name": "公交路线",
+                    "key": "bus",
+                    "sub_button": []
                 },
                 {
                     "type": "click",
@@ -82,8 +87,14 @@ MENU_SETTING = {
             "sub_button": [
                 {
                     "type": "click",
-                    "name": "成绩查询",
+                    "name": "期末成绩",
                     "key": "score",
+                    "sub_button": []
+                },
+                {
+                    "type": "click",
+                    "name": "四六级成绩",
+                    "key": "cet",
                     "sub_button": []
                 },
                 {
@@ -125,6 +136,12 @@ MENU_SETTING = {
                     "type": "click",
                     "name": "听一首歌",
                     "key": "music",
+                    "sub_button": []
+                },
+                {
+                    "type": "view",
+                    "name": "玩小游戏",
+                    "url": "http://autobox.meiriq.com/list/302da1ab?from=gxgkcat",
                     "sub_button": []
                 },
                 {
