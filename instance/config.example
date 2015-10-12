@@ -19,7 +19,7 @@ CELERY_BROKER_URL = 'redis://localhost:6379',
 CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 CELERY_TIMEZONE = 'Asia/Shanghai'
 CELERYBEAT_SCHEDULE = {
-    'every-10-min-at-8-to-23': {
+    'every-10-min-at-8-to-22': {
         'task': 'express.update',
         'schedule': crontab(minute='*/10', hour='8-22')
     },
