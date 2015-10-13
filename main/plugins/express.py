@@ -5,7 +5,7 @@ import requests
 from .. import app
 from .. import celery
 import wechat_custom
-from ..models import set_express_num
+from ..models import set_express_num, get_express_num
 
 
 @celery.task
@@ -32,23 +32,28 @@ def get_tracking_info(openid, num, com_code=None, from_user_input=True):
             wechat_custom.send_text(openid, context)
     else:
         if tracking_info["message"] == "ok":
-            des = u'%s： %s\n更新时间：%s\n\n最新状态：%s\n\n有新动态小喵会通知你哦！\n点击查看详情' % (
+            lastupdate = tracking_info["data"][0]["time"]
+            ischeck = tracking_info["ischeck"]
+            desc = u'%s： %s\n更新时间：%s\n\n最新状态：%s\n\n有新动态小喵会通知你哦！\n点击查看详情' % (
                 com_code_to_text(com_code), num,
-                tracking_info["data"][0]["time"],
-                tracking_info["data"][0]["context"])
+                lastupdate, tracking_info["data"][0]["context"])
             context = [{
                 'title': u'快递最新物流',
                 'url': web_url
             }, {
-                'title': des,
+                'title': desc,
                 'url': web_url
             }]
-            wechat_custom.send_news(openid, context)
+            if from_user_input:
+                wechat_custom.send_news(openid, context)
+            else:
+                # 快递信息有更新
+                express_info = get_express_num(openid, num)
+                if express_info.lastupdate != lastupdate:
+                    wechat_custom.send_news(openid, context)
             # 写入数据库
-            set_express_num(openid, num, com_code,
-                            tracking_info["data"][0]["time"],
-                            tracking_info["ischeck"])
-        elif tracking_info["status"] == '201' and from_user_input:
+            set_express_num(openid, num, com_code, lastupdate, ischeck)
+        elif from_user_input and tracking_info["status"] == '201':
             context = u'单号不存在或者已经过期 \n\n' + \
                 u'点击：<a href="%s">重新查询</a>' % web_url
             wechat_custom.send_text(openid, context)

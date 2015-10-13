@@ -125,9 +125,15 @@ def get_sign_keepdays_ranklist():
     return data
 
 
-def set_express_num(openid, num, com_code, lastupdate, ischeck):
-    """写入快递单号"""
+def get_express_num(openid, num):
+    """读取快递信息"""
     express_info = Express.query.filter_by(openid=openid, num=num).first()
+    return express_info
+
+
+def set_express_num(openid, num, com_code, lastupdate, ischeck):
+    """写入快递信息"""
+    express_info = get_express_num(openid, num)
     if not express_info:
         express = Express(openid=openid,
                           num=num,
