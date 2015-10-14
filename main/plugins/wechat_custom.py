@@ -60,9 +60,10 @@ def send_message(data):
         r = requests.post(url, data=payload)
         response = r.json()
     except Exception, e:
-        app.logger.warning(u"客服接口超时或解析失败: %s, %s" % (e, payload))
+        content = u"客服接口超时或解析失败，错误信息：%s\n提交内容：%s"
+        app.logger.warning(content % (e, payload))
     else:
         if response["errmsg"] != 'ok':
-            app.logger.warning(u"客服接口推送信息失败信息: %s, %s"
-                               % (response["errmsg"], data))
+            content = u"客服推送失败: %s\n推送内容：%s"
+            app.logger.warning(content % (response["errmsg"], data))
         return None
