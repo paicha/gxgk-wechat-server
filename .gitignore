@@ -133,3 +133,4 @@ sftp-config.json
 instance/config.py
 app.log
 celerybeat-schedule
+dump.rdb
