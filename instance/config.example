@@ -23,6 +23,10 @@ CELERYBEAT_SCHEDULE = {
         'task': 'express.update',
         'schedule': crontab(minute='*/10', hour='8-22')
     },
+    'every-100-min': {
+        'task': 'access_token.update',
+        'schedule': crontab(minute='*/100')
+    }
 }
 
 # simsimi key
