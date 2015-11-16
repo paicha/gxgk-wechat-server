@@ -23,9 +23,9 @@ CELERYBEAT_SCHEDULE = {
         'task': 'express.update',
         'schedule': crontab(minute='*/10', hour='8-22')
     },
-    'every-100-min': {
+    'every-1-hour': {
         'task': 'access_token.update',
-        'schedule': crontab(minute='*/100')
+        'schedule': crontab(minute=0, hour='*/1')
     }
 }
 
