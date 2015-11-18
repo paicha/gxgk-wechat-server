@@ -39,7 +39,7 @@
 pip install -r requirements.txt
 ``` 
 
-设置环境参数
+设置运行参数
 ```
 cp instance/config.example instance/config.py
 vi instance/config.py
@@ -56,7 +56,7 @@ vi instance/config.py
 运行队列任务
 
 ```
-celery -A main.celery worker
+celery -A main.celery worker --beat -l info
 ```
 
 运行
