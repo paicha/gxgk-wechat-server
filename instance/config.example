@@ -5,6 +5,11 @@ from celery.schedules import crontab
 
 DEBUG = False
 
+# 应用的网址
+HOST_URL = "http://domain.com"
+# 用于更新微信 access_token 的 url
+UPDATE_ACCESS_TOKEN_URL_ROUTE = "/i-wont-tell-you"
+
 # 微信公众平台配置
 APP_ID = ""
 APP_SECRET = ""
@@ -15,8 +20,8 @@ EncodingAESKey = ""
 SQLALCHEMY_DATABASE_URI = ""
 
 # celery 配置
-CELERY_BROKER_URL = 'redis://localhost:6379',
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_BROKER_URL = 'redis://ip:port',
+CELERY_RESULT_BACKEND = 'redis://ip:port'
 CELERY_TIMEZONE = 'Asia/Shanghai'
 CELERYBEAT_SCHEDULE = {
     'every-10-min-at-8-to-22': {
