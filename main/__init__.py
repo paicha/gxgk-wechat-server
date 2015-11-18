@@ -33,6 +33,11 @@ wechat = WechatBasic(appid=app.config['APP_ID'],
                      appsecret=app.config['APP_SECRET'],
                      token=app.config['TOKEN'])
 
+if not redis.exists("wechat:access_token"):
+    # access_token 写入缓存
+    redis.set("wechat:access_token",
+              wechat.get_access_token()['access_token'], 7000)
+
 # 路由
 from .routes import *
 # 定时任务
