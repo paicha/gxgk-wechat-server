@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import request, abort
+from flask import request
 from . import app, wechat, redis
 from .utils import check_signature
 from .response import wechat_response
@@ -20,20 +20,17 @@ def handle_wechat_request():
         return request.args.get('echostr', '')
 
 
-@app.route('/update_access_token', methods=["GET"])
+@app.route(app.config['UPDATE_ACCESS_TOKEN_URL_ROUTE'], methods=["GET"])
 def update_access_token():
     """
     读取微信最新 access_token，写入缓存
     """
-    if request.remote_addr == '127.0.0.1':
-        # 获取 access_token
-        token = wechat.grant_token()
-        access_token = token['access_token']
-        # 存入缓存，设置过期时间
-        redis.set("wechat:access_token", access_token, 7000)
-        return ('', 204)
-    else:
-        abort(404)
+    # 获取 access_token
+    token = wechat.grant_token()
+    access_token = token['access_token']
+    # 存入缓存，设置过期时间
+    redis.set("wechat:access_token", access_token, 7000)
+    return ('', 204)
 
 
 @app.errorhandler(404)

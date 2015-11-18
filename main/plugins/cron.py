@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import requests
-from .. import celery
+from .. import celery, app
 from ..models import get_uncheck_express
 from express import get_tracking_info
 
@@ -25,4 +25,5 @@ def update_uncheck_express():
 @celery.task(name='access_token.update')
 def update_access_token():
     """定时更新微信 access_token"""
-    requests.get('http://127.0.0.1:5000/update_access_token')
+    requests.get(app.config['HOST_URL'] +
+                 app.config['UPDATE_ACCESS_TOKEN_URL_ROUTE'])
