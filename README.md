@@ -88,3 +88,6 @@ gunicorn run:app -p wechat.pid -b 127.0.0.1:8000 -D
 # reload
 kill -HUP `cat wechat.pid`
 ```
+
+## License
+[MIT](LICENSE)
