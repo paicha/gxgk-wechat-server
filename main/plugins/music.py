@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import requests
-from .. import app
-from .. import celery
+from .. import app, celery
 import wechat_custom
 
 

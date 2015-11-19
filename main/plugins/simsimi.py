@@ -3,8 +3,7 @@
 
 import requests
 import random
-from .. import app
-from .. import celery
+from .. import app, celery
 import wechat_custom
 
 default_answer = [u'么么哒', u'说啥呢……', u'叫我干嘛', u'纳尼……', u'=。=']
