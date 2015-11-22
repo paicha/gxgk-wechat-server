@@ -76,6 +76,12 @@ celery -A main.celery worker --beat -l info
 python run.py
 ```
 
+测试
+
+```
+这个开发者很懒，暂时没写下什么测试……
+```
+
 部署
 
 ```
