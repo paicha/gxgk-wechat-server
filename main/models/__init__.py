@@ -152,3 +152,25 @@ def get_uncheck_express():
     """读取未签收的快递信息"""
     express_info = Express.query.filter_by(ischeck=0).all()
     return express_info
+
+
+def get_user_student_info(openid):
+    """读取绑定的教务平台账号"""
+    redis_prefix = "wechat:user:"
+    user_info_cache = redis.hgetall(redis_prefix + openid)
+
+    if 'studentid' in user_info_cache and 'studentpwd' in user_info_cache:
+        return user_info_cache
+    else:
+        auth_info = Auth.query.filter_by(openid=openid).first()
+        if auth_info and auth_info.studentid and auth_info.studentpwd:
+            # 写入缓存
+            redis.hmset(redis_prefix + openid, {
+                "studentid": auth_info.studentid,
+                "studentpwd": auth_info.studentpwd,
+            })
+            user_info_cache['studentid'] = auth_info.studentid
+            user_info_cache['studentpwd'] = auth_info.studentpwd
+            return user_info_cache
+        else:
+            return False
