@@ -39,7 +39,7 @@ SIMSIMI_KEY = ''
 
 # requests 代理
 HTTP_PROXIES = {
-    "http": "http://user:pass@ip:port/",
+    "http": "http://user:pass@ip:port/"
 }
 
 # 微信模板通知 ID
@@ -47,3 +47,18 @@ SIGN_TEMPLATE_ID = ""
 
 # 素材库图片 ID
 MUSIC_THUMB_MEDIA_ID = ""
+
+# 教务平台
+JW_PROXIES = {
+    "http": "http://user:pass@ip:port/"
+}
+LOGIN_VIEW_STATE = ''
+SCORE_VIEW_STATE = ''
+
+# 公网地址
+JW_LOGIN_URL = ''
+GET_SCORE_URL = ''
+
+# 内网地址
+JW_LOGIN_URL_LAN = ''
+GET_SCORE_URL_LAN = ''
