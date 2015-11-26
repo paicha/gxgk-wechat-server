@@ -27,7 +27,7 @@ HTML5_GAMES_TEXT = u'点击：<a href="http://autobox.meiriq.com/list/302da1ab?f
 
 POSTCARD_TEXT = u'点击：<a href="https://jinshuju.net/s/iBxE0L">明信片查询</a>'
 
-CONTACT_US_TEXT = u"我们欢迎各类型的合作\n　\n请联系：weixin@gxgk.cc\nQQ：646304004"
+CONTACT_US_TEXT = u"我们欢迎各类型的合作\n\n请联系：weixin@gxgk.cc\nQQ：646304004"
 
 ENTER_CHAT_STATE_TEXT = u"已进入自动陪聊模式\n回复你想要说的话吧\n\n回复“取消”退出陪聊\n若留言请回复m+内容"
 
