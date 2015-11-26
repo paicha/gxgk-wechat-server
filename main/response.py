@@ -4,12 +4,13 @@
 import re
 import time
 from main import wechat, app
-from .models import set_user_info
+from .models import set_user_info, get_user_student_info
 from .plugins.state import *
 from .plugins import simsimi
 from .plugins import sign
 from .plugins import express
 from .plugins import music
+from .plugins import score
 
 
 def wechat_response(data):
@@ -44,7 +45,7 @@ def wechat_response(data):
             u'合作': contact_us,
             u'明信片': postcard,
             u'游戏': html5_games,
-            u'成绩': developing,
+            u'成绩': exam_grade,
             u'新闻': developing,
             u'天气': developing,
             u'陪聊': enter_chat_state,
@@ -84,7 +85,7 @@ def wechat_response(data):
         commands = {
             'phone_number': phone_number,
             'bus': bus_routes,
-            'score': developing,
+            'score': exam_grade,
             'cet': developing,
             'express': enter_express_state,
             'search_books': developing,
@@ -113,6 +114,20 @@ def wechat_response(data):
     # 保存最后一次交互的时间
     set_user_last_interact_time(openid, message.time)
     return response
+
+
+def exam_grade():
+    """查询期末成绩"""
+    user_student_info = get_user_student_info(openid)
+    if user_student_info:
+        score.get_info.delay(openid, user_student_info['studentid'],
+                             user_student_info['studentpwd'])
+        return wechat.response_text('查询中……')
+    else:
+        content = u'请先绑定学号\n　\n<a href="' + app.config['HOST_URL'] +\
+            u'/auth?openid=%s">【点击这里绑定学号】</a>' % openid +\
+            u'\n　\n绑定后即可查询\n　\n高峰时期如果无反应\n请重试几次'
+        return wechat.response_text(content)
 
 
 def express_shipment_tracking():
