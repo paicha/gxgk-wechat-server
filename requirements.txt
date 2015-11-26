@@ -7,6 +7,7 @@ SQLAlchemy==1.0.8
 Werkzeug==0.10.4
 amqp==1.4.7
 anyjson==0.3.3
+beautifulsoup4==4.4.1
 billiard==3.3.0.20
 celery==3.1.18
 itsdangerous==0.24
