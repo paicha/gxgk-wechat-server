@@ -28,6 +28,9 @@ $(function() {
                 if (res.errcode === 0 && res.errmsg === 'ok') {
                     $('.page.msg').show()
                         // 绑定成功3秒后关闭窗口
+                    setTimeout(function() {
+                        wx.closeWindow();
+                    }, 3000);
                 } else {
                     // 绑定失败，显示后端信息
                     $('#err_msg').text(res.errmsg);
