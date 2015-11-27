@@ -19,10 +19,10 @@
             <div class="weui_cells weui_cells_form">
                 <div class="weui_cell">
                     <div class="weui_cell_hd">
-                        <label class="weui_label">{{ label_1 }}</label>
+                        <label class="weui_label">{{ username_label }}</label>
                     </div>
                     <div class="weui_cell_bd weui_cell_primary">
-                        <input class="weui_input" id="username" type="text" placeholder="{{ label_1_placeholder }}" />
+                        <input class="weui_input" id="username" type="text" placeholder="{{ username_label_placeholder }}" />
                     </div>
                 </div>
                 <div class="weui_cell">
@@ -30,7 +30,7 @@
                         <label class="weui_label">密码</label>
                     </div>
                     <div class="weui_cell_bd weui_cell_primary">
-                        <input class="weui_input" id="password" type="password" placeholder="{{ label_2_placeholder }}" />
+                        <input class="weui_input" id="password" type="password" placeholder="{{ password_label_placeholder }}" />
                     </div>
                 </div>
                 <input style="display: none;" type="text" id="openid" value="{{ openid }}" />
@@ -38,7 +38,7 @@
             <div class="weui_btn_area">
                 <a class="weui_btn weui_btn_primary" id="submit">绑定</a>
             </div>
-            <div class="weui_toptips weui_warn js_tooltips">{{ label_1 }}或密码不能为空</div>
+            <div class="weui_toptips weui_warn js_tooltips">{{ username_label }}或密码不能为空</div>
             <div id="loadingToast" class="weui_loading_toast" style="display: none;">
                 <div class="weui_mask_transparent"></div>
                 <div class="weui_toast">
