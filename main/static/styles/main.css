@@ -1,0 +1,54 @@
+.container,
+.page {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0
+}
+
+.hidden {
+    display: none
+}
+
+body,
+html {
+    height: 100%;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none
+}
+
+.page,
+body {
+    background-color: #FBF9FE
+}
+
+.container {
+    overflow: hidden
+}
+
+.page {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch
+}
+
+.hd {
+    padding: 2em 0
+}
+
+.page_desc {
+    text-align: center;
+    color: #888;
+    font-size: 14px
+}
+
+.page_title {
+    text-align: center;
+    font-size: 34px;
+    color: #3CC51F;
+    font-weight: 400;
+    margin: 0 15%
+}

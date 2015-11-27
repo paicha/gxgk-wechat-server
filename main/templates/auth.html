@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>广科小喵</title>
+    <link rel="stylesheet" href="http://gxgk-wechat.b0.upaiyun.com/styles/weui.min.css" />
+    <link rel="stylesheet" href="http://gxgk-wechat.b0.upaiyun.com/styles/main.min.css" />
+</head>
+
+<body ontouchstart>
+    <div class="container js_container">
+        <div class="page">
+            <div class="hd">
+                <h1 class="page_title">{{ title }}</h1>
+                <p class="page_desc">{{ desc }}</p>
+            </div>
+            <div class="weui_cells weui_cells_form">
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">
+                        <label class="weui_label">{{ label_1 }}</label>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <input class="weui_input" id="username" type="text" placeholder="{{ label_1_placeholder }}" />
+                    </div>
+                </div>
+                <div class="weui_cell">
+                    <div class="weui_cell_hd">
+                        <label class="weui_label">密码</label>
+                    </div>
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <input class="weui_input" id="password" type="password" placeholder="{{ label_2_placeholder }}" />
+                    </div>
+                </div>
+                <input style="display: none;" type="text" id="openid" value="{{ openid }}" />
+            </div>
+            <div class="weui_btn_area">
+                <a class="weui_btn weui_btn_primary" id="submit">绑定</a>
+            </div>
+            <div class="weui_toptips weui_warn js_tooltips">{{ label_1 }}或密码不能为空</div>
+            <div id="loadingToast" class="weui_loading_toast" style="display: none;">
+                <div class="weui_mask_transparent"></div>
+                <div class="weui_toast">
+                    <div class="weui_loading">
+                        <div class="weui_loading_leaf weui_loading_leaf_0"></div>
+                        <div class="weui_loading_leaf weui_loading_leaf_1"></div>
+                        <div class="weui_loading_leaf weui_loading_leaf_2"></div>
+                        <div class="weui_loading_leaf weui_loading_leaf_3"></div>
+                        <div class="weui_loading_leaf weui_loading_leaf_4"></div>
+                        <div class="weui_loading_leaf weui_loading_leaf_5"></div>
+                        <div class="weui_loading_leaf weui_loading_leaf_6"></div>
+                        <div class="weui_loading_leaf weui_loading_leaf_7"></div>
+                        <div class="weui_loading_leaf weui_loading_leaf_8"></div>
+                        <div class="weui_loading_leaf weui_loading_leaf_9"></div>
+                        <div class="weui_loading_leaf weui_loading_leaf_10"></div>
+                        <div class="weui_loading_leaf weui_loading_leaf_11"></div>
+                    </div>
+                    <p class="weui_toast_content">拼命绑定中</p>
+                </div>
+            </div>
+            <div class="weui_dialog_alert" style="display: none;">
+                <div class="weui_mask"></div>
+                <div class="weui_dialog">
+                    <div class="weui_dialog_hd"><strong class="weui_dialog_title">绑定失败</strong></div>
+                    <div class="weui_dialog_bd" id="err_msg"></div>
+                    <div class="weui_dialog_ft">
+                        <a class="weui_btn_dialog primary">确定</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="page msg" style="display: none;">
+            <div class="weui_msg">
+                <div class="weui_icon_area"><i class="weui_icon_success weui_icon_msg"></i></div>
+                <div class="weui_text_area">
+                    <h2 class="weui_msg_title">绑定成功</h2>
+                    <p class="weui_msg_desc">左上角「返回」公众号查看结果</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="http://gxgk-wechat.b0.upaiyun.com/scripts/zepto.min.js"></script>
+    <script src="http://gxgk-wechat.b0.upaiyun.com/scripts/touch.min.js"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script type="text/javascript">
+        var jsapi = {{ jsapi }};
+        jsapi['debug'] = false;
+        wx.config(jsapi);
+        wx.ready(function(){
+            wx.hideOptionMenu();
+        });
+    </script>
+    <script src="http://gxgk-wechat.b0.upaiyun.com/scripts/main.min.js"></script>
+</body>
+
+</html>
