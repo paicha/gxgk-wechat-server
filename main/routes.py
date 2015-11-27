@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import request
+from flask import request, render_template, jsonify, Markup
 from . import app, wechat, redis
-from .utils import check_signature
+from .utils import check_signature, get_jsapi_signature_data
 from .response import wechat_response
 
 
@@ -18,6 +18,44 @@ def handle_wechat_request():
     else:
         # 微信接入验证
         return request.args.get('echostr', '')
+
+
+@app.route('/auth-score', methods=['POST'])
+@app.route('/auth-score/<openid>')
+def auth_score(openid=None):
+    """教务系统绑定"""
+    if request.method == 'POST':
+        return jsonify(**{'errcode': 0, 'errmsg': 'ok'})
+    else:
+        jsapi = get_jsapi_signature_data('request.url')
+        jsapi['jsApiList'] = ['hideOptionMenu']
+        return render_template('auth.html',
+                               title=u'微信查成绩',
+                               desc=u'请先绑定教务系统',
+                               label_1=u'学号',
+                               label_1_placeholder=u'请输入你的学号',
+                               label_2_placeholder=u'默认是身份证号码',
+                               openid=openid,
+                               jsapi=Markup(jsapi))
+
+
+@app.route('/auth-library', methods=['POST'])
+@app.route('/auth-library/<openid>')
+def auth_library(openid=None):
+    """借书卡账号绑定"""
+    if request.method == 'POST':
+        return jsonify(**{'errcode': 0, 'errmsg': 'ok'})
+    else:
+        jsapi = get_jsapi_signature_data('request.url')
+        jsapi['jsApiList'] = ['hideOptionMenu']
+        return render_template('auth.html',
+                               title=u'图书馆查询',
+                               desc=u'请先绑定借书卡',
+                               label_1=u'卡号',
+                               label_1_placeholder=u'请输入你的借书卡号',
+                               label_2_placeholder=u'默认是 123456',
+                               openid=openid,
+                               jsapi=Markup(jsapi))
 
 
 @app.route(app.config['UPDATE_ACCESS_TOKEN_URL_ROUTE'], methods=["GET"])
