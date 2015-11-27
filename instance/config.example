@@ -48,7 +48,7 @@ SIGN_TEMPLATE_ID = ""
 # 素材库图片 ID
 MUSIC_THUMB_MEDIA_ID = ""
 
-# 教务平台
+# 教务管理系统
 JW_PROXIES = {
     "http": "http://user:pass@ip:port/"
 }

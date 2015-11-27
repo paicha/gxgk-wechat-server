@@ -155,7 +155,7 @@ def get_uncheck_express():
 
 
 def get_user_student_info(openid):
-    """读取绑定的教务平台账号"""
+    """读取绑定的教务管理系统账号"""
     redis_prefix = "wechat:user:"
     user_info_cache = redis.hgetall(redis_prefix + openid)
 
