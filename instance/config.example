@@ -55,6 +55,7 @@ PASSWORD_SECRET_KEY = ''
 JW_PROXIES = {
     "http": "http://user:pass@ip:port/"
 }
+# 正方系统 POST 用到的参数
 LOGIN_VIEW_STATE = ''
 SCORE_VIEW_STATE = ''
 
