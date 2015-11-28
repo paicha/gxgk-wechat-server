@@ -5,6 +5,7 @@ from flask import request, render_template, jsonify, Markup
 from . import app, wechat, redis
 from .utils import check_signature, get_jsapi_signature_data
 from .response import wechat_response
+from .plugins import score
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -20,12 +21,19 @@ def handle_wechat_request():
         return request.args.get('echostr', '')
 
 
-@app.route('/auth-score', methods=['POST'])
-@app.route('/auth-score/<openid>')
+@app.route('/auth-score/<openid>', methods=['GET', 'POST'])
 def auth_score(openid=None):
     """教务系统绑定"""
     if request.method == 'POST':
-        return jsonify(**{'errcode': 0, 'errmsg': 'ok'})
+        studentid = request.form["studentid"]
+        studentpwd = request.form["studentpwd"]
+        # 根据用户输入的信息，模拟登陆
+        if studentid.isalnum() and studentpwd:
+            errmsg = score.get_info(
+                openid, studentid, studentpwd, check_login=True)
+        else:
+            errmsg = u'学号或者密码格式不合法'
+        return jsonify({'errmsg': errmsg})
     else:
         jsapi = get_jsapi_signature_data('request.url')
         jsapi['jsApiList'] = ['hideOptionMenu']
@@ -35,16 +43,14 @@ def auth_score(openid=None):
                                username_label=u'学号',
                                username_label_placeholder=u'请输入你的学号',
                                password_label_placeholder=u'默认是身份证号码',
-                               openid=openid,
                                jsapi=Markup(jsapi))
 
 
-@app.route('/auth-library', methods=['POST'])
-@app.route('/auth-library/<openid>')
+@app.route('/auth-library/<openid>', methods=['GET', 'POST'])
 def auth_library(openid=None):
     """借书卡账号绑定"""
     if request.method == 'POST':
-        return jsonify(**{'errcode': 0, 'errmsg': 'ok'})
+        return jsonify({'errmsg': 'ok'})
     else:
         jsapi = get_jsapi_signature_data('request.url')
         jsapi['jsApiList'] = ['hideOptionMenu']
@@ -54,7 +60,6 @@ def auth_library(openid=None):
                                username_label=u'卡号',
                                username_label_placeholder=u'请输入你的借书卡号',
                                password_label_placeholder=u'默认是 123456',
-                               openid=openid,
                                jsapi=Markup(jsapi))
 
 

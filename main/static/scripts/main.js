@@ -2,30 +2,25 @@ $(function() {
     $('#submit').tap(function() {
         var username = $('#username').val().replace(/\s+/g, '');
         var password = $('#password').val().replace(/\s+/g, '');
-        var openid = $('#openid').val();
         // 验证各项信息不为空
-        if (!!username && !!password && !!openid) {
+        if (!!username && !!password) {
             $('#loadingToast').show();
             // 判断绑定类型
             if ($('.page_title').text() == '微信查成绩') {
-                post_url = '/auth-score';
-                data = {
+                var data = {
                     studentid: username,
-                    studentpwd: password,
-                    openid: openid
+                    studentpwd: password
                 };
             } else {
-                post_url = '/auth-library';
-                data = {
+                var data = {
                     libraryid: username,
-                    librarypwd: password,
-                    openid: openid
+                    librarypwd: password
                 };
             }
             // 提交绑定信息
-            $.post(post_url, data, function(res) {
+            $.post(window.location.href, data, function(res) {
                 $('#loadingToast').hide();
-                if (res.errcode === 0 && res.errmsg === 'ok') {
+                if (res.errmsg === 'ok') {
                     $('.page.msg').show()
                         // 绑定成功3秒后关闭窗口
                     setTimeout(function() {
