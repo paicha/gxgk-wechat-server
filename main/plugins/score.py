@@ -93,17 +93,22 @@ def get_info(openid, studentid, studentpwd, check_login=False):
                             content = content + u'\n补考成绩：%s' % makeup_score
                         if retake_score != u'\xa0':
                             content = content + u'\n重修成绩：%s' % retake_score
-                data = [{
-                    'title': u'%s 期末成绩' % name
-                }, {
-                    'title': u'【2014-2015学年第二学期】%s' % content
-                }]
-                # 缓存结果 30 分钟
-                redis.set(redis_prefix + openid, data, 60 * 30)
-                # 发送微信
-                wechat_custom.send_news(openid, data)
+                # 查询不到成绩
+                if not content:
+                    content = u'抱歉，没查询到成绩\n可能还没公布成绩\n请稍候查询'
+                    wechat_custom.send_text(openid, content)
+                else:
+                    data = [{
+                        'title': u'%s 期末成绩' % name
+                    }, {
+                        'title': u'【2014-2015学年第二学期】%s' % content
+                    }]
+                    # 缓存结果 30 分钟
+                    redis.set(redis_prefix + openid, data, 60 * 30)
+                    # 发送微信
+                    wechat_custom.send_news(openid, data)
+                # TODO 账号密码保存数据库
                 if check_login:
-                    # TODO 账号密码保存数据库
                     return 'ok'
 
 
