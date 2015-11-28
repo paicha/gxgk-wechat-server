@@ -124,7 +124,7 @@ def exam_grade():
                              user_student_info['studentpwd'])
         return wechat.response_text('查询中……')
     else:
-        url = app.config['HOST_URL'] + '/auth-score?openid=' + openid
+        url = app.config['HOST_URL'] + '/auth-score/' + openid
         content = u'请先绑定学号\n\n<a href="%s">【点击这里绑定学号】</a>' % url +\
             u'\n\n绑定后即可查询\n\n高峰时期如果无反应\n请重试几次'
         return wechat.response_text(content)

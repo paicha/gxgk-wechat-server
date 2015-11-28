@@ -54,7 +54,7 @@ def get_info(openid, studentid, studentpwd, check_login=False):
             if check_login:
                 return u"用户名或密码不正确"
             else:
-                url = app.config['HOST_URL'] + '/auth-score?openid=' + openid
+                url = app.config['HOST_URL'] + '/auth-score/' + openid
                 content = u'用户名或密码不正确\n\n' +\
                     u'<a href="%s">点这里重新绑定学号</a>' % url +\
                     u'\n\n绑定后重试操作即可'
