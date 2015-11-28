@@ -9,11 +9,11 @@ import wechat_custom
 
 
 @celery.task
-def get_info(openid, studentid, studentpwd):
+def get_info(openid, studentid, studentpwd, check_login=False):
     # 优先读取缓存的成绩
     redis_prefix = "wechat:user:score:"
     user_score_cache = redis.get(redis_prefix + openid)
-    if user_score_cache:
+    if user_score_cache and not check_login:
         content = ast.literal_eval(user_score_cache)
         wechat_custom.send_news(openid, content)
     else:
@@ -45,14 +45,20 @@ def get_info(openid, studentid, studentpwd):
 
         # 登录成功之后，教务系统会返回 302 跳转
         if not res:
-            content = u"学校的教务系统连接超时\n\n请稍后重试"
-            wechat_custom.send_text(openid, content)
+            if check_login:
+                return u"教务系统连接超时，请稍后重试"
+            else:
+                content = u"教务系统连接超时\n\n请稍后重试"
+                wechat_custom.send_text(openid, content)
         elif res.status_code == 200 and 'alert' in res.text:
-            url = app.config['HOST_URL'] + '/auth-score?openid=' + openid
-            content = u' 用户名或密码不正确\n\n' +\
-                u'<a href="%s">点这里重新绑定学号</a>' % url +\
-                u'\n\n绑定后重试操作即可'
-            wechat_custom.send_text(openid, content)
+            if check_login:
+                return u"用户名或密码不正确"
+            else:
+                url = app.config['HOST_URL'] + '/auth-score?openid=' + openid
+                content = u'用户名或密码不正确\n\n' +\
+                    u'<a href="%s">点这里重新绑定学号</a>' % url +\
+                    u'\n\n绑定后重试操作即可'
+                wechat_custom.send_text(openid, content)
         else:
             # 请求在校成绩页面
             try:
@@ -60,8 +66,11 @@ def get_info(openid, studentid, studentpwd):
             except Exception, e:
                 app.logger.warning(u'登录成功，但是在校成绩查询出错：%s,%s' % (
                     e, score_url))
-                content = u"学校的教务系统连接超时\n\n请稍后重试"
-                wechat_custom.send_text(openid, content)
+                if check_login:
+                    return u"教务系统连接超时，请稍后重试"
+                else:
+                    content = u"学校的教务系统连接超时\n\n请稍后重试"
+                    wechat_custom.send_text(openid, content)
             else:
                 # 解析 HTML 内容
                 soup = BeautifulSoup(res.text, "html.parser")
@@ -93,6 +102,9 @@ def get_info(openid, studentid, studentpwd):
                 redis.set(redis_prefix + openid, data, 60 * 30)
                 # 发送微信
                 wechat_custom.send_news(openid, data)
+                if check_login:
+                    # TODO 账号密码保存数据库
+                    return 'ok'
 
 
 def login(studentid, studentpwd, url, session, proxy):
