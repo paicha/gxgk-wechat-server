@@ -12,6 +12,7 @@ billiard==3.3.0.20
 celery==3.1.18
 itsdangerous==0.24
 kombu==3.0.26
+pycrypto==2.6.1
 pytz==2015.6
 redis==2.10.3
 requests==2.7.0
