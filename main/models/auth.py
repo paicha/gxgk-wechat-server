@@ -13,9 +13,9 @@ class Auth(db.Model):
     openid = db.Column(db.String(32), primary_key=True, unique=True,
                        nullable=False)
     studentid = db.Column(db.String(20), nullable=True)
-    studentpwd = db.Column(db.String(40), nullable=True)
+    studentpwd = db.Column(db.String(100), nullable=True)
     libraryid = db.Column(db.String(20), nullable=True)
-    librarypwd = db.Column(db.String(40), nullable=True)
+    librarypwd = db.Column(db.String(100), nullable=True)
 
     def __init__(self, openid, studentid, studentpwd, libraryid,
                  librarypwd):
