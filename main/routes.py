@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import request, render_template, jsonify, Markup
+from flask import request, render_template, jsonify, Markup, abort
 from . import app, wechat, redis
 from .utils import check_signature, get_jsapi_signature_data
 from .response import wechat_response
 from .plugins import score
+from .models import is_user_exists
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -25,16 +26,16 @@ def handle_wechat_request():
 def auth_score(openid=None):
     """教务系统绑定"""
     if request.method == 'POST':
-        studentid = request.form["studentid"]
-        studentpwd = request.form["studentpwd"]
+        studentid = request.form.get('studentid', '')
+        studentpwd = request.form.get('studentpwd', '')
         # 根据用户输入的信息，模拟登陆
-        if studentid.isalnum() and studentpwd:
+        if studentid.isalnum() and studentpwd and is_user_exists(openid):
             errmsg = score.get_info(
                 openid, studentid, studentpwd, check_login=True)
         else:
             errmsg = u'学号或者密码格式不合法'
         return jsonify({'errmsg': errmsg})
-    else:
+    elif is_user_exists(openid):
         jsapi = get_jsapi_signature_data('request.url')
         jsapi['jsApiList'] = ['hideOptionMenu']
         return render_template('auth.html',
@@ -44,6 +45,8 @@ def auth_score(openid=None):
                                username_label_placeholder=u'请输入你的学号',
                                password_label_placeholder=u'默认是身份证号码',
                                jsapi=Markup(jsapi))
+    else:
+        abort(404)
 
 
 @app.route('/auth-library/<openid>', methods=['GET', 'POST'])
@@ -51,7 +54,7 @@ def auth_library(openid=None):
     """借书卡账号绑定"""
     if request.method == 'POST':
         return jsonify({'errmsg': 'ok'})
-    else:
+    elif is_user_exists(openid):
         jsapi = get_jsapi_signature_data('request.url')
         jsapi['jsApiList'] = ['hideOptionMenu']
         return render_template('auth.html',
@@ -61,6 +64,8 @@ def auth_library(openid=None):
                                username_label_placeholder=u'请输入你的借书卡号',
                                password_label_placeholder=u'默认是 123456',
                                jsapi=Markup(jsapi))
+    else:
+        abort(404)
 
 
 @app.route(app.config['UPDATE_ACCESS_TOKEN_URL_ROUTE'], methods=["GET"])

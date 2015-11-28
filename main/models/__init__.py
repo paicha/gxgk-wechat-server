@@ -50,6 +50,20 @@ def set_user_info(openid):
         return None
 
 
+def is_user_exists(openid):
+    """用户是否存在数据库"""
+    redis_prefix = "wechat:user:"
+    cache = redis.exists(redis_prefix + openid)
+    if not cache:
+        user_info = User.query.filter_by(openid=openid).first()
+        if not user_info:
+            return False
+        else:
+            return True
+    else:
+        return True
+
+
 def get_sign_info(openid):
     """读取签到信息"""
     redis_prefix = "wechat:sign:"
