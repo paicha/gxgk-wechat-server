@@ -188,3 +188,24 @@ def get_user_student_info(openid):
             return user_info_cache
         else:
             return False
+
+
+def set_user_student_info(openid, studentid, studentpwd):
+    """写入绑定的教务管理系统账号"""
+    redis_prefix = "wechat:user:"
+    auth_info = Auth.query.filter_by(openid=openid).first()
+    if not auth_info:
+        auth = Auth(openid=openid,
+                    studentid=studentid,
+                    studentpwd=studentpwd)
+        auth.save()
+    else:
+        auth_info.studentid = studentid
+        auth_info.studentpwd = studentpwd
+        auth_info.update()
+
+    # 写入缓存
+    redis.hmset(redis_prefix + openid, {
+        "studentid": studentid,
+        "studentpwd": studentpwd
+    })

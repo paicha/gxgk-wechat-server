@@ -5,6 +5,8 @@ import requests
 from bs4 import BeautifulSoup
 import ast
 from .. import app, redis, celery
+from ..models import set_user_student_info
+from ..utils import AESCipher
 import wechat_custom
 
 
@@ -108,8 +110,12 @@ def get_info(openid, studentid, studentpwd, check_login=False):
                     redis.set(redis_prefix + openid, data, 60 * 30)
                     # 发送微信
                     wechat_custom.send_news(openid, data)
-                # TODO 账号密码保存数据库
+                # 账号密码保存数据库
                 if check_login:
+                    # 加密密码
+                    cipher = AESCipher(app.config['PASSWORD_SECRET_KEY'])
+                    studentpwd = cipher.encrypt(studentpwd)
+                    set_user_student_info(openid, studentid, studentpwd)
                     return 'ok'
 
 

@@ -5,6 +5,7 @@ import re
 import time
 from main import wechat, app
 from .models import set_user_info, get_user_student_info
+from .utils import AESCipher
 from .plugins.state import *
 from .plugins import simsimi
 from .plugins import sign
@@ -120,8 +121,11 @@ def exam_grade():
     """查询期末成绩"""
     user_student_info = get_user_student_info(openid)
     if user_student_info:
+        # 解密密码
+        cipher = AESCipher(app.config['PASSWORD_SECRET_KEY'])
+        studentpwd = cipher.decrypt(user_student_info['studentpwd'])
         score.get_info.delay(openid, user_student_info['studentid'],
-                             user_student_info['studentpwd'])
+                             studentpwd)
         return wechat.response_text('查询中……')
     else:
         url = app.config['HOST_URL'] + '/auth-score/' + openid
