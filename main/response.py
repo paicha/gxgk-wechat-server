@@ -124,8 +124,7 @@ def exam_grade():
         # 解密密码
         cipher = AESCipher(app.config['PASSWORD_SECRET_KEY'])
         studentpwd = cipher.decrypt(user_student_info['studentpwd'])
-        score.get_info.delay(openid, user_student_info['studentid'],
-                             studentpwd)
+        score.get_info.delay(openid, user_student_info['studentid'], studentpwd)
         return wechat.response_text('查询中……')
     else:
         url = app.config['HOST_URL'] + '/auth-score/' + openid
