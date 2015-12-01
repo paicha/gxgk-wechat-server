@@ -37,6 +37,7 @@ def get_info(openid, studentid, studentpwd, check_login=False):
             proxy = True
             score_url = app.config['GET_SCORE_URL_LAN']
             login_url = app.config['JW_LOGIN_URL_LAN']
+            session.headers.update({'Referer': app.config['JW_LOGIN_URL_LAN']})
             try:
                 res = login(studentid, studentpwd, login_url, session, proxy)
             except Exception, e:
