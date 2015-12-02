@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, SoupStrainer
 import ast
 from .. import app, redis, celery
-from ..models import set_user_student_info
+from ..models import set_user_student_info, set_user_realname_and_classname
 from ..utils import AESCipher
 import wechat_custom
 
@@ -29,17 +29,17 @@ def get_info(openid, studentid, studentpwd, check_login=False):
 
         # 登录获取 cookie
         proxy = False
-        score_url = app.config['GET_SCORE_URL']
         login_url = app.config['JW_LOGIN_URL']
+        score_url = app.config['JW_SCORE_URL']
         try:
             res = login(studentid, studentpwd, login_url, session, proxy)
         except Exception, e:
             app.logger.warning(u'外网查询出错：%s' % e)
             # 外网查询超时，切换内网代理查询
             proxy = True
-            score_url = app.config['GET_SCORE_URL_LAN']
             login_url = app.config['JW_LOGIN_URL_LAN']
-            session.headers.update({'Referer': app.config['JW_LOGIN_URL_LAN']})
+            score_url = app.config['JW_SCORE_URL_LAN']
+            session.headers.update({'Referer': login_url})
             try:
                 res = login(studentid, studentpwd, login_url, session, proxy)
             except Exception, e:
@@ -63,7 +63,7 @@ def get_info(openid, studentid, studentpwd, check_login=False):
                     u'\n\n绑定后重试操作即可'
                 wechat_custom.send_text(openid, content)
         else:
-            # 请求在校成绩页面
+            # 查询学习成绩
             try:
                 res = score_page(studentid, score_url, session, proxy)
             except Exception, e:
@@ -75,17 +75,18 @@ def get_info(openid, studentid, studentpwd, check_login=False):
                     content = u"学校的教务系统连接超时\n\n请稍后重试"
                     wechat_custom.send_text(openid, content)
             else:
+                school_year = app.config['SCHOOL_YEAR']
+                school_term = app.config['SCHOOL_TERM']
                 # 解析 HTML 内容
                 soup = BeautifulSoup(res.text, "html.parser")
                 rows = soup.find(id='Datagrid1').find_all('tr')
-                name = soup.find(id='Label5').get_text()[3:]
                 # 提取当前学期的成绩
                 content = u''
                 for row in rows:
                     cells = row.find_all("td")
-                    school_year = cells[0].get_text()
-                    school_term = cells[1].get_text()
-                    if school_year == '2014-2015' and school_term == '2':
+                    year = cells[0].get_text()
+                    term = cells[1].get_text()
+                    if year == school_year and term == school_term:
                         content = content + u'\n\n课程名称：%s\n考试成绩：%s' % (
                             cells[3].get_text(),
                             cells[8].get_text())
@@ -96,15 +97,19 @@ def get_info(openid, studentid, studentpwd, check_login=False):
                             content = content + u'\n补考成绩：%s' % makeup_score
                         if retake_score != u'\xa0':
                             content = content + u'\n重修成绩：%s' % retake_score
+                # 保存用户真实姓名和所在班级信息
+                realname = soup.find(id='Label5').get_text()[3:]
+                classname = soup.find(id='Label8').get_text()[4:]
+                set_user_realname_and_classname(openid, realname, classname)
                 # 查询不到成绩
                 if not content:
                     content = u'抱歉，没查询到成绩\n可能还没公布成绩\n请稍候查询'
                     wechat_custom.send_text(openid, content)
                 else:
                     data = [{
-                        'title': u'%s 期末成绩' % name
+                        'title': u'%s 期末成绩' % realname
                     }, {
-                        'title': u'【2014-2015学年第二学期】%s' % content
+                        'title': u'【%s学年第%s学期】%s' % (school_year, school_term, content)
                     }]
                     # 缓存结果 30 分钟
                     redis.set(redis_prefix + openid, data, 60 * 30)
@@ -121,26 +126,57 @@ def get_info(openid, studentid, studentpwd, check_login=False):
 
 def login(studentid, studentpwd, url, session, proxy):
     """登录获取 cookie"""
-    payload = app.config['LOGIN_VIEW_STATE'] +\
-        '&TextBox1=%s&TextBox2=%s' % (studentid, studentpwd) +\
-        '&RadioButtonList1=%D1%A7%C9%FA&Button1=+%B5%C7+%C2%BC+'
+    # 先获取 VIEWSTATE
+    if not proxy:
+        pre_login = session.get(url, allow_redirects=False, timeout=5)
+    else:
+        pre_login = session.get(url, allow_redirects=False, timeout=5,
+                                proxies=app.config['JW_PROXIES'])
+    pre_login_soup = BeautifulSoup(pre_login.text, "html.parser",
+                                   parse_only=SoupStrainer("input"))
+    login_view_state = pre_login_soup.find(
+        attrs={"name": "__VIEWSTATE"})['value']
+    # 登录
+    payload = {
+        '__VIEWSTATE': login_view_state,
+        'TextBox1': studentid,
+        'TextBox2': studentpwd,
+        'RadioButtonList1': u'学生',
+        'Button1': u' 登 录 '
+    }
     if not proxy:
         res = session.post(url, data=payload, allow_redirects=False, timeout=7)
     else:
-        res = session.post(url, data=payload, proxies=app.config['JW_PROXIES'],
-                           allow_redirects=False, timeout=7)
+        res = session.post(url, data=payload, allow_redirects=False, timeout=7,
+                           proxies=app.config['JW_PROXIES'])
     return res
 
 
 def score_page(studentid, url, session, proxy):
     """在校成绩页面"""
-    payload = app.config['SCORE_VIEW_STATE'] +\
-        '&ddlXN=&ddlXQ=&Button2=%D4%DA%D0%A3%D1' +\
-        '%A7%CF%B0%B3%C9%BC%A8%B2%E9%D1%AF'
+    url = url + studentid
+    # 先获取查询成绩需要的 VIEWSTATE
     if not proxy:
-        res = session.post(url + studentid, data=payload, allow_redirects=False,
-                           timeout=7)
+        pre_score = session.get(url, allow_redirects=False, timeout=7)
     else:
-        res = session.post(url + studentid, data=payload, allow_redirects=False,
-                           proxies=app.config['JW_PROXIES'], timeout=7)
-    return res
+        pre_score = session.get(url, allow_redirects=False, timeout=7,
+                                proxies=app.config['JW_PROXIES'])
+    pre_score_soup = BeautifulSoup(
+        pre_score.text, "html.parser", parse_only=SoupStrainer("input"))
+    score_view_state = pre_score_soup.find(
+        attrs={"name": "__VIEWSTATE"})['value']
+    # 查询成绩
+    payload = {
+        '__VIEWSTATE': score_view_state,
+        'Button2': u'在校学习成绩查询',
+        'ddlXN': '',
+        'ddlXQ': ''
+    }
+    if not proxy:
+        score_res = session.post(
+            url, data=payload, allow_redirects=False, timeout=7)
+    else:
+        score_res = session.post(
+            url, data=payload, allow_redirects=False, timeout=7,
+            proxies=app.config['JW_PROXIES'])
+    return score_res
