@@ -44,3 +44,7 @@ class User(db.Model):
         db.session.add(self)
         db.session.commit()
         return self
+
+    def update(self):
+        db.session.commit()
+        return self
