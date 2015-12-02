@@ -56,6 +56,7 @@ def wechat_response(data):
             u'音乐': play_music,
             u'论坛': bbs_url,
             u'快递': enter_express_state,
+            u'绑定': auth_url,
             u'更新菜单': update_menu_setting
         }
         # 状态列表
@@ -189,6 +190,15 @@ def daily_sign():
     else:
         return wechat.response_text(u"离起床还早呢~\n快睡觉吧~\n\n签到时间从" +
                                     u"早上6点开始\n\n记得每天签到啦~")
+
+
+def auth_url():
+    """教务系统、图书馆绑定的 URL"""
+    jw_url = app.config['HOST_URL'] + '/auth-score/' + openid
+    library_url = app.config['HOST_URL'] + '/auth-library/' + openid
+    content = u'<a href="%s">教务系统绑定：点击这里</a>\n\n\n' % jw_url +\
+        u'<a href="%s">图书馆系统绑定：点击这里</a>' % library_url
+    return wechat.response_text(content)
 
 
 def update_menu_setting():
