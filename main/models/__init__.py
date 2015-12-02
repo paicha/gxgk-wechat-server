@@ -47,6 +47,7 @@ def set_user_info(openid):
 
         return None
     else:
+        # TODO 7天以上没互动过的，获取最新的用户信息
         return None
 
 
@@ -209,3 +210,21 @@ def set_user_student_info(openid, studentid, studentpwd):
         "studentid": studentid,
         "studentpwd": studentpwd
     })
+
+
+def set_user_realname_and_classname(openid, realname, classname):
+    """写入用户的真实姓名和班级"""
+    redis_prefix = "wechat:user:"
+    cache = redis.hgetall(redis_prefix + openid)
+
+    if cache['realname'] == 'None' or cache['classname'] == 'None':
+        user_info = User.query.filter_by(openid=openid).first()
+        if not user_info.realname or not user_info.classname:
+            user_info.realname = realname
+            user_info.classname = classname
+            user_info.update()
+        # 写入缓存
+        redis.hmset(redis_prefix + openid, {
+            "realname": user_info.realname,
+            "classname": user_info.classname
+        })
