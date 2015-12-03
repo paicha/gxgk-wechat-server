@@ -73,8 +73,10 @@ def update_access_token():
     """
     读取微信最新 access_token，写入缓存
     """
-    # 获取 access_token
-    token = wechat.grant_token()
+    # 由于 wechat-python-sdk 中，generate_jsapi_signature -> grant_jsapi_ticket
+    # 会顺带把 access_token 刷新了，所以先 grant_jsapi_ticket 再读取 access_token
+    wechat.grant_jsapi_ticket()
+    token = wechat.get_access_token()
     access_token = token['access_token']
     # 存入缓存，设置过期时间
     redis.set("wechat:access_token", access_token, 7000)

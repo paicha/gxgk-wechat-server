@@ -35,6 +35,7 @@ wechat = WechatBasic(appid=app.config['APP_ID'],
 
 if not redis.exists("wechat:access_token"):
     # access_token 写入缓存
+    wechat.grant_jsapi_ticket()
     redis.set("wechat:access_token",
               wechat.get_access_token()['access_token'], 7000)
 
