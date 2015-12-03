@@ -15,17 +15,19 @@ CANCEL_COMMAND_TEXT = u"已回到正常模式啦啦啦~\n\n"
 
 HELP_TEXT = u"\n\n回复 “ ? ” 查看主菜单"
 
-BBS_URL_TXT = u'点击：<a href="http://wsq.discuz.qq.com/?siteid=264557099">进入论坛</a>'
+BBS_URL_TXT = u'<a href="http://wsq.discuz.qq.com/?siteid=264557099">进入论坛：点击这里</a>'
 
 PHONE_NUMBER_TEXT = u"————办公————\n校园网 0769-86211959\n\n院办室 0769-86211800\n\n学生处 0769-86211913\n\n教务处 0769-86211915\n\n招生办 0769-86211555"
 
 LEAVE_A_MESSAGE_TEXT = u"Hi~这里是小喵~\n请听到喵一声之后留言\n\n喵~回复：m+内容\n如：m小喵是笨蛋"
 
-WEATHER_RADAR_TEXT = u'点击查看：<a href="http://www.dg121.com/tianqiziliao/donghua_yun_radar/radar.gif">东莞雷达回波</a>'
+WEATHER_RADAR_TEXT = u'<a href="http://www.dg121.com/tianqiziliao/donghua_yun_radar/radar.gif">东莞雷达回波：点击这里</a>'
 
-HTML5_GAMES_TEXT = u'点击：<a href="http://autobox.meiriq.com/list/302da1ab?from=gxgkcat">开始玩游戏</a>'
+HTML5_GAMES_TEXT = u'<a href="http://autobox.meiriq.com/list/302da1ab?from=gxgkcat">开始玩游戏：点击这里</a>'
 
-POSTCARD_TEXT = u'点击：<a href="https://jinshuju.net/s/iBxE0L">明信片查询</a>'
+POSTCARD_TEXT = u'<a href="https://jinshuju.net/s/iBxE0L">明信片查询：点击这里</a>'
+
+CET_SCORE_TEXT = u'<a href="http://115.159.64.43/CETQuery/">四六级查询：点击这里</a>'
 
 CONTACT_US_TEXT = u"我们欢迎各类型的合作\n\n请联系：weixin@gxgk.cc\nQQ：646304004"
 

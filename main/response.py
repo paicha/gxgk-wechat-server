@@ -50,7 +50,7 @@ def wechat_response(data):
             u'新闻': developing,
             u'天气': developing,
             u'陪聊': enter_chat_state,
-            u'四六级': developing,
+            u'四六级': cet_score,
             u'^图书馆|^找书': search_books,
             u'^签到|^起床': daily_sign,
             u'音乐': play_music,
@@ -132,9 +132,9 @@ def exam_grade():
 
 
 def search_books():
-    """图书馆找书查询"""
+    """图书馆找书"""
     content = u'<a href="%s">' % app.config['LIBRARY_SEARCH_URL'] +\
-        u'查询图书馆书籍：点击这里</a>'
+        u'搜索图书馆书籍：点击这里</a>' + app.config['HELP_TEXT']
     return wechat.response_text(content)
 
 
@@ -236,6 +236,12 @@ def enter_chat_state():
     """进入聊天模式"""
     set_user_state(openid, 'chat')
     return wechat.response_text(app.config['ENTER_CHAT_STATE_TEXT'])
+
+
+def cet_score():
+    """回复四六级查询网址"""
+    content = app.config['CET_SCORE_TEXT'] + app.config['HELP_TEXT']
+    return wechat.response_text(content)
 
 
 def postcard():
