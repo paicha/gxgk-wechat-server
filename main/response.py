@@ -51,7 +51,7 @@ def wechat_response(data):
             u'天气': developing,
             u'陪聊': enter_chat_state,
             u'四六级': developing,
-            u'图书馆': developing,
+            u'^图书馆|^找书': search_books,
             u'^签到|^起床': daily_sign,
             u'音乐': play_music,
             u'论坛': bbs_url,
@@ -90,7 +90,6 @@ def wechat_response(data):
             'score': exam_grade,
             'cet': developing,
             'express': enter_express_state,
-            'search_books': developing,
             'borrowing_record': developing,
             'renew_books': developing,
             'chat_robot': enter_chat_state,
@@ -132,6 +131,13 @@ def exam_grade():
         content = u'请先绑定学号\n\n<a href="%s">【点击这里绑定学号】</a>' % url +\
             u'\n\n绑定后即可查询\n\n高峰时期如果无反应\n请重试几次'
         return wechat.response_text(content)
+
+
+def search_books():
+    """图书馆找书查询"""
+    content = u'<a href="%s">' % app.config['LIBRARY_SEARCH_URL'] +\
+        u'查询图书馆书籍：点击这里</a>'
+    return wechat.response_text(content)
 
 
 def express_shipment_tracking():
