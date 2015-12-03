@@ -25,6 +25,16 @@ WEATHER_RADAR_TEXT = u'<a href="http://www.dg121.com/tianqiziliao/donghua_yun_ra
 
 HTML5_GAMES_TEXT = u'<a href="http://autobox.meiriq.com/list/302da1ab?from=gxgkcat">开始玩游戏：点击这里</a>'
 
+LIBRARY_TEXT = u'<a href="http://61.142.33.201:8090/sms/opac/search/showiphoneSearch.action">搜索图书馆书籍：点击这里</a>\n\n回复“借书”\n查询借书记录\n\n回复“续借”\n续借 7 天内到期的书籍'
+
+AUTH_JW_TEXT = u'<a href="%s">【点击这里绑定学号】</a>\n\n绑定后即可查询'
+
+AUTH_LIBRARY_TEXT = u'<a href="%s">【点击这里绑定借书卡】</a>\n\n绑定后即可查询'
+
+NOT_SIGN_TIME_TEXT = u"离起床还早呢~\n快睡觉吧~\n\n签到时间从早上6点开始\n\n记得每天签到啦~"
+
+AUTH_TEXT = u'<a href="%s">教务系统绑定：点击这里</a>\n\n\n<a href="%s">图书馆系统绑定：点击这里</a>'
+
 POSTCARD_TEXT = u'<a href="https://jinshuju.net/s/iBxE0L">明信片查询：点击这里</a>'
 
 CET_SCORE_TEXT = u'<a href="http://115.159.64.43/CETQuery/">四六级查询：点击这里</a>'

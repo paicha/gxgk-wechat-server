@@ -4,14 +4,10 @@
 import re
 import time
 from main import wechat, app
-from .models import set_user_info, get_user_student_info
+from .models import set_user_info, get_user_student_info, get_user_library_info
 from .utils import AESCipher
 from .plugins.state import *
-from .plugins import simsimi
-from .plugins import sign
-from .plugins import express
-from .plugins import music
-from .plugins import score
+from .plugins import simsimi, sign, express, music, score, library
 
 
 def wechat_response(data):
@@ -52,6 +48,8 @@ def wechat_response(data):
             u'陪聊': enter_chat_state,
             u'四六级': cet_score,
             u'^图书馆|^找书': search_books,
+            u'借书': borrowing_record,
+            u'续借': renew_books,
             u'^签到|^起床': daily_sign,
             u'音乐': play_music,
             u'论坛': bbs_url,
@@ -115,6 +113,26 @@ def wechat_response(data):
     return response
 
 
+def borrowing_record():
+    """查询借书记录"""
+    user_library_info = get_user_library_info(openid)
+    if user_library_info:
+        # 解密密码
+        cipher = AESCipher(app.config['PASSWORD_SECRET_KEY'])
+        librarypwd = cipher.decrypt(user_library_info['librarypwd'])
+        library.get_borrowing_record.delay(
+            openid, user_library_info['libraryid'], librarypwd)
+        return wechat.response_text('查询中……')
+    else:
+        url = app.config['HOST_URL'] + '/auth-library/' + openid
+        content = app.config['AUTH_LIBRARY_TEXT'] % url
+        return wechat.response_text(content)
+
+
+def renew_books():
+    pass
+
+
 def exam_grade():
     """查询期末成绩"""
     user_student_info = get_user_student_info(openid)
@@ -126,15 +144,13 @@ def exam_grade():
         return wechat.response_text('查询中……')
     else:
         url = app.config['HOST_URL'] + '/auth-score/' + openid
-        content = u'请先绑定学号\n\n<a href="%s">【点击这里绑定学号】</a>' % url +\
-            u'\n\n绑定后即可查询\n\n高峰时期如果无反应\n请重试几次'
+        content = app.config['AUTH_JW_TEXT'] % url
         return wechat.response_text(content)
 
 
 def search_books():
     """图书馆找书"""
-    content = u'<a href="%s">' % app.config['LIBRARY_SEARCH_URL'] +\
-        u'搜索图书馆书籍：点击这里</a>' + app.config['HELP_TEXT']
+    content = app.config['LIBRARY_TEXT'] + app.config['HELP_TEXT']
     return wechat.response_text(content)
 
 
@@ -192,16 +208,15 @@ def daily_sign():
         time.sleep(0.7)
         return wechat.response_text(data['ranklist'])
     else:
-        return wechat.response_text(u"离起床还早呢~\n快睡觉吧~\n\n签到时间从" +
-                                    u"早上6点开始\n\n记得每天签到啦~")
+        content = app.config['NOT_SIGN_TIME_TEXT']
+        return wechat.response_text(content)
 
 
 def auth_url():
     """教务系统、图书馆绑定的 URL"""
     jw_url = app.config['HOST_URL'] + '/auth-score/' + openid
     library_url = app.config['HOST_URL'] + '/auth-library/' + openid
-    content = u'<a href="%s">教务系统绑定：点击这里</a>\n\n\n' % jw_url +\
-        u'<a href="%s">图书馆系统绑定：点击这里</a>' % library_url
+    content = app.config['AUTH_TEXT'] % (jw_url, library_url)
     return wechat.response_text(content)
 
 

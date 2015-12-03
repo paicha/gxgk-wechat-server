@@ -62,7 +62,7 @@ def auth_library(openid=None):
                                desc=u'请先绑定借书卡',
                                username_label=u'卡号',
                                username_label_placeholder=u'请输入你的借书卡号',
-                               password_label_placeholder=u'默认是 123456',
+                               password_label_placeholder=u'默认是卡号后六位',
                                jsapi=Markup(jsapi))
     else:
         abort(404)
