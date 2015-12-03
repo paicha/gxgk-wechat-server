@@ -86,14 +86,12 @@ def wechat_response(data):
     elif message.type == 'click':
         commands = {
             'phone_number': phone_number,
-            'bus': bus_routes,
-            'score': exam_grade,
-            'cet': developing,
             'express': enter_express_state,
+            'score': exam_grade,
             'borrowing_record': developing,
             'renew_books': developing,
-            'chat_robot': enter_chat_state,
             'sign': daily_sign,
+            'chat_robot': enter_chat_state,
             'music': play_music,
             'weather': developing
         }

@@ -63,9 +63,9 @@ MENU_SETTING = {
                     "key": "phone_number",
                     "sub_button": []
                 }, {
-                    "type": "click",
+                    "type": "view",
                     "name": "公交路线",
-                    "key": "bus",
+                    "url": "http://mp.weixin.qq.com/mp/appmsg/show?__biz=MjM5NTY3NjAyMg==&appmsgid=10000022&itemidx=1&sign=4015ca2f093456d0b51a4e7b5663a242#wechat_redirect",
                     "sub_button": []
                 },
                 {
