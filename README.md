@@ -6,7 +6,7 @@
 **主要功能**：
 
 - [ ] 期末成绩查询
-    - [ ] 手动查询
+    - [X] 手动查询
     - [ ] 定时重试，自动提醒
     - [ ] 成绩排名，朋友圈分享
 - [ ] 四六级成绩查询
@@ -64,16 +64,16 @@ vi instance/config.py
 >>> db.create_all()
 ```
 
-运行队列任务
-
-```
-celery -A main.celery worker --beat -l info
-```
-
 运行
 
 ```
 python run.py
+```
+
+运行队列任务
+
+```
+celery -A main.celery worker --beat -l info
 ```
 
 测试
