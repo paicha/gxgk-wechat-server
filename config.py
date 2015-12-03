@@ -92,15 +92,15 @@ MENU_SETTING = {
                     "sub_button": []
                 },
                 {
-                    "type": "click",
+                    "type": "view",
                     "name": "四六级成绩",
-                    "key": "cet",
+                    "url": "http://115.159.64.43/CETQuery/",
                     "sub_button": []
                 },
                 {
-                    "type": "click",
+                    "type": "view",
                     "name": "图书馆找书",
-                    "key": "search_books",
+                    "url": "http://61.142.33.201:8090/sms/opac/search/showiphoneSearch.action",
                     "sub_button": []
                 },
                 {
