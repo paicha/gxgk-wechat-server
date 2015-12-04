@@ -87,7 +87,7 @@ def wechat_response(data):
             'express': enter_express_state,
             'score': exam_grade,
             'borrowing_record': borrowing_record,
-            'renew_books': developing,
+            'renew_books': renew_books,
             'sign': daily_sign,
             'chat_robot': enter_chat_state,
             'music': play_music,
@@ -115,22 +115,28 @@ def wechat_response(data):
 
 def borrowing_record():
     """查询借书记录"""
+    return library_check_auth(False, u'查询中……')
+
+
+def renew_books():
+    """续借图书"""
+    return library_check_auth(True, u'续借中……')
+
+
+def library_check_auth(renew, content):
+    """检查有无授权，进行查询或续借"""
     user_library_info = get_user_library_info(openid)
     if user_library_info:
         # 解密密码
         cipher = AESCipher(app.config['PASSWORD_SECRET_KEY'])
         librarypwd = cipher.decrypt(user_library_info['librarypwd'])
-        library.get_borrowing_record.delay(
-            openid, user_library_info['libraryid'], librarypwd)
-        return wechat.response_text('查询中……')
+        library.record_or_renew_books.delay(
+            openid, user_library_info['libraryid'], librarypwd, renew=renew)
+        return wechat.response_text(content)
     else:
         url = app.config['HOST_URL'] + '/auth-library/' + openid
         content = app.config['AUTH_LIBRARY_TEXT'] % url
         return wechat.response_text(content)
-
-
-def renew_books():
-    pass
 
 
 def exam_grade():
