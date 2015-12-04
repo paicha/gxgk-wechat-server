@@ -131,7 +131,7 @@ def login(studentid, studentpwd, url, session, proxy):
         pre_login = session.get(url, allow_redirects=False, timeout=5)
     else:
         pre_login = session.get(url, allow_redirects=False, timeout=5,
-                                proxies=app.config['JW_PROXIES'])
+                                proxies=app.config['SCHOOL_LAN_PROXIES'])
     pre_login_soup = BeautifulSoup(pre_login.text, "html.parser",
                                    parse_only=SoupStrainer("input"))
     login_view_state = pre_login_soup.find(
@@ -148,7 +148,7 @@ def login(studentid, studentpwd, url, session, proxy):
         res = session.post(url, data=payload, allow_redirects=False, timeout=7)
     else:
         res = session.post(url, data=payload, allow_redirects=False, timeout=7,
-                           proxies=app.config['JW_PROXIES'])
+                           proxies=app.config['SCHOOL_LAN_PROXIES'])
     return res
 
 
@@ -160,7 +160,7 @@ def score_page(studentid, url, session, proxy):
         pre_score = session.get(url, allow_redirects=False, timeout=7)
     else:
         pre_score = session.get(url, allow_redirects=False, timeout=7,
-                                proxies=app.config['JW_PROXIES'])
+                                proxies=app.config['SCHOOL_LAN_PROXIES'])
     pre_score_soup = BeautifulSoup(
         pre_score.text, "html.parser", parse_only=SoupStrainer("input"))
     score_view_state = pre_score_soup.find(
@@ -178,5 +178,5 @@ def score_page(studentid, url, session, proxy):
     else:
         score_res = session.post(
             url, data=payload, allow_redirects=False, timeout=7,
-            proxies=app.config['JW_PROXIES'])
+            proxies=app.config['SCHOOL_LAN_PROXIES'])
     return score_res
