@@ -25,7 +25,7 @@ WEATHER_RADAR_TEXT = u'<a href="http://www.dg121.com/tianqiziliao/donghua_yun_ra
 
 HTML5_GAMES_TEXT = u'<a href="http://autobox.meiriq.com/list/302da1ab?from=gxgkcat">开始玩游戏：点击这里</a>'
 
-LIBRARY_TEXT = u'<a href="http://61.142.33.201:8090/sms/opac/search/showiphoneSearch.action">搜索图书馆书籍：点击这里</a>\n\n回复“借书”\n查询借书记录\n\n回复“续借”\n续借 7 天内到期的书籍'
+LIBRARY_TEXT = u'<a href="http://61.142.33.201:8090/sms/opac/search/showiphoneSearch.action">搜索图书馆书籍：点击这里</a>\n\n回复“借书”\n查询借书记录\n\n回复“续借”\n将7天内到期的书籍续借30天'
 
 AUTH_JW_TEXT = u'<a href="%s">【点击这里绑定学号】</a>\n\n绑定后即可查询'
 

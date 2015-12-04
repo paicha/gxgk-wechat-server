@@ -5,7 +5,7 @@ from flask import request, render_template, jsonify, Markup, abort
 from . import app, wechat, redis
 from .utils import check_signature, get_jsapi_signature_data
 from .response import wechat_response
-from .plugins import score
+from .plugins import score, library
 from .models import is_user_exists
 
 
@@ -29,7 +29,7 @@ def auth_score(openid=None):
         studentid = request.form.get('studentid', '')
         studentpwd = request.form.get('studentpwd', '')
         # 根据用户输入的信息，模拟登陆
-        if studentid.isalnum() and studentpwd and is_user_exists(openid):
+        if studentid and studentpwd and is_user_exists(openid):
             errmsg = score.get_info(
                 openid, studentid, studentpwd, check_login=True)
         else:
@@ -53,7 +53,15 @@ def auth_score(openid=None):
 def auth_library(openid=None):
     """借书卡账号绑定"""
     if request.method == 'POST':
-        return jsonify({'errmsg': 'ok'})
+        libraryid = request.form.get('libraryid', '')
+        librarypwd = request.form.get('librarypwd', '')
+        # 根据用户输入的信息，模拟登陆
+        if libraryid and librarypwd and is_user_exists(openid):
+            errmsg = library.get_borrowing_record(
+                openid, libraryid, librarypwd, check_login=True)
+        else:
+            errmsg = u'卡号或者密码格式不合法'
+        return jsonify({'errmsg': errmsg})
     elif is_user_exists(openid):
         jsapi = get_jsapi_signature_data('request.url')
         jsapi['jsApiList'] = ['hideOptionMenu']

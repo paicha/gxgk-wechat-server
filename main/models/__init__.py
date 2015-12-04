@@ -191,6 +191,28 @@ def get_user_student_info(openid):
             return False
 
 
+def get_user_library_info(openid):
+    """读取绑定的图书馆账号"""
+    redis_prefix = "wechat:user:"
+    user_info_cache = redis.hgetall(redis_prefix + openid)
+
+    if 'libraryid' in user_info_cache and 'librarypwd' in user_info_cache:
+        return user_info_cache
+    else:
+        auth_info = Auth.query.filter_by(openid=openid).first()
+        if auth_info and auth_info.libraryid and auth_info.librarypwd:
+            # 写入缓存
+            redis.hmset(redis_prefix + openid, {
+                "libraryid": auth_info.libraryid,
+                "librarypwd": auth_info.librarypwd,
+            })
+            user_info_cache['libraryid'] = auth_info.libraryid
+            user_info_cache['librarypwd'] = auth_info.librarypwd
+            return user_info_cache
+        else:
+            return False
+
+
 def set_user_student_info(openid, studentid, studentpwd):
     """写入绑定的教务管理系统账号"""
     redis_prefix = "wechat:user:"
@@ -209,6 +231,27 @@ def set_user_student_info(openid, studentid, studentpwd):
     redis.hmset(redis_prefix + openid, {
         "studentid": studentid,
         "studentpwd": studentpwd
+    })
+
+
+def set_user_library_info(openid, libraryid, librarypwd):
+    """写入绑定的借书卡账号"""
+    redis_prefix = "wechat:user:"
+    auth_info = Auth.query.filter_by(openid=openid).first()
+    if not auth_info:
+        auth = Auth(openid=openid,
+                    libraryid=libraryid,
+                    librarypwd=librarypwd)
+        auth.save()
+    else:
+        auth_info.libraryid = libraryid
+        auth_info.librarypwd = librarypwd
+        auth_info.update()
+
+    # 写入缓存
+    redis.hmset(redis_prefix + openid, {
+        "libraryid": libraryid,
+        "librarypwd": librarypwd
     })
 
 

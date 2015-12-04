@@ -86,7 +86,7 @@ def wechat_response(data):
             'phone_number': phone_number,
             'express': enter_express_state,
             'score': exam_grade,
-            'borrowing_record': developing,
+            'borrowing_record': borrowing_record,
             'renew_books': developing,
             'sign': daily_sign,
             'chat_robot': enter_chat_state,
@@ -232,7 +232,7 @@ def update_menu_setting():
 
 def developing():
     """维护公告"""
-    return wechat.response_text('该功能维护中，过两天再来吧')
+    return wechat.response_text('该功能维护中')
 
 
 def enter_express_state():
