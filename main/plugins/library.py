@@ -56,7 +56,10 @@ def record_or_renew_books(openid, libraryid, librarypwd,
                 wechat_custom.send_text(openid, content)
         else:
             record.encoding = 'gbk'
-            soup = BeautifulSoup(record.text, "html.parser",
+            # 修正不规范的 HTML
+            html = record.text.replace('TR', 'tr').replace(
+                '<td width=7></td></tr>', '')
+            soup = BeautifulSoup(html, "html.parser",
                                  parse_only=SoupStrainer("table"))
             rows = soup.find_all('tr')[1:]
             if len(rows) == 0:
