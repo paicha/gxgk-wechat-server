@@ -130,7 +130,7 @@ def library_check_auth(renew, content):
         # 解密密码
         cipher = AESCipher(app.config['PASSWORD_SECRET_KEY'])
         librarypwd = cipher.decrypt(user_library_info['librarypwd'])
-        library.record_or_renew_books.delay(
+        library.borrowing_record.delay(
             openid, user_library_info['libraryid'], librarypwd, renew=renew)
         return wechat.response_text(content)
     else:

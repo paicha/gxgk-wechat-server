@@ -57,7 +57,7 @@ def auth_library(openid=None):
         librarypwd = request.form.get('librarypwd', '')
         # 根据用户输入的信息，模拟登陆
         if libraryid and librarypwd and is_user_exists(openid):
-            errmsg = library.record_or_renew_books(
+            errmsg = library.borrowing_record(
                 openid, libraryid, librarypwd, check_login=True)
         else:
             errmsg = u'卡号或者密码格式不合法'
