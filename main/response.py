@@ -115,15 +115,15 @@ def wechat_response(data):
 
 def borrowing_record():
     """查询借书记录"""
-    return library_check_auth(False, u'查询中……')
+    return library_check_auth(u'查询中……')
 
 
 def renew_books():
     """续借图书"""
-    return library_check_auth(True, u'续借中……')
+    return library_check_auth(u'续借中……', renew=True)
 
 
-def library_check_auth(renew, content):
+def library_check_auth(content, renew=False):
     """检查有无授权，进行查询或续借"""
     user_library_info = get_user_library_info(openid)
     if user_library_info:
