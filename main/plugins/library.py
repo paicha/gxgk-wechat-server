@@ -218,6 +218,6 @@ def time_to_return_books(openid, libraryid, librarypwd):
                 now = time.time()
                 # 有效期小于 1 天
                 if deadline >= now and deadline - now < 1 * 24 * 3600:
-                    content_end = u"你有图书准备过期\n\n请续期或尽快到图书馆还书"
+                    content_end = u"你有图书准备过期\n请续期或尽快到图书馆还书"
                     send_record(openid, rows, content_end)
                     break
