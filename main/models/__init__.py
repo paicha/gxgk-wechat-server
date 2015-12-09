@@ -47,7 +47,7 @@ def set_user_info(openid):
 
         return None
     else:
-        # TODO 7天以上没互动过的，获取最新的用户信息
+        # TODO 每天第一次互动，获取最新的用户信息
         return None
 
 
@@ -163,10 +163,16 @@ def set_express_num(openid, num, com_code, lastupdate, ischeck):
             express_info.update()
 
 
-def get_uncheck_express():
+def get_all_uncheck_express():
     """读取未签收的快递信息"""
     express_info = Express.query.filter_by(ischeck=0).all()
     return express_info
+
+
+def get_all_auth_info():
+    """读取全部授权账号信息"""
+    auth_info = Auth.query.all()
+    return auth_info
 
 
 def get_user_student_info(openid):
