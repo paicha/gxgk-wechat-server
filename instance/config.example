@@ -31,6 +31,10 @@ CELERYBEAT_SCHEDULE = {
     'every-1-hour': {
         'task': 'access_token.update',
         'schedule': crontab(minute=0, hour='*/1')
+    },
+    'every-9-am': {
+        'task': 'library.return_books',
+        'schedule': crontab(minute=0, hour='9')
     }
 }
 

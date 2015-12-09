@@ -194,3 +194,30 @@ def get_html_tr_list(res):
     soup = BeautifulSoup(html, "html.parser", parse_only=SoupStrainer("table"))
     rows = soup.find_all('tr')[1:]  # 第一行是列名，去掉
     return rows
+
+
+def time_to_return_books(openid, libraryid, librarypwd):
+    """判断是否有图书准备过期"""
+    session = requests.Session()
+    login_url = app.config['LIBRARY_LOGIN_URL']
+    record_url = app.config['LIBRARY_RECORD_URL']
+    # 登录获取 cookie
+    login_res = login(session, libraryid, librarypwd, login_url, False)
+    # 判断登录结果
+    if login_res.status_code == 200 and login_res.text == 'ok':
+        record = get_record(session, record_url, False)
+        record.encoding = 'gbk'
+        rows = get_html_tr_list(record)
+        if len(rows) > 0:
+            for row in rows:
+                cells = row.find_all("td")
+                # 去除空格，转换为时间戳
+                deadline = cells[6].get_text().replace(u'\xa0', '')
+                deadline = time.mktime(
+                    datetime.strptime(deadline, '%Y/%m/%d').timetuple()) + 24 * 3600
+                now = time.time()
+                # 有效期小于 1 天
+                if deadline >= now and deadline - now < 1 * 24 * 3600:
+                    content_end = u"你有图书准备过期\n\n请续期或尽快到图书馆还书"
+                    send_record(openid, rows, content_end)
+                    break
