@@ -111,8 +111,8 @@ def get_info(openid, studentid, studentpwd, check_login=False):
                     }, {
                         'title': u'【%s学年第%s学期】%s' % (school_year, school_term, content)
                     }]
-                    # 缓存结果 30 分钟
-                    redis.set(redis_prefix + openid, data, 60 * 30)
+                    # 缓存结果 1 小时
+                    redis.set(redis_prefix + openid, data, 3600)
                     # 发送微信
                     wechat_custom.send_news(openid, data)
                 # 账号密码保存数据库
