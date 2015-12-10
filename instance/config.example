@@ -41,6 +41,13 @@ CELERYBEAT_SCHEDULE = {
 # simsimi key
 SIMSIMI_KEY = ''
 
+# 天气 API
+WEATHER_PRIVATE_KEY = ''
+WEATHER_APPID = ''
+
+# PM2.5
+PM2_5_TOKEN = ''
+
 # requests 代理
 HTTP_PROXIES = {
     "http": "http://user:pass@ip:port/"
@@ -55,10 +62,12 @@ MUSIC_THUMB_MEDIA_ID = ""
 # 密码加解密 KEY
 PASSWORD_SECRET_KEY = ''
 
-# 教务管理系统
+# 学院内网代理
 SCHOOL_LAN_PROXIES = {
     "http": "http://user:pass@ip:port/"
 }
+
+# 教务管理系统
 SCHOOL_YEAR = ''
 SCHOOL_TERM = ''
 # 公网地址

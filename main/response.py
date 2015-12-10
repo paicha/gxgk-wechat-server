@@ -8,6 +8,7 @@ from .models import set_user_info, get_user_student_info, get_user_library_info
 from .utils import AESCipher
 from .plugins.state import *
 from .plugins import simsimi, sign, express, music, score, library, school_news
+from .plugins import weather
 
 
 def wechat_response(data):
@@ -44,7 +45,7 @@ def wechat_response(data):
             u'游戏': html5_games,
             u'成绩': exam_grade,
             u'新闻': get_school_news,
-            u'天气': developing,
+            u'天气': get_weather_news,
             u'陪聊': enter_chat_state,
             u'四六级': cet_score,
             u'^图书馆|^找书': search_books,
@@ -91,7 +92,7 @@ def wechat_response(data):
             'sign': daily_sign,
             'chat_robot': enter_chat_state,
             'music': play_music,
-            'weather': developing
+            'weather': get_weather_news
         }
         # 匹配指令后，重置状态
         set_user_state(openid, 'default')
@@ -229,6 +230,12 @@ def auth_url():
 def get_school_news():
     """读取学院新闻"""
     school_news.get.delay(openid)
+    return 'success'
+
+
+def get_weather_news():
+    """获取天气预报"""
+    weather.get.delay(openid)
     return 'success'
 
 
