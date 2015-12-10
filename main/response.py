@@ -29,33 +29,32 @@ def wechat_response(data):
         message.content = message.content.replace(u'　', ' ')
         # 清除行首空格
         message.content = message.content.lstrip()
-        # TODO 繁体转换或增加繁体关键字判断
         # 指令列表
         commands = {
             u'取消': cancel_command,
             u'^\?|^？': all_command,
             u'^留言|^客服': leave_a_message,
             u'^m': command_not_found,
-            u'雷达': weather_radar,
-            u'电话': phone_number,
-            u'^公交|^公车': bus_routes,
-            u'放假|校历': academic_calendar,
+            u'^雷达|^雷達': weather_radar,
+            u'^電話|^电话': phone_number,
+            u'^公交|^公车|^公車': bus_routes,
+            u'^放假|^校历|^校曆': academic_calendar,
             u'合作': contact_us,
             u'明信片': postcard,
-            u'游戏': html5_games,
-            u'成绩': exam_grade,
-            u'新闻': get_school_news,
-            u'天气': get_weather_news,
+            u'^游戏|^遊戲': html5_games,
+            u'^成绩|^成績': exam_grade,
+            u'^新闻|^新聞': get_school_news,
+            u'^天气|^天氣': get_weather_news,
             u'陪聊': enter_chat_state,
-            u'四六级': cet_score,
-            u'^图书馆|^找书': search_books,
-            u'借书': borrowing_record,
-            u'续借': renew_books,
-            u'^签到|^起床': daily_sign,
-            u'音乐': play_music,
-            u'论坛': bbs_url,
-            u'快递': enter_express_state,
-            u'绑定': auth_url,
+            u'^四六级|^四六級': cet_score,
+            u'^图书馆|^找书|^圖書館|^找書': search_books,
+            u'^借书|^借書': borrowing_record,
+            u'^续借|^續借': renew_books,
+            u'^签到|^起床|^簽到': daily_sign,
+            u'^音乐|^音樂': play_music,
+            u'^论坛|^論壇': bbs_url,
+            u'^快递|^快遞': enter_express_state,
+            u'^绑定|^綁定': auth_url,
             u'更新菜单': update_menu_setting
         }
         # 状态列表
