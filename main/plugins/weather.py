@@ -97,7 +97,8 @@ def get_pm2_5_info():
 def day_of_week(offset=0):
     """获取星期几"""
     day_of_week = int(time.strftime('%w')) + offset
-    days = [u'周日', u'周一', u'周二', u'周三', u'周四', u'周五', u'周六']
+    days = [u'周日', u'周一', u'周二', u'周三', u'周四', u'周五', u'周六',
+            u'周日', u'周一']
     prefix = [u'今天', u'明天', u'后天']
     return prefix[offset] + days[day_of_week]
 
