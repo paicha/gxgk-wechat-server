@@ -10,7 +10,7 @@ import wechat_custom
 def get_douban_fm(openid):
     """抓取豆瓣FM"""
     url = 'http://www.douban.com/j/app/radio/people?' + \
-        'app_name=radio_desktop_win&version=100&channel=0&type=n'
+        'app_name=radio_android&version=100&channel=0&type=n'
     try:
         r = requests.get(url, timeout=5)
         result = r.json()["song"][0]
