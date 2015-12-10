@@ -41,6 +41,7 @@ def remind_return_books():
                 time_to_return_books(user.openid, user.libraryid, librarypwd)
             except Exception, e:
                 app.logger.warning(u'还书提醒任务出错：%s' % e)
+            time.sleep(10)
 
 
 @celery.task(name='access_token.update')
