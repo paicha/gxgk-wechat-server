@@ -65,5 +65,5 @@ def send_message(data):
     else:
         if response["errmsg"] != 'ok':
             content = u"客服推送失败: %s\n推送内容：%s"
-            app.logger.warning(content % (response["errmsg"], data))
+            app.logger.warning(content % (response, data))
         return None
