@@ -7,7 +7,7 @@ from main import wechat, app
 from .models import set_user_info, get_user_student_info, get_user_library_info
 from .utils import AESCipher
 from .plugins.state import *
-from .plugins import simsimi, sign, express, music, score, library
+from .plugins import simsimi, sign, express, music, score, library, school_news
 
 
 def wechat_response(data):
@@ -43,7 +43,7 @@ def wechat_response(data):
             u'明信片': postcard,
             u'游戏': html5_games,
             u'成绩': exam_grade,
-            u'新闻': developing,
+            u'新闻': get_school_news,
             u'天气': developing,
             u'陪聊': enter_chat_state,
             u'四六级': cet_score,
@@ -224,6 +224,12 @@ def auth_url():
     library_url = app.config['HOST_URL'] + '/auth-library/' + openid
     content = app.config['AUTH_TEXT'] % (jw_url, library_url)
     return wechat.response_text(content)
+
+
+def get_school_news():
+    """读取学院新闻"""
+    school_news.get.delay(openid)
+    return 'success'
 
 
 def update_menu_setting():
