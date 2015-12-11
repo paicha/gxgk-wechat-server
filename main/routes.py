@@ -77,7 +77,7 @@ def auth_library(openid=None):
         abort(404)
 
 
-@app.route('/score/<openid>', methods=['GET'])
+@app.route('/score-report/<openid>', methods=['GET'])
 def school_report_card(openid=None):
     """学生成绩单"""
     if is_user_exists(openid):

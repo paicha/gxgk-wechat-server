@@ -117,6 +117,11 @@ def get_info(openid, studentid, studentpwd, check_login=False):
                         'title': u'%s 期末成绩' % realname
                     }, {
                         'title': u'【%s学年第%s学期】%s' % (school_year, school_term, content)
+                    }, {
+                        'title': u'以上是上学期成绩\n本学期成绩公布后小喵会第一时间开放查询'
+                    }, {
+                        'title': u'点击这里 分享成绩单到朋友圈',
+                        'url': app.config['HOST_URL'] + '/score-report/' + openid
                     }]
                     # 缓存结果 1 小时
                     redis.set(redis_prefix + openid, data, 3600)
