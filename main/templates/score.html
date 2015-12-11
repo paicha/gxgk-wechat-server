@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <meta content="telephone=no" name="format-detection" />
+    <title>广科小喵</title>
+    <link rel="stylesheet" href="http://gxgk-wechat.b0.upaiyun.com/styles/weui.min.css" />
+    <link rel="stylesheet" href="http://gxgk-wechat.b0.upaiyun.com/styles/score.min.css" />
+</head>
+
+<body ontouchstart>
+    <div class="container js_container">
+        <div class="page">
+            <div class="hd">
+                <h1 class="page_title">{{ real_name }} 期末成绩单</h1>
+                <p class="page_desc">点击右上角按钮分享</p>
+            </div>
+            <div class="weui_cells_title">{{ school_year }} 第 {{ school_term }} 学期</div>
+            <div class="weui_cells">
+                {% for data in score_info %}
+                <div class="weui_cell">
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>{{ data.lesson_name }}</p>
+                    </div>
+                    <div class="weui_cell_ft">{{ data.score }} 分</div>
+                </div>    
+                {% endfor %}
+            </div>
+            <p class="weui_cells_tips">数据更新于：{{ update_time }}</p>
+            <div class="qrcode">
+                <img src="http://gxgk-wechat.b0.upaiyun.com/qrcode_card.jpg">
+            </div>
+        </div>
+    </div>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script type="text/javascript">
+        var jsapi = {{ jsapi }};
+        jsapi['debug'] = false;
+        wx.config(jsapi);
+        shareData = {
+            title: '{{ real_name }}的期末成绩单', // 分享标题
+            desc: '快来广科小喵微信查成绩', // 分享描述
+            link: location.href.split('#')[0], // 分享链接
+            imgUrl: 'http://gxgk-wechat.b0.upaiyun.com/icon.jpg' //分享图标
+        }
+        wx.ready(function(){
+            wx.onMenuShareTimeline(shareData);
+            wx.onMenuShareAppMessage(shareData);
+            wx.onMenuShareQQ(shareData);
+            wx.onMenuShareWeibo(shareData);
+            wx.onMenuShareQZone(shareData);
+        });
+    </script>
+</body>
+
+</html>

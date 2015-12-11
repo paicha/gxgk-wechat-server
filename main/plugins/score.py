@@ -4,6 +4,7 @@
 import requests
 from bs4 import BeautifulSoup, SoupStrainer
 import ast
+import time
 from .. import app, redis, celery
 from ..models import set_user_student_info, set_user_realname_and_classname
 from ..utils import AESCipher
@@ -82,14 +83,20 @@ def get_info(openid, studentid, studentpwd, check_login=False):
                 rows = soup.find(id='Datagrid1').find_all('tr')
                 # 提取当前学期的成绩
                 content = u''
+                score_info = []
                 for row in rows:
                     cells = row.find_all("td")
                     year = cells[0].get_text()
                     term = cells[1].get_text()
                     if year == school_year and term == school_term:
+                        lesson_name = cells[3].get_text()
+                        score = cells[8].get_text()
+                        # 组装文本格式数据回复用户
                         content = content + u'\n\n课程名称：%s\n考试成绩：%s' % (
-                            cells[3].get_text(),
-                            cells[8].get_text())
+                            lesson_name, score)
+                        # 组装数组格式的数据备用
+                        score_info.append({"lesson_name": lesson_name,
+                                           "score": score})
                         # 有其他成绩内容则输出
                         makeup_score = cells[10].get_text()
                         retake_score = cells[11].get_text()
@@ -115,6 +122,14 @@ def get_info(openid, studentid, studentpwd, check_login=False):
                     redis.set(redis_prefix + openid, data, 3600)
                     # 发送微信
                     wechat_custom.send_news(openid, data)
+                    # 更新缓存成绩，用于 Web 展示，不设置过期时间
+                    redis.hmset('wechat:user:scoreforweb:' + openid, {
+                        "real_name": realname,
+                        "school_year": school_year,
+                        "school_term": school_term,
+                        "score_info": score_info,
+                        "update_time": time.strftime('%Y-%m-%d %H:%M:%S')
+                    })
                 # 账号密码保存数据库
                 if check_login:
                     # 加密密码

@@ -1,0 +1,68 @@
+.container,
+.page {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0
+}
+
+.page_desc,
+.page_title,
+.qrcode {
+    text-align: center
+}
+
+.hidden {
+    display: none
+}
+
+body,
+html {
+    height: 100%;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none
+}
+
+.page,
+body {
+    background-color: #FBF9FE
+}
+
+.container {
+    overflow: hidden
+}
+
+.page {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch
+}
+
+.qrcode {
+    max-width: 92%;
+    margin-left: 4%;
+    margin-top: 1em;
+    margin-bottom: 1em
+}
+
+.qrcode img {
+    max-width: 100%
+}
+
+.hd {
+    padding: 2em 0
+}
+
+.page_desc {
+    color: #888;
+    font-size: 14px
+}
+
+.page_title {
+    font-size: 34px;
+    color: #44C7A2;
+    font-weight: 400
+}

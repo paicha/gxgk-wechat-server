@@ -7,6 +7,7 @@ from .utils import check_signature, get_jsapi_signature_data
 from .response import wechat_response
 from .plugins import score, library
 from .models import is_user_exists
+import ast
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -72,6 +73,35 @@ def auth_library(openid=None):
                                username_label_placeholder=u'请输入你的借书卡号',
                                password_label_placeholder=u'默认是卡号后六位',
                                jsapi=Markup(jsapi))
+    else:
+        abort(404)
+
+
+@app.route('/score/<openid>', methods=['GET'])
+def school_report_card(openid=None):
+    """学生成绩单"""
+    if is_user_exists(openid):
+        jsapi = get_jsapi_signature_data(request.url)
+        jsapi['jsApiList'] = ['onMenuShareTimeline',
+                              'onMenuShareAppMessage',
+                              'onMenuShareQQ',
+                              'onMenuShareWeibo',
+                              'onMenuShareQZone']
+        score_cache = redis.hgetall('wechat:user:scoreforweb:' + openid)
+        if score_cache:
+            score_info = ast.literal_eval(score_cache['score_info'])
+            real_name = score_cache['real_name'].decode('utf-8')
+            return render_template('score.html',
+                                   real_name=real_name,
+                                   school_year=score_cache['school_year'],
+                                   school_term=score_cache['school_term'],
+                                   score_info=score_info,
+                                   update_time=score_cache['update_time'],
+                                   jsapi=Markup(jsapi))
+        else:
+            # 一般不会丢失缓存数据
+            # 若丢失，用户再一次查询成功就有缓存了
+            abort(404)
     else:
         abort(404)
 
