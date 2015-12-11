@@ -135,7 +135,9 @@ def get_sign_keepdays_ranklist():
     """获取续签排行榜"""
     data = Sign.query.join(User, Sign.openid == User.openid) \
         .add_columns(User.nickname) \
-        .order_by(Sign.keepdays.desc()).all()
+        .order_by(Sign.keepdays.desc(),
+                  Sign.totaldays.desc(),
+                  Sign.lastsigntime).all()
 
     return data
 
