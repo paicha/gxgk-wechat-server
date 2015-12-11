@@ -9,6 +9,8 @@ DEBUG = False
 HOST_URL = "http://domain.com"
 # 用于更新微信 access_token 的 url
 UPDATE_ACCESS_TOKEN_URL_ROUTE = "/i-wont-tell-you"
+# Web 页面的百度统计
+BAIDU_ANALYTICS = ""
 
 # 微信公众平台配置
 APP_ID = ""

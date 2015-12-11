@@ -45,6 +45,7 @@ def auth_score(openid=None):
                                username_label=u'学号',
                                username_label_placeholder=u'请输入你的学号',
                                password_label_placeholder=u'默认是身份证号码',
+                               baidu_analytics=app.config['BAIDU_ANALYTICS'],
                                jsapi=Markup(jsapi))
     else:
         abort(404)
@@ -72,6 +73,7 @@ def auth_library(openid=None):
                                username_label=u'卡号',
                                username_label_placeholder=u'请输入你的借书卡号',
                                password_label_placeholder=u'默认是卡号后六位',
+                               baidu_analytics=app.config['BAIDU_ANALYTICS'],
                                jsapi=Markup(jsapi))
     else:
         abort(404)
@@ -97,6 +99,8 @@ def school_report_card(openid=None):
                                    school_term=score_cache['school_term'],
                                    score_info=score_info,
                                    update_time=score_cache['update_time'],
+                                   baidu_analytics=app.config[
+                                       'BAIDU_ANALYTICS'],
                                    jsapi=Markup(jsapi))
         else:
             # 一般不会丢失缓存数据
