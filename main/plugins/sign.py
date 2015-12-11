@@ -33,26 +33,13 @@ def daily_sign(openid):
                 last_sign_time / 1000).strftime('%H:%M:%S')
             # 排行榜信息
             ranklist_data = ranklist_and_user_rank(openid, today_timestamp)
-            content = u"\n今天广科第 %s 个签到！"
-            return {
-                "template_data": {
-                    "first": {
-                        "value": "今天已经签到过啦！"
-                    },
-                    "keyword1": {
-                        "value": today_sign_time
-                    },
-                    "keyword2": {
-                        "value": keepdays
-                    },
-                    "keyword3": {
-                        "value": totaldays
-                    },
-                    "remark": {
-                        "value": content % ranklist_data['user_sign_rank']
-                    }
-                },
-                "ranklist": ranklist_data['ranklist_content']}
+            return [{
+                "title": u"今天已经签到过啦！\n签到时间：%s\n连续签到：%s天\n累计签到：%s天\n\n今天广科第 %s 个签到！" % (today_sign_time, keepdays, totaldays, ranklist_data['user_sign_rank'])
+            }, {
+                "title": ranklist_data['sign_ranklist']
+            }, {
+                "title": ranklist_data['keepdays_ranklist']
+            }]
         else:
             # 更新签到，上次签到时间大于昨日凌晨的时间戳，续签
             yesterday_timestamp = today_timestamp - 86400 * 1000
@@ -68,26 +55,13 @@ def daily_sign(openid):
                 current_milli_time / 1000).strftime('%H:%M:%S')
             # 获取最新的排行榜信息
             ranklist_data = ranklist_and_user_rank(openid, today_timestamp)
-            content = u"\n今天广科第 %s 个签到！"
-            return {
-                "template_data": {
-                    "first": {
-                        "value": "签到成功！"
-                    },
-                    "keyword1": {
-                        "value": today_sign_time
-                    },
-                    "keyword2": {
-                        "value": sign_info["keepdays"]
-                    },
-                    "keyword3": {
-                        "value": sign_info["totaldays"] + 1
-                    },
-                    "remark": {
-                        "value":  content % ranklist_data['user_sign_rank']
-                    }
-                },
-                "ranklist": ranklist_data['ranklist_content']}
+            return [{
+                "title": u"签到成功！\n签到时间：%s\n连续签到：%s天\n累计签到：%s天\n\n今天广科第 %s 个签到！" % (today_sign_time, sign_info["keepdays"], sign_info["totaldays"] + 1, ranklist_data['user_sign_rank'])
+            }, {
+                "title": ranklist_data['sign_ranklist']
+            }, {
+                "title": ranklist_data['keepdays_ranklist']
+            }]
 
 
 def ranklist_and_user_rank(openid, today_timestamp):
@@ -122,6 +96,7 @@ def ranklist_and_user_rank(openid, today_timestamp):
             keepdays_ranklist[0].keepdays)
 
     return {
-        "ranklist_content": sign_ranklist_content + "\n\n" + keepdays_ranklist_content,
+        "sign_ranklist": sign_ranklist_content,
+        "keepdays_ranklist": keepdays_ranklist_content,
         "user_sign_rank": user_sign_rank
     }

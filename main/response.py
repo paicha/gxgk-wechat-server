@@ -2,13 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import re
-import time
 from main import wechat, app
 from .models import set_user_info, get_user_student_info, get_user_library_info
 from .utils import AESCipher
 from .plugins.state import *
-from .plugins import simsimi, sign, express, music, score, library, school_news
-from .plugins import weather
+from .plugins import simsimi, sign, express, music, score, library, \
+    school_news, weather
 
 
 def wechat_response(data):
@@ -208,11 +207,7 @@ def daily_sign():
     """每日签到"""
     data = sign.daily_sign(openid)
     if data:
-        wechat.send_template_message(
-            openid, app.config['SIGN_TEMPLATE_ID'], data['template_data'])
-        # 为保证模板通知先被接收
-        time.sleep(0.7)
-        return wechat.response_text(data['ranklist'])
+        return wechat.response_news(data)
     else:
         content = app.config['NOT_SIGN_TIME_TEXT']
         return wechat.response_text(content)
