@@ -53,9 +53,6 @@ HTTP_PROXIES = {
     "http": "http://user:pass@ip:port/"
 }
 
-# 微信模板通知 ID
-SIGN_TEMPLATE_ID = ""
-
 # 素材库图片 ID
 MUSIC_THUMB_MEDIA_ID = ""
 
