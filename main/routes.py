@@ -36,7 +36,7 @@ def auth_score(openid=None):
             errmsg = u'学号或者密码格式不合法'
         return jsonify({'errmsg': errmsg})
     elif is_user_exists(openid):
-        jsapi = get_jsapi_signature_data('request.url')
+        jsapi = get_jsapi_signature_data(request.url)
         jsapi['jsApiList'] = ['hideOptionMenu']
         return render_template('auth.html',
                                title=u'微信查成绩',
@@ -63,7 +63,7 @@ def auth_library(openid=None):
             errmsg = u'卡号或者密码格式不合法'
         return jsonify({'errmsg': errmsg})
     elif is_user_exists(openid):
-        jsapi = get_jsapi_signature_data('request.url')
+        jsapi = get_jsapi_signature_data(request.url)
         jsapi['jsApiList'] = ['hideOptionMenu']
         return render_template('auth.html',
                                title=u'图书馆查询',
