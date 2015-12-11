@@ -3,7 +3,7 @@
 
 import requests
 from .. import app, celery
-import wechat_custom
+from . import wechat_custom
 
 
 @celery.task

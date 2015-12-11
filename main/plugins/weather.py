@@ -6,7 +6,7 @@ import hashlib
 import hmac
 import time
 import requests
-import wechat_custom
+from . import wechat_custom
 
 
 @celery.task

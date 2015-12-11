@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup, SoupStrainer
 from .. import app, celery
 from ..models import set_user_library_info
 from ..utils import AESCipher
-import wechat_custom
+from . import wechat_custom
 import time
 from datetime import datetime
 import re

@@ -6,7 +6,7 @@ from .. import app, celery, redis
 from bs4 import BeautifulSoup
 import urlparse
 import ast
-import wechat_custom
+from . import wechat_custom
 
 
 @celery.task

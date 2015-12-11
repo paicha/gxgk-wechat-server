@@ -7,7 +7,7 @@ import ast
 from .. import app, redis, celery
 from ..models import set_user_student_info, set_user_realname_and_classname
 from ..utils import AESCipher
-import wechat_custom
+from . import wechat_custom
 
 
 @celery.task
