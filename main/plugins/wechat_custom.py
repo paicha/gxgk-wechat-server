@@ -66,4 +66,8 @@ def send_message(data):
         if response["errmsg"] != 'ok':
             content = u"客服推送失败: %s\n推送内容：%s"
             app.logger.warning(content % (response, data))
+            if response["errcode"] == 40001:
+                # access_token 失效
+                requests.get(app.config['HOST_URL'] +
+                             app.config['UPDATE_ACCESS_TOKEN_URL_ROUTE'])
         return None
