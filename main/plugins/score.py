@@ -123,7 +123,7 @@ def get_info(openid, studentid, studentpwd, check_login=False):
                         'title': u'以上是上学期成绩\n本学期成绩公布后小喵会第一时间开放查询',
                         'url': url
                     }, {
-                        'title': u'点击这里 分享成绩单到朋友圈',
+                        'title': u'点击这里：分享成绩单到朋友圈',
                         'url': url
                     }]
                     # 缓存结果 1 小时
