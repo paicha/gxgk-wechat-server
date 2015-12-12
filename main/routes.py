@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import request, render_template, jsonify, Markup, abort
+from flask import request, render_template, jsonify, Markup, abort, \
+    send_from_directory
 from . import app, wechat, redis
 from .utils import check_signature, get_jsapi_signature_data
 from .response import wechat_response
@@ -123,6 +124,12 @@ def update_access_token():
     # 存入缓存，设置过期时间
     redis.set("wechat:access_token", access_token, 7000)
     return ('', 204)
+
+
+@app.route('/robots.txt')
+def robots():
+    """搜索引擎爬虫协议"""
+    return send_from_directory(app.static_folder, request.path[1:])
 
 
 @app.errorhandler(404)
