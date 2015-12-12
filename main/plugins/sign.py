@@ -71,27 +71,26 @@ def ranklist_and_user_rank(openid, today_timestamp):
     ranklist = get_today_sign_ranklist(today_timestamp)
     # 计算今日签到排名
     sign_ranklist_content = u"【今日签到排行榜】"
-    for (rank, ranklist) in enumerate(ranklist):
-        ranklist[0].rank = rank + 1
+    for (index, ranklist) in enumerate(ranklist):
+        rank = index + 1
         # 转换签到时间显示
         user_today_sign_time = datetime.fromtimestamp(
             ranklist[0].lastsigntime / 1000).strftime('%H:%M:%S')
         # 组合排行榜 Top 12 信息
-        if ranklist[0].rank <= 12:
+        if rank <= 12:
             sign_ranklist_content += u"\n%s. %s %s 连续%s天" % (
-                ranklist[0].rank, ranklist[1], user_today_sign_time,
+                rank, ranklist[1], user_today_sign_time,
                 ranklist[0].keepdays)
         # 该用户本次排名
         if ranklist[0].openid == openid:
-            user_sign_rank = ranklist[0].rank
+            user_sign_rank = rank
 
     # 续签排行榜
     keepdays_ranklist = get_sign_keepdays_ranklist()
     keepdays_ranklist_content = u"【学霸排行榜】"
-    for (rank, keepdays_ranklist) in enumerate(keepdays_ranklist):
-        keepdays_ranklist[0].rank = rank + 1
+    for (index, keepdays_ranklist) in enumerate(keepdays_ranklist):
         keepdays_ranklist_content += u"\n%s. %s 连续签到%s天" % (
-            keepdays_ranklist[0].rank,
+            index + 1,
             keepdays_ranklist[1],
             keepdays_ranklist[0].keepdays)
 
