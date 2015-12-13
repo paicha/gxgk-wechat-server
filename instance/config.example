@@ -40,7 +40,7 @@ CELERYBEAT_SCHEDULE = {
     }
 }
 
-# simsimi key
+# SimSimi key
 SIMSIMI_KEY = ''
 
 # 天气 API
