@@ -45,7 +45,7 @@ def wechat_response(data):
             u'^新闻|^新聞': get_school_news,
             u'^天气|^天氣': get_weather_news,
             u'陪聊': enter_chat_state,
-            u'^四六级|^四六級': cet_score,
+            u'^四级|^六级|^四六级|^四級|^六級|^四六級': cet_score,
             u'^图书馆|^找书|^圖書館|^找書': search_books,
             u'^借书|^借書': borrowing_record,
             u'^续借|^續借': renew_books,
