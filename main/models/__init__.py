@@ -15,37 +15,40 @@ from .user import *
 def set_user_info(openid):
     """保存用户信息"""
     redis_prefix = "wechat:user:"
-    cache = redis.exists(redis_prefix + openid)
+    cache = redis.hexists(redis_prefix + openid, 'nickname')
 
     if not cache:
         user_info = User.query.filter_by(openid=openid).first()
         if not user_info:
-            user_info = wechat.get_user_info(openid)
-            user = User(openid=user_info['openid'],
-                        nickname=user_info['nickname'],
-                        sex=user_info['sex'],
-                        province=user_info['province'],
-                        city=user_info['city'],
-                        country=user_info['country'],
-                        headimgurl=user_info['headimgurl'])
-            user.save()
-            # 与查询的数据类型一样，方便 redis 写入
-            user_info = user
+            try:
+                user_info = wechat.get_user_info(openid)
+            except Exception, e:
+                app.logger.warning(u"获取微信用户信息 API 出错: %s" % e)
+            else:
+                user = User(openid=user_info['openid'],
+                            nickname=user_info['nickname'],
+                            sex=user_info['sex'],
+                            province=user_info['province'],
+                            city=user_info['city'],
+                            country=user_info['country'],
+                            headimgurl=user_info['headimgurl'])
+                user.save()
+                # 与查询的数据类型一样，方便 redis 写入
+                user_info = user
 
-        # 写入缓存
-        redis.hmset(redis_prefix + user_info.openid, {
-            "nickname": user_info.nickname,
-            "realname": user_info.realname,
-            "classname": user_info.classname,
-            "sex": user_info.sex,
-            "province": user_info.province,
-            "city": user_info.city,
-            "country": user_info.country,
-            "headimgurl": user_info.headimgurl,
-            "regtime": user_info.regtime
-        })
-
-        return None
+        if user_info:
+            # 写入缓存
+            redis.hmset(redis_prefix + user_info.openid, {
+                "nickname": user_info.nickname,
+                "realname": user_info.realname,
+                "classname": user_info.classname,
+                "sex": user_info.sex,
+                "province": user_info.province,
+                "city": user_info.city,
+                "country": user_info.country,
+                "headimgurl": user_info.headimgurl,
+                "regtime": user_info.regtime
+            })
     else:
         # TODO 每天第一次互动，获取最新的用户信息
         return None
