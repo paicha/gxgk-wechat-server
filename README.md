@@ -50,7 +50,7 @@
 pip install -r requirements.txt
 ``` 
 
-设置运行参数
+创建配置文件
 ```
 cp instance/config.example instance/config.py
 vi instance/config.py
