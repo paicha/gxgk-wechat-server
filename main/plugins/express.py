@@ -79,6 +79,6 @@ def com_code_to_text(com_code):
     try:
         text = com_list[com_code]
     except KeyError:
-        return "快递"
+        return u"快递"
     else:
         return text
