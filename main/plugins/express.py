@@ -32,7 +32,7 @@ def get_tracking_info(openid, num, com_code=None, from_user_input=True):
     else:
         if tracking_info["message"] == "ok":
             lastupdate = tracking_info["data"][0]["time"]
-            ischeck = tracking_info["ischeck"]
+            ischeck = tracking_info["state"]
             desc = u'%s： %s\n更新时间：%s\n\n最新状态：%s\n\n有新动态小喵会通知你哦！\n点击查看详情' % (
                 com_code_to_text(com_code), num,
                 lastupdate, tracking_info["data"][0]["context"])
