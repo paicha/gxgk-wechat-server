@@ -12,8 +12,8 @@ class Express(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     openid = db.Column(db.String(32), primary_key=True, nullable=False)
-    num = db.Column(db.String(20), primary_key=True, nullable=False)
-    comcode = db.Column(db.String(10), nullable=False)
+    num = db.Column(db.String(30), primary_key=True, nullable=False)
+    comcode = db.Column(db.String(20), nullable=False)
     lastupdate = db.Column(db.String(25), nullable=False)
     ischeck = db.Column(db.SmallInteger, default=0, nullable=False)
 
