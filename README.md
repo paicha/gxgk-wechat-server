@@ -1,7 +1,8 @@
 # gxgk-wechat-server
-莞香广科微信公众号后端，为在校学生提供一系列信息查询与便民服务。
+莞香广科微信公众号后端，为在校学生提供一系列信息查询与便民服务。微信号```GXGKCAT```
 
-!["微信号 GXGKCAT"](http://gxgk-wechat.b0.upaiyun.com/qrcode_for_gh_637c9ac560fd_258.jpg)
+**预览**：
+!["预览"](http://i.v2ex.co/OA598S46.jpeg)
 
 **主要功能**：
 
