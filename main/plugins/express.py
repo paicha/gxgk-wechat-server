@@ -21,7 +21,10 @@ def get_tracking_info(openid, num, com_code=None, from_user_input=True):
         # 查询物流
         get_info_url = 'http://www.kuaidi100.com/query?type=%s&postid=%s' % (
             com_code, num)
-        info_res = requests.get(get_info_url, timeout=3)
+        referer = 'http://m.kuaidi100.com/result.jsp?com=%s&nu=%s' % (
+            com_code, num)
+        headers = {'Referer': referer}
+        info_res = requests.get(get_info_url, headers=headers, timeout=3)
         tracking_info = info_res.json()
     except Exception, e:
         app.logger.warning(u"快递公司代号请求或解析失败: %s, num: %s" % (e, num))
