@@ -37,7 +37,7 @@ def wechat_response(data):
             u'^雷达|^雷達': weather_radar,
             u'^電話|^电话': phone_number,
             u'^公交|^公车|^公車': bus_routes,
-            u'^放假|^校历|^校曆': academic_calendar,
+            u'^放假|^校历|^校曆|^校歷': academic_calendar,
             u'合作': contact_us,
             u'明信片': postcard,
             u'^游戏|^遊戲': html5_games,
