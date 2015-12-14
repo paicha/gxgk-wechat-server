@@ -25,9 +25,7 @@ def chat(openid, text):
     payload = {'key': app.config['SIMSIMI_KEY'],
                'text': text, 'lc': 'ch', 'ft': '1.0'}
     try:
-        # 由于 API 的延迟过高，使用代理请求
-        r = requests.get(url, params=payload, timeout=5,
-                         proxies=app.config['HTTP_PROXIES'])
+        r = requests.get(url, params=payload, timeout=7)
         answer = r.json()['response'].encode('utf-8')
     except Exception, e:
         app.logger.warning(u"simsimi 请求或解析失败: %s, text: %s" % (e, text))

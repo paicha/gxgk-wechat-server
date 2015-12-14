@@ -50,11 +50,6 @@ WEATHER_APPID = ''
 # PM2.5
 PM2_5_TOKEN = ''
 
-# requests 代理
-HTTP_PROXIES = {
-    "http": "http://user:pass@ip:port/"
-}
-
 # 素材库图片 ID
 MUSIC_THUMB_MEDIA_ID = ""
 
