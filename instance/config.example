@@ -19,7 +19,7 @@ TOKEN = ""
 EncodingAESKey = ""
 
 # 数据库
-SQLALCHEMY_DATABASE_URI = ""
+SQLALCHEMY_DATABASE_URI = "mysql://user:password@host/dbname"
 
 # celery 配置
 CELERY_BROKER_URL = 'redis://ip:port',
