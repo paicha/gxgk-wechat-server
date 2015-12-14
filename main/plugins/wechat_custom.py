@@ -71,5 +71,5 @@ def send_message(data):
                 requests.get(app.config['HOST_URL'] +
                              app.config['UPDATE_ACCESS_TOKEN_URL_ROUTE'])
                 # 再发送
-                requests.post(url, data=payload)
+                send_message(data)
         return None
