@@ -22,8 +22,11 @@ def set_user_info(openid):
         if not user_info:
             try:
                 user_info = wechat.get_user_info(openid)
+                if 'nickname' not in user_info:
+                    raise KeyError(user_info)
             except Exception, e:
                 app.logger.warning(u"获取微信用户信息 API 出错: %s" % e)
+                user_info = None
             else:
                 user = User(openid=user_info['openid'],
                             nickname=user_info['nickname'],
