@@ -39,7 +39,7 @@ def auth_score(openid=None):
         return jsonify({'errmsg': errmsg})
     elif is_user_exists(openid):
         jsapi = get_jsapi_signature_data(request.url)
-        jsapi['jsApiList'] = ['hideOptionMenu']
+        jsapi['jsApiList'] = ['hideAllNonBaseMenuItem']
         return render_template('auth.html',
                                title=u'微信查成绩',
                                desc=u'请先绑定教务系统',
@@ -67,7 +67,7 @@ def auth_library(openid=None):
         return jsonify({'errmsg': errmsg})
     elif is_user_exists(openid):
         jsapi = get_jsapi_signature_data(request.url)
-        jsapi['jsApiList'] = ['hideOptionMenu']
+        jsapi['jsApiList'] = ['hideAllNonBaseMenuItem']
         return render_template('auth.html',
                                title=u'图书馆查询',
                                desc=u'请先绑定借书卡',
