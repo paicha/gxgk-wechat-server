@@ -67,8 +67,11 @@ def get_info(openid, studentid, studentpwd, check_login=False):
             # 查询学习成绩
             try:
                 res = score_page(studentid, score_url, session, proxy)
+                # 解析 HTML 内容
+                soup = BeautifulSoup(res.text, "html.parser")
+                rows = soup.find(id='Datagrid1').find_all('tr')
             except Exception, e:
-                app.logger.warning(u'登录成功，但是在校成绩查询出错：%s,%s' % (
+                app.logger.warning(u'登录成功，但是在校成绩查询或解析出错：%s,%s' % (
                     e, score_url))
                 if check_login:
                     return u"教务系统连接超时，请稍后重试"
@@ -78,9 +81,6 @@ def get_info(openid, studentid, studentpwd, check_login=False):
             else:
                 school_year = app.config['SCHOOL_YEAR']
                 school_term = app.config['SCHOOL_TERM']
-                # 解析 HTML 内容
-                soup = BeautifulSoup(res.text, "html.parser")
-                rows = soup.find(id='Datagrid1').find_all('tr')
                 # 提取当前学期的成绩
                 content = u''
                 score_info = []
