@@ -95,6 +95,7 @@ def login(session, libraryid, librarypwd, url, proxy):
     else:
         login = session.post(url, data=payload, timeout=5,
                              proxies=app.config['SCHOOL_LAN_PROXIES'])
+    login.raise_for_status()
     return login
 
 

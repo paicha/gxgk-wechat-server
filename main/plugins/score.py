@@ -155,6 +155,7 @@ def login(studentid, studentpwd, url, session, proxy):
     else:
         pre_login = session.get(url, allow_redirects=False, timeout=5,
                                 proxies=app.config['SCHOOL_LAN_PROXIES'])
+    pre_login.raise_for_status()
     pre_login_soup = BeautifulSoup(pre_login.text, "html.parser",
                                    parse_only=SoupStrainer("input"))
     login_view_state = pre_login_soup.find(
