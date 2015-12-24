@@ -143,7 +143,7 @@ def get_sign_keepdays_ranklist():
         .add_columns(User.nickname) \
         .order_by(Sign.keepdays.desc(),
                   Sign.totaldays.desc(),
-                  Sign.lastsigntime).limit(12).all()
+                  Sign.lastsigntime).limit(6).all()
 
     return data
 
