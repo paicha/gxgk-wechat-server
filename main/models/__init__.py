@@ -272,17 +272,17 @@ def set_user_library_info(openid, libraryid, librarypwd):
 def set_user_realname_and_classname(openid, realname, classname):
     """写入用户的真实姓名和班级"""
     redis_prefix = "wechat:user:"
+    cache = redis.hgetall(redis_prefix + openid)
     realname_exists = redis.hexists(redis_prefix + openid, 'realname')
-    classname_exists = redis.hexists(redis_prefix + openid, 'classname')
 
-    if not realname_exists or not classname_exists:
+    if not realname_exists or cache['realname'] == 'None':
         user_info = User.query.filter_by(openid=openid).first()
-        if not user_info or not user_info.realname or not user_info.classname:
+        if user_info and not user_info.realname:
             user_info.realname = realname
             user_info.classname = classname
             user_info.update()
         # 写入缓存
         redis.hmset(redis_prefix + openid, {
-            "realname": user_info.realname,
-            "classname": user_info.classname
+            "realname": realname,
+            "classname": classname
         })
