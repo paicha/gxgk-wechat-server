@@ -277,7 +277,7 @@ def set_user_realname_and_classname(openid, realname, classname):
 
     if not realname_exists or not classname_exists:
         user_info = User.query.filter_by(openid=openid).first()
-        if not user_info.realname or not user_info.classname:
+        if not user_info or not user_info.realname or not user_info.classname:
             user_info.realname = realname
             user_info.classname = classname
             user_info.update()
