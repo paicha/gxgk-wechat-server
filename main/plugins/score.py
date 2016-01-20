@@ -148,9 +148,9 @@ def login(studentid, studentpwd, url, session, proxy):
     """登录获取 cookie"""
     # 先获取 VIEWSTATE
     if not proxy:
-        pre_login = session.get(url, allow_redirects=False, timeout=5)
+        pre_login = session.get(url, allow_redirects=False)
     else:
-        pre_login = session.get(url, allow_redirects=False, timeout=5,
+        pre_login = session.get(url, allow_redirects=False,
                                 proxies=app.config['SCHOOL_LAN_PROXIES'])
     pre_login.raise_for_status()
     pre_login_soup = BeautifulSoup(pre_login.text, "html.parser",
@@ -166,9 +166,9 @@ def login(studentid, studentpwd, url, session, proxy):
         'Button1': u' 登 录 '
     }
     if not proxy:
-        res = session.post(url, data=payload, allow_redirects=False, timeout=7)
+        res = session.post(url, data=payload, allow_redirects=False)
     else:
-        res = session.post(url, data=payload, allow_redirects=False, timeout=7,
+        res = session.post(url, data=payload, allow_redirects=False,
                            proxies=app.config['SCHOOL_LAN_PROXIES'])
     return res
 
@@ -178,9 +178,9 @@ def score_page(studentid, url, session, proxy):
     url = url + studentid
     # 先获取查询成绩需要的 VIEWSTATE
     if not proxy:
-        pre_score = session.get(url, allow_redirects=False, timeout=7)
+        pre_score = session.get(url, allow_redirects=False)
     else:
-        pre_score = session.get(url, allow_redirects=False, timeout=7,
+        pre_score = session.get(url, allow_redirects=False,
                                 proxies=app.config['SCHOOL_LAN_PROXIES'])
     pre_score_soup = BeautifulSoup(
         pre_score.text, "html.parser", parse_only=SoupStrainer("input"))
@@ -195,9 +195,9 @@ def score_page(studentid, url, session, proxy):
     }
     if not proxy:
         score_res = session.post(
-            url, data=payload, allow_redirects=False, timeout=7)
+            url, data=payload, allow_redirects=False)
     else:
         score_res = session.post(
-            url, data=payload, allow_redirects=False, timeout=7,
+            url, data=payload, allow_redirects=False,
             proxies=app.config['SCHOOL_LAN_PROXIES'])
     return score_res
