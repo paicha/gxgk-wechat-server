@@ -8,7 +8,7 @@ from datetime import datetime
 class User(db.Model):
     __table_args__ = {
         'mysql_engine': 'InnoDB',
-        'mysql_charset': 'utf8'
+        'mysql_charset': 'utf8mb4'
     }
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
