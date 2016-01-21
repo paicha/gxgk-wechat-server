@@ -37,14 +37,9 @@ def set_user_info(openid):
                             city=user_info['city'],
                             country=user_info['country'],
                             headimgurl=user_info['headimgurl'])
-                try:
-                    user.save()
-                except Exception, e:
-                    app.logger.warning(u"写入用户信息出错: %s" % e)
-                    user_info = None
-                else:
-                    # 与查询的数据类型一样，方便 redis 写入
-                    user_info = user
+                user.save()
+                # 与查询的数据类型一样，方便 redis 写入
+                user_info = user
 
         if user_info:
             # 写入缓存
