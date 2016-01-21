@@ -78,46 +78,23 @@ def is_user_exists(openid):
 
 def get_sign_info(openid):
     """读取签到信息"""
-    redis_prefix = "wechat:sign:"
-    sign_info_cache = redis.hgetall(redis_prefix + openid)
-
-    if not sign_info_cache:
-        # 无缓存，查询数据库
-        sign_info = Sign.query.filter_by(openid=openid).first()
-        if not sign_info:
-            return {
-                "lastsigntime": 0,
-                "keepdays": 0,
-                "totaldays": 0
-            }
-        else:
-            redis.hmset(redis_prefix + openid, {
-                "lastsigntime": sign_info.lastsigntime,
-                "keepdays": sign_info.keepdays,
-                "totaldays": sign_info.totaldays
-            })
-            return {
-                "lastsigntime": int(sign_info.lastsigntime),
-                "keepdays": int(sign_info.keepdays),
-                "totaldays": int(sign_info.totaldays)
-            }
+    sign_info = Sign.query.filter_by(openid=openid).first()
+    if not sign_info:
+        return {
+            "lastsigntime": 0,
+            "keepdays": 0,
+            "totaldays": 0
+        }
     else:
         return {
-            "lastsigntime": int(sign_info_cache["lastsigntime"]),
-            "keepdays": int(sign_info_cache["keepdays"]),
-            "totaldays": int(sign_info_cache["totaldays"])
+            "lastsigntime": int(sign_info.lastsigntime),
+            "keepdays": int(sign_info.keepdays),
+            "totaldays": int(sign_info.totaldays)
         }
 
 
 def update_sign_info(openid, lastsigntime, totaldays, keepdays):
     """更新签到信息"""
-    # 写入缓存
-    redis_prefix = "wechat:sign:"
-    redis.hmset(redis_prefix + openid, {
-                "lastsigntime": lastsigntime,
-                "totaldays": totaldays,
-                "keepdays": keepdays
-                })
     # 写入数据库
     sign_info = Sign.query.filter_by(openid=openid).first()
     if not sign_info:
