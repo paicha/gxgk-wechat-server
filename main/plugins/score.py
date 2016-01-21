@@ -194,10 +194,8 @@ def score_page(studentid, url, session, proxy):
         'ddlXQ': ''
     }
     if not proxy:
-        score_res = session.post(
-            url, data=payload, allow_redirects=False)
+        score_res = session.post(url, data=payload, allow_redirects=False)
     else:
-        score_res = session.post(
-            url, data=payload, allow_redirects=False,
-            proxies=app.config['SCHOOL_LAN_PROXIES'])
+        score_res = session.post(url, data=payload, allow_redirects=False,
+                                 proxies=app.config['SCHOOL_LAN_PROXIES'])
     return score_res
