@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from flask.ext.sqlalchemy import SQLAlchemy
-from .. import app, wechat, redis
+from .. import app, redis
+from ..utils import init_wechat_sdk
 
 db = SQLAlchemy(app)
 
@@ -21,6 +22,7 @@ def set_user_info(openid):
         user_info = User.query.filter_by(openid=openid).first()
         if not user_info:
             try:
+                wechat = init_wechat_sdk()
                 user_info = wechat.get_user_info(openid)
                 if 'nickname' not in user_info:
                     raise KeyError(user_info)

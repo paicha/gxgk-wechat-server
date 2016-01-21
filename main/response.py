@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import re
-from main import wechat, app
+from main import app
 from .models import set_user_info, get_user_student_info, get_user_library_info
-from .utils import AESCipher
+from .utils import AESCipher, init_wechat_sdk
 from .plugins.state import *
 from .plugins import simsimi, sign, express, music, score, library, \
     school_news, weather
@@ -12,8 +12,9 @@ from .plugins import simsimi, sign, express, music, score, library, \
 
 def wechat_response(data):
     """微信消息处理回复"""
-    global message, openid
+    global message, openid, wechat
 
+    wechat = init_wechat_sdk()
     wechat.parse_data(data)
     message = wechat.get_message()
     openid = message.source

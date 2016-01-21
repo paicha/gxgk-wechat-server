@@ -5,7 +5,6 @@ from flask import Flask
 import logging
 from logging.handlers import RotatingFileHandler
 from redis import Redis
-from wechat_sdk import WechatBasic
 from .plugins.queue import make_celery
 
 app = Flask(__name__, instance_relative_config=True)
@@ -28,16 +27,6 @@ app.logger.addHandler(handler)
 # 初始第三方库
 redis = Redis()
 
-# 初始化微信 SDK
-wechat = WechatBasic(appid=app.config['APP_ID'],
-                     appsecret=app.config['APP_SECRET'],
-                     token=app.config['TOKEN'])
-
-if not redis.exists("wechat:access_token"):
-    # access_token 写入缓存
-    wechat.grant_jsapi_ticket()
-    redis.set("wechat:access_token",
-              wechat.get_access_token()['access_token'], 7000)
 
 # 路由
 from .routes import *

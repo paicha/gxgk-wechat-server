@@ -3,8 +3,8 @@
 
 from flask import request, render_template, jsonify, Markup, abort, \
     send_from_directory
-from . import app, wechat, redis
-from .utils import check_signature, get_jsapi_signature_data
+from . import app, redis
+from .utils import check_signature, get_jsapi_signature_data, init_wechat_sdk
 from .response import wechat_response
 from .plugins import score, library
 from .models import is_user_exists
@@ -116,13 +116,18 @@ def update_access_token():
     """
     读取微信最新 access_token，写入缓存
     """
-    # 由于 wechat-python-sdk 中，generate_jsapi_signature -> grant_jsapi_ticket
-    # 会顺带把 access_token 刷新了，所以先 grant_jsapi_ticket 再读取 access_token
+    wechat = init_wechat_sdk()
+    wechat.grant_token()
     wechat.grant_jsapi_ticket()
-    token = wechat.get_access_token()
-    access_token = token['access_token']
-    # 存入缓存，设置过期时间
-    redis.set("wechat:access_token", access_token, 7000)
+
+    access_token = wechat.get_access_token()
+    redis.set("wechat:access_token", access_token['access_token'], 7000)
+    redis.set("wechat:access_token_expires_at",
+              access_token['access_token_expires_at'], 7000)
+    jsapi_ticket = wechat.get_jsapi_ticket()
+    redis.set("wechat:jsapi_ticket", jsapi_ticket['jsapi_ticket'], 7000)
+    redis.set("wechat:jsapi_ticket_expires_at",
+              jsapi_ticket['jsapi_ticket_expires_at'], 7000)
     return ('', 204)
 
 

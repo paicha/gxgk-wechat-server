@@ -3,7 +3,8 @@
 
 from functools import wraps
 from flask import request, redirect
-from . import app, wechat, redis
+from . import app, redis
+from wechat_sdk import WechatBasic
 from Crypto.Cipher import AES
 from Crypto import Random
 import time
@@ -22,6 +23,7 @@ def check_signature(func):
         timestamp = request.args.get('timestamp', '')
         nonce = request.args.get('nonce', '')
 
+        wechat = init_wechat_sdk()
         if not wechat.check_signature(signature=signature,
                                       timestamp=timestamp,
                                       nonce=nonce):
@@ -33,6 +35,36 @@ def check_signature(func):
         return func(*args, **kwargs)
 
     return decorated_function
+
+
+def init_wechat_sdk():
+    """初始化微信 SDK"""
+    access_token = redis.get("wechat:access_token")
+    jsapi_ticket = redis.get("wechat:jsapi_ticket")
+    token_expires_at = redis.get("wechat:access_token_expires_at")
+    ticket_expires_at = redis.get("wechat:jsapi_ticket_expires_at")
+    if access_token and jsapi_ticket and token_expires_at and ticket_expires_at:
+        wechat = WechatBasic(appid=app.config['APP_ID'],
+                             appsecret=app.config['APP_SECRET'],
+                             token=app.config['TOKEN'],
+                             access_token=access_token,
+                             access_token_expires_at=int(token_expires_at),
+                             jsapi_ticket=jsapi_ticket,
+                             jsapi_ticket_expires_at=int(ticket_expires_at))
+    else:
+        wechat = WechatBasic(appid=app.config['APP_ID'],
+                             appsecret=app.config['APP_SECRET'],
+                             token=app.config['TOKEN'])
+        access_token = wechat.get_access_token()
+        redis.set("wechat:access_token", access_token['access_token'], 7000)
+        redis.set("wechat:access_token_expires_at",
+                  access_token['access_token_expires_at'], 7000)
+        jsapi_ticket = wechat.get_jsapi_ticket()
+        redis.set("wechat:jsapi_ticket", jsapi_ticket['jsapi_ticket'], 7000)
+        redis.set("wechat:jsapi_ticket_expires_at",
+                  jsapi_ticket['jsapi_ticket_expires_at'], 7000)
+
+    return wechat
 
 
 def get_wechat_access_token():
@@ -51,6 +83,7 @@ def get_jsapi_signature_data(url):
     """
     timestamp = int(time.time())
     noncestr = generate_random_str(16)
+    wechat = init_wechat_sdk()
     signature = wechat.generate_jsapi_signature(timestamp, noncestr, url)
     return {
         "appId": app.config['APP_ID'],
