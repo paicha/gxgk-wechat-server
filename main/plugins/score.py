@@ -148,7 +148,7 @@ def login(studentid, studentpwd, url, session, proxy):
     """登录获取 cookie"""
     # 先获取 VIEWSTATE
     if not proxy:
-        pre_login = session.get(url, allow_redirects=False)
+        pre_login = session.get(url, allow_redirects=False, timeout=10)
     else:
         pre_login = session.get(url, allow_redirects=False,
                                 proxies=app.config['SCHOOL_LAN_PROXIES'])
@@ -166,7 +166,7 @@ def login(studentid, studentpwd, url, session, proxy):
         'Button1': u' 登 录 '
     }
     if not proxy:
-        res = session.post(url, data=payload, allow_redirects=False)
+        res = session.post(url, data=payload, allow_redirects=False, timeout=10)
     else:
         res = session.post(url, data=payload, allow_redirects=False,
                            proxies=app.config['SCHOOL_LAN_PROXIES'])
@@ -178,7 +178,7 @@ def score_page(studentid, url, session, proxy):
     url = url + studentid
     # 先获取查询成绩需要的 VIEWSTATE
     if not proxy:
-        pre_score = session.get(url, allow_redirects=False)
+        pre_score = session.get(url, allow_redirects=False, timeout=10)
     else:
         pre_score = session.get(url, allow_redirects=False,
                                 proxies=app.config['SCHOOL_LAN_PROXIES'])
@@ -194,7 +194,8 @@ def score_page(studentid, url, session, proxy):
         'ddlXQ': ''
     }
     if not proxy:
-        score_res = session.post(url, data=payload, allow_redirects=False)
+        score_res = session.post(url, data=payload, allow_redirects=False,
+                                 timeout=10)
     else:
         score_res = session.post(url, data=payload, allow_redirects=False,
                                  proxies=app.config['SCHOOL_LAN_PROXIES'])
