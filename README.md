@@ -100,7 +100,7 @@ celery -A main.celery worker --beat -l info
 pip install gunicorn
 
 # run
-gunicorn run:app -p wechat.pid -b 127.0.0.1:8000 -D
+gunicorn -w 3 run:app -p wechat.pid -b 127.0.0.1:8000 -D --log-level warning --error-logfile gunicorn-error.log
 
 # reload
 kill -HUP `cat wechat.pid`
