@@ -6,14 +6,14 @@ import random
 from .. import app, celery
 from . import wechat_custom
 
-default_answer = [u'么么哒', u'说啥呢……', u'叫我干嘛', u'纳尼……', u'=。=']
+default_answer = [u'么么哒', u'说啥呢……', u'叫我干嘛', u'我不听我不听', u'=。=']
 
 
 def bad_word_filter(answer):
     for word in ['撸', '微', '胸', '屌', '插', '叼', '操', '草', '舔',
                  '骚', '逼', '淫', '好爽', '鸡巴', '嫖', '干你', '你妈',
                  '你妹', '越大声', '夹紧', '上床', '搜索', '不要停',
-                 '淘宝', '扣扣']:
+                 '淘宝', '扣扣', 'QQ', '.com']:
         if word in answer:
             return True
             break
