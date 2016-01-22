@@ -34,7 +34,7 @@ def wechat_response(data):
             u'取消': cancel_command,
             u'^\?|^？': all_command,
             u'^留言|^客服': leave_a_message,
-            u'^m': command_not_found,
+            u'^m': transfer_customer_service,
             u'^雷达|^雷達': weather_radar,
             u'^電話|^电话': phone_number,
             u'^公交|^公车|^公車': bus_routes,
@@ -111,6 +111,11 @@ def wechat_response(data):
     # 保存最后一次交互的时间
     set_user_last_interact_time(openid, message.time)
     return response
+
+
+def transfer_customer_service():
+    """转发消息到微信多客服系统"""
+    return wechat.group_transfer_message()
 
 
 def borrowing_record():
