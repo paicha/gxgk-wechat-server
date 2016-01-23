@@ -7,9 +7,9 @@ MAIN_URL = "http://weixin.gxgk.cc/"
 
 WELCOME_TEXT = u"感谢关注莞香广科[愉快]\n我是广科助手小喵[调皮]\n\n"
 
-COMMAND_TEXT = u"请回复以下关键词开始：\n——————————\n成绩  图书馆  四六级\n\n电话  快递  明信片\n\n签到  音乐  游戏\n\n公交  雷达  天气\n\n校历  新闻  论坛\n\n陪聊  留言  合作\n\n点击左下角切换输入框"
+COMMAND_TEXT = u"请回复以下关键词开始：\n——————————\n成绩  图书馆  四六级\n\n电话  快递  明信片\n\n签到  音乐  游戏\n\n公交  雷达  天气\n\n校历  新闻  论坛\n\n陪聊  合作\n\n点击左下角切换输入框"
 
-COMMAND_NOT_FOUND_TEXT = u"输入错误关键词了？\n\n留言请回复：m+内容"
+COMMAND_NOT_FOUND_TEXT = u"收到你的留言啦！"
 
 CANCEL_COMMAND_TEXT = u"已回到正常模式啦啦啦~\n\n"
 
@@ -18,8 +18,6 @@ HELP_TEXT = u"\n\n回复 “ ? ” 查看主菜单"
 BBS_URL_TXT = u'<a href="http://wsq.discuz.qq.com/?siteid=264557099">进入论坛：点击这里</a>'
 
 PHONE_NUMBER_TEXT = u"————办公————\n校园网 0769-86211959\n\n院办室 0769-86211800\n\n学生处 0769-86211913\n\n教务处 0769-86211915\n\n招生办 0769-86211555"
-
-LEAVE_A_MESSAGE_TEXT = u"Hi~这里是小喵~\n请听到喵一声之后留言\n\n喵~回复：m+内容\n如：m小喵是笨蛋"
 
 WEATHER_RADAR_TEXT = u'<a href="http://www.dg121.com/tianqiziliao/donghua_yun_radar/radar.gif">东莞雷达回波：点击这里</a>'
 
@@ -41,11 +39,11 @@ CET_SCORE_TEXT = u'<a href="http://115.159.64.43/CETQuery/">四六级查询：�
 
 CONTACT_US_TEXT = u"我们欢迎各类型的合作\n\n请联系：weixin@gxgk.cc\nQQ：646304004"
 
-ENTER_CHAT_STATE_TEXT = u"已进入自动陪聊模式\n回复你想要说的话吧\n\n回复“取消”退出陪聊\n若留言请回复m+内容"
+ENTER_CHAT_STATE_TEXT = u"已进入自动陪聊模式\n回复你想要说的话吧\n\n回复“取消”退出陪聊"
 
 CHAT_TIMEOUT_TEXT = u"那么久不理小喵[可怜]\n自动退出陪聊模式啦~\n\n回复“陪聊”可以重新进入"
 
-EXPRESS_TIMEOUT_TEXT = u'自动退出快递查询模式啦\n\n回复 “快递” 重新进入查询'
+EXPRESS_TIMEOUT_TEXT = u'自动退出快递查询模式啦\n\n回复“快递”重新进入查询'
 
 ENTER_EXPRESS_STATE_TEXT = u"已进入快递查询模式\n\n直接回复运单号\n即可查询物流信息\n\n回复“取消”退出本模式"
 

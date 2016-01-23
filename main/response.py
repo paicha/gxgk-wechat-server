@@ -7,7 +7,7 @@ from .models import set_user_info, get_user_student_info, get_user_library_info
 from .utils import AESCipher, init_wechat_sdk
 from .plugins.state import *
 from .plugins import simsimi, sign, express, music, score, library, \
-    school_news, weather
+    school_news, weather, wechat_custom
 
 
 def wechat_response(data):
@@ -33,8 +33,6 @@ def wechat_response(data):
         commands = {
             u'取消': cancel_command,
             u'^\?|^？': all_command,
-            u'^留言|^客服': leave_a_message,
-            u'^m': transfer_customer_service,
             u'^雷达|^雷達': weather_radar,
             u'^電話|^电话': phone_number,
             u'^公交|^公车|^公車': bus_routes,
@@ -111,11 +109,6 @@ def wechat_response(data):
     # 保存最后一次交互的时间
     set_user_last_interact_time(openid, message.time)
     return response
-
-
-def transfer_customer_service():
-    """转发消息到微信多客服系统"""
-    return wechat.group_transfer_message()
 
 
 def borrowing_record():
@@ -319,16 +312,13 @@ def weather_radar():
     return wechat.response_text(content)
 
 
-def leave_a_message():
-    """留言提示"""
-    content = app.config['LEAVE_A_MESSAGE_TEXT'] + app.config['HELP_TEXT']
-    return wechat.response_text(content)
-
-
 def command_not_found():
     """非关键词回复"""
+    # 客服接口回复信息
     content = app.config['COMMAND_NOT_FOUND_TEXT'] + app.config['HELP_TEXT']
-    return wechat.response_text(content)
+    wechat_custom.send_text(openid, content)
+    # 转发消息到微信多客服系统
+    return wechat.group_transfer_message()
 
 
 def all_command():
