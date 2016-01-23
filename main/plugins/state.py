@@ -23,4 +23,8 @@ def set_user_last_interact_time(openid, timestamp):
 
 def get_user_last_interact_time(openid):
     """获取最后一次交互时间"""
-    return redis.hget('wechat:user:' + openid, 'last_interact_time')
+    last_time = redis.hget('wechat:user:' + openid, 'last_interact_time')
+    if last_time:
+        return last_time
+    else:
+        return 0
