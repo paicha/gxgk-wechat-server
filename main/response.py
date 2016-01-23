@@ -172,8 +172,8 @@ def express_shipment_tracking():
         # 超过一段时间，退出模式
         if timeout > 15 * 60:
             set_user_state(openid, 'default')
-            content = app.config['COMMAND_NOT_FOUND_TEXT'] + \
-                u'\n\n回复 “快递” 进入查询快递模式' + app.config['HELP_TEXT']
+            content = app.config['EXPRESS_TIMEOUT_TEXT'] + \
+                app.config['HELP_TEXT']
             return wechat.response_text(content)
         else:
             # 放入队列任务执行，异步回复
@@ -203,7 +203,8 @@ def chat_robot():
     # 超过一段时间，退出模式
     if timeout > 20 * 60:
         set_user_state(openid, 'default')
-        return command_not_found()
+        content = app.config['CHAT_TIMEOUT_TEXT'] + app.config['HELP_TEXT']
+        return wechat.response_text(content)
     else:
         simsimi.chat.delay(openid, message.content)
         return 'success'
