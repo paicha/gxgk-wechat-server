@@ -45,7 +45,7 @@ CHAT_TIMEOUT_TEXT = u"那么久不理小喵[可怜]\n自动退出陪聊模式啦
 
 EXPRESS_TIMEOUT_TEXT = u'自动退出快递查询模式啦\n\n回复“快递”重新进入查询'
 
-ENTER_EXPRESS_STATE_TEXT = u"已进入快递查询模式\n\n直接回复运单号\n即可查询物流信息\n\n回复“取消”退出本模式"
+ENTER_EXPRESS_STATE_TEXT = u"已进入快递查询模式\n\n直接回复运单号\n即可查询快递信息\n\n回复“取消”退出本模式"
 
 BUS_ROUTES_NEWS = [{
     'title': u'公交路线时刻表',

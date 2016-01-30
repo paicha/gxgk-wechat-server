@@ -9,7 +9,7 @@ from ..models import set_express_num, get_express_num
 
 @celery.task
 def get_tracking_info(openid, num, com_code=None, from_user_input=True):
-    """根据单号查询快递物流"""
+    """根据单号查询快递"""
 
     web_url = "http://m.kuaidi100.com/result.jsp?from=weixin&nu=%s" % num
     get_com_url = 'http://www.kuaidi100.com/autonumber/autoComNum?text=%s' % num
@@ -18,7 +18,7 @@ def get_tracking_info(openid, num, com_code=None, from_user_input=True):
         if not com_code:
             com_code_res = requests.get(get_com_url, timeout=2)
             com_code = com_code_res.json()["auto"][0]["comCode"]
-        # 查询物流
+        # 查询快递
         get_info_url = 'http://www.kuaidi100.com/query?type=%s&postid=%s' % (
             com_code, num)
         referer = 'http://m.kuaidi100.com/result.jsp?com=%s&nu=%s' % (
@@ -40,7 +40,7 @@ def get_tracking_info(openid, num, com_code=None, from_user_input=True):
                 com_code_to_text(com_code), num,
                 lastupdate, tracking_info["data"][0]["context"])
             context = [{
-                'title': u'快递最新物流',
+                'title': u'快递最新动态',
                 'url': web_url
             }, {
                 'title': desc,

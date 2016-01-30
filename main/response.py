@@ -159,7 +159,7 @@ def search_books():
 
 
 def express_shipment_tracking():
-    """快递物流查询"""
+    """快递查询"""
     if message.type == 'text':
         timeout = int(message.time) - int(get_user_last_interact_time(openid))
         # 超过一段时间，退出模式
