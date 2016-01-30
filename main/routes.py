@@ -42,7 +42,7 @@ def auth_score(openid=None):
         jsapi['jsApiList'] = ['hideAllNonBaseMenuItem']
         return render_template('auth.html',
                                title=u'微信查成绩',
-                               desc=u'请先绑定教务系统',
+                               desc=u'请绑定教务系统，请勿分享本页面',
                                username_label=u'学号',
                                username_label_placeholder=u'请输入你的学号',
                                password_label_placeholder=u'默认是身份证号码',
@@ -70,7 +70,7 @@ def auth_library(openid=None):
         jsapi['jsApiList'] = ['hideAllNonBaseMenuItem']
         return render_template('auth.html',
                                title=u'图书馆查询',
-                               desc=u'请先绑定借书卡',
+                               desc=u'请绑定借书卡，请勿分享本页面',
                                username_label=u'卡号',
                                username_label_placeholder=u'请输入你的借书卡号',
                                password_label_placeholder=u'默认是卡号后六位',
