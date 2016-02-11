@@ -1,3 +1,5 @@
+'use strict';
+
 $(function() {
     $('#submit').tap(function() {
         var username = $('#username').val().replace(/\s+/g, '');
@@ -6,13 +8,14 @@ $(function() {
         if (!!username && !!password) {
             $('#loadingToast').show();
             // 判断绑定类型
-            if ($('.page_title').text() == '微信查成绩') {
-                var data = {
+            var data;
+            if ($('.page_title').text() === '微信查成绩') {
+                data = {
                     studentid: username,
                     studentpwd: password
                 };
             } else {
-                var data = {
+                data = {
                     libraryid: username,
                     librarypwd: password
                 };
@@ -21,8 +24,8 @@ $(function() {
             $.post(window.location.href, data, function(res) {
                 $('#loadingToast').hide();
                 if (res.errmsg === 'ok') {
-                    $('.page.msg').show()
-                        // 绑定成功3秒后关闭窗口
+                    $('.page.msg').show();
+                    // 绑定成功3秒后关闭窗口
                     setTimeout(function() {
                         wx.closeWindow();
                     }, 3000);
@@ -31,7 +34,7 @@ $(function() {
                     $('#err_msg').text(res.errmsg);
                     $('.weui_dialog_alert').show();
                 }
-            })
+            });
         } else {
             // 提示输入格式不正确
             $('.js_tooltips').show();
