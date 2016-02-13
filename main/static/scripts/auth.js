@@ -1,5 +1,3 @@
-'use strict';
-
 $(function() {
     $('#submit').tap(function() {
         var username = $('#username').val().replace(/\s+/g, '');

@@ -5,7 +5,8 @@ import re
 from main import app
 from .models import set_user_info, get_user_student_info, get_user_library_info
 from .utils import AESCipher, init_wechat_sdk
-from .plugins.state import *
+from .plugins.state import set_user_state, get_user_state, \
+    set_user_last_interact_time, get_user_last_interact_time
 from .plugins import simsimi, sign, express, music, score, library, \
     school_news, weather, wechat_custom
 

@@ -1,8 +1,0 @@
-{
-    "globals": {
-        "$": true,
-        "wx": true
-    },
-    "browser": true,
-    "indent": 4
-}
