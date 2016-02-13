@@ -1,0 +1,26 @@
+{
+  "name": "gxgk-wechat-server",
+  "version": "1.0.0",
+  "description": "莞香广科微信公众号后端，为在校学生提供一系列信息查询与便民服务。",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paicha/gxgk-wechat-server.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/paicha/gxgk-wechat-server/issues"
+  },
+  "homepage": "https://github.com/paicha/gxgk-wechat-server#readme",
+  "devDependencies": {
+    "babel-eslint": "^4.1.8",
+    "eslint": "^2.0.0"
+  }
+}

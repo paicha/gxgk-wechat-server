@@ -134,3 +134,4 @@ instance/config.py
 app.log
 celerybeat-schedule
 dump.rdb
+node_modules
