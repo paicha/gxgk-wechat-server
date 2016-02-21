@@ -1,16 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import time
 from flask.ext.sqlalchemy import SQLAlchemy
 from .. import app, redis
 from ..utils import init_wechat_sdk
+from ..plugins.state import get_user_last_interact_time
 
 db = SQLAlchemy(app)
 
-from .auth import *
-from .express import *
-from .sign import *
-from .user import *
+from .auth import Auth
+from .express import Express
+from .sign import Sign
+from .user import User
 
 
 def set_user_info(openid):
@@ -55,7 +57,33 @@ def set_user_info(openid):
                 "regtime": user_info.regtime
             })
     else:
-        # TODO 每天第一次互动，获取最新的用户信息
+        timeout = int(time.time()) - int(get_user_last_interact_time(openid))
+        if timeout > 24 * 60 * 60:
+            try:
+                wechat = init_wechat_sdk()
+                user_info = wechat.get_user_info(openid)
+                if 'nickname' not in user_info:
+                    raise KeyError(user_info)
+            except Exception, e:
+                app.logger.warning(u"获取微信用户信息 API 出错: %s" % e)
+            else:
+                user = User.query.filter_by(openid=openid).first()
+                user.nickname = user_info['nickname']
+                user.sex = user_info['sex']
+                user.province = user_info['province']
+                user.city = user_info['city']
+                user.country = user_info['country']
+                user.headimgurl = user_info['headimgurl']
+                user.update()
+
+                redis.hmset(redis_prefix + openid, {
+                    "nickname": user_info['nickname'],
+                    "sex": user_info['sex'],
+                    "province": user_info['province'],
+                    "city": user_info['city'],
+                    "country": user_info['country'],
+                    "headimgurl": user_info['headimgurl']
+                })
         return None
 
 
