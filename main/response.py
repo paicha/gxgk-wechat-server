@@ -10,26 +10,48 @@ from .plugins.state import set_user_state, get_user_state, \
 from .plugins import simsimi, sign, express, music, score, library, \
     school_news, weather, wechat_custom
 
+
+def wechat_response(data):
+    """微信消息处理回复"""
+    global message, openid, wechat
+
+    wechat = init_wechat_sdk()
+    wechat.parse_data(data)
+    message = wechat.get_message()
+    openid = message.source
+    # 用户信息写入数据库
+    set_user_info(openid)
+
+    try:
+        get_resp_func = msg_type_resp[message.type]
+        response = get_resp_func()
+    except KeyError:
+        # 默认回复微信消息
+        response = 'success'
+
+    # 保存最后一次交互的时间
+    set_user_last_interact_time(openid, message.time)
+    return response
+
 # 储存微信消息类型所对应函数（方法）的字典
-msg_type_resp_dict = {}
+msg_type_resp = {}
 
 
-def set_msg_type_resp_dict(msg_type):
+def set_msg_type(msg_type):
     """
     储存微信消息类型所对应函数（方法）的装饰器
     """
     def decorator(func):
-        msg_type_resp_dict[msg_type] = func
+        msg_type_resp[msg_type] = func
         return func
     return decorator
 
 
-@set_msg_type_resp_dict('text')
-def get_type_text_resp():
-
+@set_msg_type('text')
+def text_resp():
+    """文本类型回复"""
     # 默认回复微信消息
     response = 'success'
-
     # 替换全角空格为半角空格
     message.content = message.content.replace(u'　', ' ')
     # 清除行首空格
@@ -85,8 +107,9 @@ def get_type_text_resp():
     return response
 
 
-@set_msg_type_resp_dict('click')
-def get_type_click_resp():
+@set_msg_type('click')
+def click_resp():
+    """菜单点击类型回复"""
     commands = {
         'phone_number': phone_number,
         'express': enter_express_state,
@@ -104,41 +127,19 @@ def get_type_click_resp():
     return response
 
 
-@set_msg_type_resp_dict('scancode_waitmsg')
-def get_type_scancode_waitmsg_resp():
+@set_msg_type('scancode_waitmsg')
+def scancode_waitmsg_resp():
+    """扫码类型回复"""
     set_user_state(openid, 'express')
     response = express_shipment_tracking()
     return response
 
 
-@set_msg_type_resp_dict('subscribe')
-def get_type_subscribe_resp():
+@set_msg_type('subscribe')
+def subscribe_resp():
+    """订阅类型回复"""
     set_user_state(openid, 'default')
     response = subscribe()
-    return response
-
-
-def wechat_response(data):
-    """微信消息处理回复"""
-    global message, openid, wechat
-
-    wechat = init_wechat_sdk()
-    wechat.parse_data(data)
-    message = wechat.get_message()
-    openid = message.source
-
-    # 用户信息写入数据库
-    set_user_info(openid)
-
-    try:
-        get_resp_func = msg_type_resp_dict[message.type]
-        response = get_resp_func()
-    except KeyError:
-        # 默认回复微信消息
-        response = 'success'
-
-    # 保存最后一次交互的时间
-    set_user_last_interact_time(openid, message.time)
     return response
 
 
