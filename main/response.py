@@ -67,7 +67,7 @@ def text_resp():
         u'合作': contact_us,
         u'明信片': postcard,
         u'^游戏|^遊戲': html5_games,
-        u'^成绩|^成績': exam_grade,
+        u'^成绩|^成績|^补考|^補考': exam_grade,
         u'^新闻|^新聞': get_school_news,
         u'^天气|^天氣': get_weather_news,
         u'陪聊': enter_chat_state,
