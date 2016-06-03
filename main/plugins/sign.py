@@ -86,7 +86,7 @@ def ranklist_and_user_rank(openid, today_timestamp):
             user_sign_rank = rank
 
     # 续签排行榜
-    keepdays_ranklist = get_sign_keepdays_ranklist()
+    keepdays_ranklist = get_sign_keepdays_ranklist(today_timestamp)
     keepdays_ranklist_content = u"【学霸排行榜】"
     for (index, keepdays_ranklist) in enumerate(keepdays_ranklist):
         keepdays_ranklist_content += u"\n%s. %s 连续签到%s天" % (

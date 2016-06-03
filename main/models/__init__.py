@@ -144,10 +144,11 @@ def get_today_sign_ranklist(today_timestamp):
     return data
 
 
-def get_sign_keepdays_ranklist():
+def get_sign_keepdays_ranklist(today_timestamp):
     """获取续签排行榜"""
     data = Sign.query.join(User, Sign.openid == User.openid) \
         .add_columns(User.nickname) \
+        .filter(Sign.lastsigntime >= today_timestamp) \
         .order_by(Sign.keepdays.desc(),
                   Sign.totaldays.desc(),
                   Sign.lastsigntime).limit(6).all()
