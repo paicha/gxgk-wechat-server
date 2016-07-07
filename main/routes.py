@@ -139,4 +139,10 @@ def robots():
 
 @app.errorhandler(404)
 def page_not_found(error):
-    return "page not found!"
+    return "page not found!", 404
+
+
+@app.errorhandler(Exception)
+def unhandled_exception(error):
+    app.logger.error('Unhandled Exception: %s', (error))
+    return "Error", 500
