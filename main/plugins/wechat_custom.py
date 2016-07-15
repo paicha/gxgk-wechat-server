@@ -3,7 +3,7 @@
 
 import requests
 import json
-from ..utils import get_wechat_access_token
+from ..utils import get_wechat_access_token, update_wechat_token
 from .. import app
 
 
@@ -68,8 +68,7 @@ def send_message(data):
             app.logger.warning(content % (response, data))
             if response["errcode"] == 40001:
                 # access_token 失效，更新
-                requests.get(app.config['HOST_URL'] +
-                             app.config['UPDATE_ACCESS_TOKEN_URL_ROUTE'])
+                update_wechat_token()
                 # 再发送
                 send_message(data)
         return None

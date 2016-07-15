@@ -4,7 +4,7 @@
 from flask import request, render_template, jsonify, Markup, abort, \
     send_from_directory
 from . import app, redis
-from .utils import check_signature, get_jsapi_signature_data, init_wechat_sdk
+from .utils import check_signature, get_jsapi_signature_data
 from .response import wechat_response
 from .plugins import score, library
 from .models import is_user_exists
@@ -109,26 +109,6 @@ def school_report_card(openid=None):
             abort(404)
     else:
         abort(404)
-
-
-@app.route(app.config['UPDATE_ACCESS_TOKEN_URL_ROUTE'], methods=["GET"])
-def update_access_token():
-    """
-    读取微信最新 access_token，写入缓存
-    """
-    wechat = init_wechat_sdk()
-    wechat.grant_token()
-    wechat.grant_jsapi_ticket()
-
-    access_token = wechat.get_access_token()
-    redis.set("wechat:access_token", access_token['access_token'], 7000)
-    redis.set("wechat:access_token_expires_at",
-              access_token['access_token_expires_at'], 7000)
-    jsapi_ticket = wechat.get_jsapi_ticket()
-    redis.set("wechat:jsapi_ticket", jsapi_ticket['jsapi_ticket'], 7000)
-    redis.set("wechat:jsapi_ticket_expires_at",
-              jsapi_ticket['jsapi_ticket_expires_at'], 7000)
-    return ('', 204)
 
 
 @app.route('/robots.txt')

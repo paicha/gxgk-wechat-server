@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import requests
 from .. import celery, app
 from ..models import get_all_uncheck_express, get_all_auth_info
-from ..utils import AESCipher
+from ..utils import AESCipher, update_wechat_token
 from .express import get_tracking_info
 from .library import time_to_return_books
 import time
@@ -46,6 +45,5 @@ def remind_return_books():
 
 @celery.task(name='access_token.update')
 def update_access_token():
-    """定时更新微信 access_token"""
-    requests.get(app.config['HOST_URL'] +
-                 app.config['UPDATE_ACCESS_TOKEN_URL_ROUTE'])
+    """定时更新微信 access_token，写入缓存"""
+    update_wechat_token()

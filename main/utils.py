@@ -67,6 +67,21 @@ def init_wechat_sdk():
     return wechat
 
 
+def update_wechat_token():
+    """刷新微信 token """
+    wechat = init_wechat_sdk()
+    wechat.grant_token()
+    wechat.grant_jsapi_ticket()
+    access_token = wechat.get_access_token()
+    redis.set("wechat:access_token", access_token['access_token'], 7000)
+    redis.set("wechat:access_token_expires_at",
+              access_token['access_token_expires_at'], 7000)
+    jsapi_ticket = wechat.get_jsapi_ticket()
+    redis.set("wechat:jsapi_ticket", jsapi_ticket['jsapi_ticket'], 7000)
+    redis.set("wechat:jsapi_ticket_expires_at",
+              jsapi_ticket['jsapi_ticket_expires_at'], 7000)
+
+
 def get_wechat_access_token():
     """获取 access_token"""
     access_token = redis.get("wechat:access_token")
