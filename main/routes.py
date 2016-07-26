@@ -32,8 +32,8 @@ def auth_score(openid=None):
         studentpwd = request.form.get('studentpwd', '')
         # 根据用户输入的信息，模拟登陆
         if studentid and studentpwd and is_user_exists(openid):
-            errmsg = score.get_info(
-                openid, studentid, studentpwd, check_login=True)
+            score.get_info.delay(openid, studentid, studentpwd, check_login=True)
+            errmsg = 'ok'
         else:
             errmsg = u'学号或者密码格式不合法'
         return jsonify({'errmsg': errmsg})
@@ -52,6 +52,21 @@ def auth_score(openid=None):
         abort(404)
 
 
+@app.route('/auth-score/<openid>/result', methods=['GET'])
+def auth_score_result(openid=None):
+    """查询学号绑定结果"""
+    if is_user_exists(openid):
+        redis_prefix = 'wechat:user:auth:score:'
+        errmsg = redis.get(redis_prefix + openid)
+        if errmsg:
+            redis.delete(redis_prefix + openid)
+            return jsonify({'errmsg': errmsg})
+        else:
+            abort(404)
+    else:
+        abort(404)
+
+
 @app.route('/auth-library/<openid>', methods=['GET', 'POST'])
 def auth_library(openid=None):
     """借书卡账号绑定"""
@@ -60,8 +75,8 @@ def auth_library(openid=None):
         librarypwd = request.form.get('librarypwd', '')
         # 根据用户输入的信息，模拟登陆
         if libraryid and librarypwd and is_user_exists(openid):
-            errmsg = library.borrowing_record(
-                openid, libraryid, librarypwd, check_login=True)
+            library.borrowing_record.delay(openid, libraryid, librarypwd, check_login=True)
+            errmsg = 'ok'
         else:
             errmsg = u'卡号或者密码格式不合法'
         return jsonify({'errmsg': errmsg})
@@ -76,6 +91,21 @@ def auth_library(openid=None):
                                password_label_placeholder=u'默认是卡号后六位',
                                baidu_analytics=app.config['BAIDU_ANALYTICS'],
                                jsapi=Markup(jsapi))
+    else:
+        abort(404)
+
+
+@app.route('/auth-library/<openid>/result', methods=['GET'])
+def auth_library_result(openid=None):
+    """查询借书卡绑定结果"""
+    if is_user_exists(openid):
+        redis_prefix = 'wechat:user:auth:library:'
+        errmsg = redis.get(redis_prefix + openid)
+        if errmsg:
+            redis.delete(redis_prefix + openid)
+            return jsonify({'errmsg': errmsg})
+        else:
+            abort(404)
     else:
         abort(404)
 

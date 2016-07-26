@@ -1,4 +1,25 @@
 $(function() {
+
+    function get_auth_result() {
+        var intervalId = setInterval(function() {
+            $.get(window.location.href + '/result', function(res) {
+                clearInterval(intervalId);
+                $('#loadingToast').hide();
+                if (res.errmsg === 'ok') {
+                    $('.page.msg').show();
+                    // 绑定成功3秒后关闭窗口
+                    setTimeout(function() {
+                        wx.closeWindow();
+                    }, 3000);
+                } else {
+                    // 绑定失败，显示后端信息
+                    $('#err_msg').text(res.errmsg);
+                    $('.weui_dialog_alert').show();
+                }
+            });
+        }, 1000);
+    }
+
     $('#submit').tap(function() {
         var username = $('#username').val().replace(/\s+/g, '');
         var password = $('#password').val().replace(/\s+/g, '');
@@ -20,17 +41,8 @@ $(function() {
             }
             // 提交绑定信息
             $.post(window.location.href, data, function(res) {
-                $('#loadingToast').hide();
                 if (res.errmsg === 'ok') {
-                    $('.page.msg').show();
-                    // 绑定成功3秒后关闭窗口
-                    setTimeout(function() {
-                        wx.closeWindow();
-                    }, 3000);
-                } else {
-                    // 绑定失败，显示后端信息
-                    $('#err_msg').text(res.errmsg);
-                    $('.weui_dialog_alert').show();
+                    get_auth_result();
                 }
             });
         } else {

@@ -3,7 +3,7 @@
 
 import requests
 from bs4 import BeautifulSoup, SoupStrainer
-from .. import app, celery
+from .. import app, celery, redis
 from ..models import set_user_library_info
 from ..utils import AESCipher
 from . import wechat_custom
@@ -16,6 +16,7 @@ import re
 def borrowing_record(openid, libraryid, librarypwd,
                      check_login=False, renew=False):
     """查询借书记录，根据参数做登录验证或续借书籍"""
+    redis_auth_prefix = "wechat:user:auth:library:"
     session = requests.Session()
     proxy = False
     login_url = app.config['LIBRARY_LOGIN_URL']
@@ -38,13 +39,15 @@ def borrowing_record(openid, libraryid, librarypwd,
     # 判断登录结果
     if not login_res or login_res.status_code != 200:
         if check_login:
-            return u'图书馆网站连接超时'
+            errmsg = u'图书馆网站连接超时'
+            redis.set(redis_auth_prefix + openid, errmsg, 10)
         else:
             content = u"图书馆网站连接超时\n\n请稍候重试"
             wechat_custom.send_text(openid, content)
     elif login_res.status_code == 200 and login_res.text != 'ok':
         if check_login:
-            return login_res.text
+            errmsg = login_res.text
+            redis.set(redis_auth_prefix + openid, errmsg, 10)
         else:
             auth_url = app.config['HOST_URL'] + '/auth-library/' + openid
             content = u'借书卡号或密码错误\n\n<a href="%s">点这里重新绑定借书卡</a>\n\n绑定后重试操作即可' % auth_url
@@ -57,7 +60,8 @@ def borrowing_record(openid, libraryid, librarypwd,
         except Exception, e:
             app.logger.warning(u'图书馆登录成功，但是查询借书失败：%s' % e)
             if check_login:
-                return u'图书馆网站连接超时'
+                errmsg = u'图书馆网站连接超时'
+                redis.set(redis_auth_prefix + openid, errmsg, 10)
             else:
                 content = u"图书馆网站连接超时\n\n请稍候重试"
                 wechat_custom.send_text(openid, content)
@@ -79,7 +83,7 @@ def borrowing_record(openid, libraryid, librarypwd,
                 cipher = AESCipher(app.config['PASSWORD_SECRET_KEY'])
                 librarypwd = cipher.encrypt(librarypwd)
                 set_user_library_info(openid, libraryid, librarypwd)
-                return 'ok'
+                redis.set(redis_auth_prefix + openid, 'ok', 10)
 
 
 def login(session, libraryid, librarypwd, url, proxy):

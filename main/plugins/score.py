@@ -15,6 +15,7 @@ from . import wechat_custom
 def get_info(openid, studentid, studentpwd, check_login=False):
     # 优先读取缓存的成绩
     redis_prefix = "wechat:user:score:"
+    redis_auth_prefix = "wechat:user:auth:score:"
     user_score_cache = redis.get(redis_prefix + openid)
     if user_score_cache and not check_login:
         content = ast.literal_eval(user_score_cache)
@@ -50,13 +51,15 @@ def get_info(openid, studentid, studentpwd, check_login=False):
         # 登录成功之后，教务系统会返回 302 跳转
         if not res:
             if check_login:
-                return u"教务系统连接超时，请稍后重试"
+                errmsg = u"教务系统连接超时，请稍后重试"
+                redis.set(redis_auth_prefix + openid, errmsg, 10)
             else:
                 content = u"教务系统连接超时\n\n请稍后重试"
                 wechat_custom.send_text(openid, content)
         elif res.status_code == 200 and 'alert' in res.text:
             if check_login:
-                return u"用户名或密码不正确"
+                errmsg = u"用户名或密码不正确"
+                redis.set(redis_auth_prefix + openid, errmsg, 10)
             else:
                 url = app.config['HOST_URL'] + '/auth-score/' + openid
                 content = u'用户名或密码不正确\n\n' +\
@@ -74,7 +77,8 @@ def get_info(openid, studentid, studentpwd, check_login=False):
                 app.logger.warning(u'登录成功，但是在校成绩查询或解析出错：%s,%s' % (
                     e, score_url))
                 if check_login:
-                    return u"教务系统连接超时，请稍后重试"
+                    errmsg = u"教务系统连接超时，请稍后重试"
+                    redis.set(redis_auth_prefix + openid, errmsg, 10)
                 else:
                     content = u"学校的教务系统连接超时\n\n请稍后重试"
                     wechat_custom.send_text(openid, content)
@@ -141,7 +145,7 @@ def get_info(openid, studentid, studentpwd, check_login=False):
                     cipher = AESCipher(app.config['PASSWORD_SECRET_KEY'])
                     studentpwd = cipher.encrypt(studentpwd)
                     set_user_student_info(openid, studentid, studentpwd)
-                    return 'ok'
+                    redis.set(redis_auth_prefix + openid, 'ok', 10)
 
 
 def login(studentid, studentpwd, url, session, proxy):
