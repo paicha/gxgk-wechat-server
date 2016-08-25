@@ -283,7 +283,7 @@ def set_user_realname_and_classname(openid, realname, classname):
     user_info_cache = redis.hgetall(redis_prefix + openid)
     realname_exists = redis.hexists(redis_prefix + openid, 'realname')
 
-    if not realname_exists or user_info_cache['realname'] != realname:
+    if not realname_exists or user_info_cache['realname'] != realname.encode('utf-8'):
         user_info = User.query.filter_by(openid=openid).first()
         if user_info:
             user_info.realname = realname
