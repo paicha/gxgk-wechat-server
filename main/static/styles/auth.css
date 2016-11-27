@@ -39,13 +39,13 @@ body {
     padding: 2em 0
 }
 
-.page_desc {
+.page__desc {
     text-align: center;
     color: #888;
     font-size: 14px
 }
 
-.page_title {
+.page__title {
     text-align: center;
     font-size: 34px;
     color: #3CC51F;
