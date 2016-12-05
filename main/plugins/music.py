@@ -9,8 +9,8 @@ from . import wechat_custom
 @celery.task
 def get_douban_fm(openid):
     """抓取豆瓣FM"""
-    url = 'http://www.douban.com/j/app/radio/people?' + \
-        'app_name=radio_android&version=100&channel=0&type=n'
+    url = 'https://douban.fm/j/v2/playlist?' + \
+        'app_name=radio_website&version=100&channel=0&type=n'
     try:
         r = requests.get(url, timeout=5)
         result = r.json()["song"][0]
