@@ -47,6 +47,7 @@
 - 关键词兼容繁体、全角空格
 - 长文本的回复使用图文信息进行排版
 - 前端 UI 使用 WeUI 统一风格
+- 后端遵循PEP8规范
 
 ## 快速开始
 
@@ -55,9 +56,25 @@
 略
 ```
 
+安装Nginx(建议，但非必须)
+
+```
+配置反向代理转发8000端口到80端口
+开发环境为5000端口
+```
+
+创建独立的Python运行环境
+
+```
+pip install virtualenv
+virtualenv xiaomiao
+source xiaomiao/bin/activate
+```
+
 安装依赖
 
 ```
+apt-get install python python-dev libmysqlclient-dev
 pip install -r requirements.txt
 ```
 
@@ -75,7 +92,7 @@ vi instance/config.py
 >>> db.create_all()
 ```
 
-运行
+开发环境运行
 
 ```
 python run.py
@@ -93,7 +110,7 @@ celery -A main.celery worker --beat -l info
 这个开发者很懒，暂时没写下什么测试……
 ```
 
-部署
+部署到运行环境
 
 ```
 # using gunicorn
@@ -102,9 +119,21 @@ pip install gunicorn
 # run
 gunicorn -w 3 run:app -p wechat.pid -b 127.0.0.1:8000 -D --log-level warning --error-logfile gunicorn-error.log
 
+celery -A main.celery worker -c 10 --beat -l info
+
 # reload
 kill -HUP `cat wechat.pid`
 ```
+
+## 框架文档
+[Flask](http://docs.jinkan.org/docs/flask/)
+[Flask-Sqlalchemy](http://www.pythondoc.com/flask-sqlalchemy/quickstart.html)
+[Celery](http://www.pythondoc.com/flask/patterns/celery.html)
+
+
+## 扩展开发项目
+[莞香小喵小程序](https://github.com/gxgk/gxgk-wechat-app)
+
 
 ## License
 [MIT](LICENSE)
