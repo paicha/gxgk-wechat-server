@@ -1,3 +1,5 @@
+This code is no longer being maintained.
+
 项目已经不再维护，开源的目的更多是给新手一个参考 Demo
 
 # gxgk-wechat-server
