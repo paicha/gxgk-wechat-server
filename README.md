@@ -7,7 +7,7 @@ This code is no longer being maintained.
 
 
 **预览**：
-!["预览"](http://i.v2ex.co/OA598S46.jpeg)
+![gxgk](https://user-images.githubusercontent.com/5148245/156481489-c0e0f757-a3bd-4412-9231-0998ed4b7686.jpeg)
 
 **主要功能**：
 
